@@ -1,0 +1,263 @@
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsfonts,amsthm,mathtools}
+\usepackage{physics}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usetikzlibrary{arrows.meta,positioning,calc,decorations.pathreplacing,fit,backgrounds}
+\pgfplotsset{compat=1.18}
+
+\geometry{margin=1in}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\title{The Relational Emergence Model:\\Generative Differentiation via Variational Selection\\on Factorization Manifold}
+\author{Yoshifumi Maruko\\Independent Researcher\\Yamagata, Japan}
+\date{2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Relational Quantum Mechanics (RQM) defines physical states relationally but provides no generative account of how relational structure itself becomes articulated. We propose the Relational Emergence Model (REM) to fill this gap. REM introduces a non-unitary differentiation map
+\[
+D:\mathcal{H}\rightarrow \mathcal{H}_S\otimes \mathcal{H}_O
+\]
+that selects a tensor-product decomposition of Hilbert space through a variational principle,
+\[
+\Phi=\Phi_S+\lambda \Phi_H,
+\]
+combining informational articulation and dynamical stability. Factorization space is formalized as a quotient manifold,
+\[
+\mathcal{F}\cong U(N)/(U(n_A)\otimes U(n_B)),
+\]
+allowing gradient-flow optimization over candidate subsystem structures. A three-qubit toy model demonstrates a concrete crossover at $\lambda^\ast\approx 0.367$ between informationally favored and dynamically stabilized factorizations. REM provides the missing generative dynamics for RQM: relational structure is not assumed, but selected.
+\end{abstract}
+
+\section{Introduction}
+Relational Quantum Mechanics (RQM) proposes that physical properties exist only relative to other systems \cite{rovelli1996}. This shift removes the need for observer-independent state attribution, but it leaves a prior question unresolved: if physical structure is relational, how does relational structure itself become articulated?
+
+The Relational Emergence Model (REM) addresses this question by introducing a generative layer beneath standard relational description. Instead of taking subsystem structure as given, REM treats subsystem differentiation as a structured selection problem over candidate factorizations of Hilbert space. In this sense, REM moves from static relationality to generative relational articulation.
+
+The central claim is not that all subsystem decompositions are physically equivalent, nor that one decomposition is universally fundamental. Rather, REM asks how specific relational structures become selected, stabilized, and rendered physically salient.
+
+\section{Limitations of Existing Relational Approaches}
+Several major approaches in quantum foundations employ relational or observer-dependent language, but none provides a full generative account of subsystem articulation.
+
+RQM defines states only relative to other systems, but it does not specify how the system--observer split itself is selected \cite{rovelli1996}. QBism emphasizes agent-centered probability assignment, but the emergence of objective-looking relational structure is left outside the formalism. Everettian approaches describe branching structure, yet typically assume a subsystem decomposition prior to branching analysis. Decoherence theory explains the stabilization of quasi-classical states, but it presupposes a tensor-product split between system and environment \cite{zurek2003}.
+
+The common gap is therefore not the absence of relational language, but the absence of a selection principle for relational structure itself. REM is designed to fill precisely this gap.
+
+\section{Three-Layer Architecture}
+REM is organized around a three-layer architecture.
+
+\subsection{Layer 0: Pre-relational Hilbert space}
+At Layer 0, one considers the total Hilbert space $\mathcal{H}$ without privileging any particular tensor-product decomposition. This layer is a formal limit of description in which no determinate system--observer distinction has yet been articulated.
+
+\subsection{Layer 1: Differentiation}
+Differentiation selects a relational articulation:
+\[
+D:\mathcal{H}\rightarrow\mathcal{H}_S\otimes\mathcal{H}_O.
+\]
+Given a state $\ket{\Psi}\in\mathcal{H}$, differentiation yields
+\[
+D(\ket{\Psi})=\sum_i c_i \ket{s_i}\otimes \ket{o_i},\qquad \sum_i |c_i|^2=1.
+\]
+The reduced relational state is
+\[
+\rho_{S|O}=\Tr_O\!\left(D(\ket{\Psi})D(\ket{\Psi})^\dagger\right).
+\]
+
+\subsection{Layer 2: Decoherence}
+Once a relational articulation has been selected, environmental decoherence suppresses off-diagonal coherences and stabilizes effectively classical facts:
+\[
+\mathcal{E}(\rho)=\sum_i p_i \ket{s_i}\bra{s_i}\otimes \ket{e_i}\bra{e_i}.
+\]
+The ordering relation is strict:
+\[
+D \rightarrow \mathcal{E}.
+\]
+Differentiation generates relational structure; decoherence stabilizes that structure.
+
+\section{Variational Selection Principle}
+Hilbert space generally admits multiple inequivalent tensor-product structures,
+\[
+\mathcal{H}\cong \mathcal{H}_A\otimes \mathcal{H}_B,
+\]
+with no unique preferred factorization in the abstract. REM models relational articulation as a selection problem over a space of candidate factorizations,
+\[
+\mathcal{F}=\{F_k\}.
+\]
+To each candidate factorization $F\in\mathcal{F}$, we assign a scalar functional $\Phi(F)$ and define
+\[
+F^\ast=\arg\max_F \Phi(F).
+\]
+At lowest order,
+\[
+\Phi=\Phi_S+\lambda \Phi_H,
+\]
+where $\Phi_S$ is an informational term, $\Phi_H$ is a dynamical term, and $\lambda$ governs their relative weight.
+
+\section{Informational Functional}
+For a candidate factorization $A|B$, define
+\[
+\rho_{AB}=\ket{\Psi}\bra{\Psi},\qquad \rho_A=\Tr_B \rho_{AB},\qquad \rho_B=\Tr_A \rho_{AB}.
+\]
+The von Neumann entropy is
+\[
+S(\rho)=-\Tr(\rho \ln \rho),
+\]
+and the informational functional is mutual information,
+\[
+\Phi_S=I(A:B)=S(\rho_A)+S(\rho_B)-S(\rho_{AB}).
+\]
+For pure bipartitions,
+\[
+I(A:B)=2S(\rho_A)=2S(\rho_B).
+\]
+
+\section{Dynamical Functional}
+Let the Hamiltonian decompose as $H=\sum_\alpha h_\alpha$, and define a boundary Hamiltonian $H_{\partial F}$ containing terms coupling degrees of freedom across the chosen partition. Then
+\[
+\Phi_H=-\ev{H_{\partial F}}.
+\]
+This quantity penalizes strong inter-partition dynamical leakage and rewards factorizations that are more self-contained.
+
+\section{Physical Interpretation of $\lambda$}
+First, the functional has a free-energy-like form,
+\[
+\Phi \sim S-\beta E,
+\]
+so that $\lambda\leftrightarrow\beta$ plays the role of an effective inverse-temperature-like control parameter.
+
+Second,
+\[
+\lambda \sim \frac{\tau_D}{\tau_{\mathrm{dyn}}},
+\]
+where $\tau_D$ is a decoherence timescale and $\tau_{\mathrm{dyn}}$ a characteristic dynamical timescale.
+
+Third, $\lambda$ may be treated as a scale-dependent parameter,
+\[
+\lambda=\lambda(\Lambda),
+\]
+suggesting a renormalization-style interpretation.
+
+\section{Geometry of Factorization Space}
+The space of candidate factorizations may be modeled as
+\[
+\mathcal{F}\cong U(N)/(U(n_A)\otimes U(n_B)).
+\]
+A local metric may be introduced,
+\[
+ds^2=g_{ij}(\theta)d\theta^i d\theta^j,
+\]
+with stationary condition
+\[
+\nabla_{\mathcal{F}}\Phi=0.
+\]
+For numerical work,
+\[
+U(\theta)=\exp\!\left(-i\sum_k \theta^k G_k\right).
+\]
+
+\section{Three-Qubit Toy Model and Crossover Structure}
+Consider
+\[
+\ket{\Psi}=\sqrt{0.6}\ket{000}+\sqrt{0.3}\ket{111}+\sqrt{0.1}\ket{101}.
+\]
+The informational values are
+\[
+I(A:BC)=1.942,
+\]
+\[
+I(B:AC)=1.5747,
+\]
+\[
+I(C:AB)=1.942,
+\]
+in nats. Thus the $B|AC$ partition is informationally disfavored, while $A|BC$ and $C|AB$ remain degenerate at the informational level.
+
+To exhibit regime competition, one compares an informationally favored partition with a dynamically favored one. The crossover scale is
+\[
+\lambda^\ast\approx0.367,
+\]
+at which informational preference and dynamical preference exchange dominance. The linear profiles used to visualize this are schematic effective approximations and are not claimed to arise from a unique microscopic Hamiltonian.
+
+\section{Conceptual Extensions}
+\subsection{Gauge-theoretic subsystem structure}
+Gauge theories show that subsystem decomposition is not always straightforward. In constrained systems, the physical Hilbert space need not factorize naively, and boundary degrees of freedom may be required to restore subsystem structure \cite{donnelly2016}.
+
+\subsection{Category-theoretic perspective}
+From a categorical point of view, factorizations correspond to monoidal decompositions,
+\[
+X\cong A\otimes B.
+\]
+Frobenius-algebra-like structures provide a natural language for compositional subsystem articulation.
+
+\subsection{Nested observers and Wigner-type scenarios}
+In Wigner-type cases, different observers may apply differentiation at different levels of the nested structure. One may represent this by
+\[
+D_F\neq D_W.
+\]
+REM interprets observer dependence as layered differentiation rather than inconsistency.
+
+\section{Relation to Prior Work}
+Rovelli introduced observer-relative state assignment and relational observables \cite{rovelli1996}. Adlam and Rovelli refine cross-perspectival consistency \cite{adlam2023}. Riedel develops an iterated relational framework \cite{riedel2024}. Calosi and Riedel identify open problems regarding interactions and bipartition selection \cite{calosi2024}. Weststeijn studies perspectival consistency in Wigner's friend scenarios \cite{weststeijn2021}. Zurek showed how decoherence stabilizes classical structure \cite{zurek2003}. Zanardi demonstrated the non-uniqueness of tensor-product structures \cite{zanardi2001,zanardi2004}. Carroll and Singh studied subsystem selection through dynamical cohesion and quantum mereology \cite{carroll2021}. Donnelly and Freidel showed that gauge constraints obstruct naive subsystem decomposition \cite{donnelly2016}.
+
+REM differs in one decisive respect: it proposes a generative variational principle for selecting relational structure itself.
+
+\section{Conclusion}
+REM provides a generative framework for relational quantum structure. The central claim is simple but nontrivial: relational structure is not merely assumed; it is selected.
+
+The model combines a three-layer architecture, a variational principle over factorization space, an informational--dynamical trade-off governed by $\lambda$, and a geometric view of subsystem articulation.
+
+\appendix
+\section{Geodesic and Gradient-Flow Structure on Factorization Manifold}
+Let $\mathcal{F}$ denote the factorization manifold with local coordinates $\theta^i$ and metric $g_{ij}(\theta)$. The variational functional $\Phi(\theta)$ defines a scalar field on $\mathcal{F}$. A stationary factorization satisfies
+\[
+\nabla_{\mathcal{F}}\Phi=0.
+\]
+The metric gradient flow is
+\[
+\frac{d\theta^i}{d\tau}=g^{ij}\partial_j\Phi.
+\]
+The geodesic equation is
+\[
+\frac{d^2\theta^i}{d\tau^2}+\Gamma^{i}{}_{jk}\frac{d\theta^j}{d\tau}\frac{d\theta^k}{d\tau}=0,
+\]
+with
+\[
+\Gamma^{i}{}_{jk}=\frac{1}{2}g^{i\ell}(\partial_j g_{k\ell}+\partial_k g_{j\ell}-\partial_\ell g_{jk}).
+\]
+REM does not claim that the selected factorization is obtained by free geodesic motion. The relevant dynamics is motion on a curved manifold under the scalar potential $\Phi$.
+
+\section{Three-Qubit Entropy and Mutual Information}
+For the state above, the values used are
+\[
+I(A:BC)=1.942,\qquad I(B:AC)=1.5747,\qquad I(C:AB)=1.942,
+\]
+quoted in nats to the displayed precision.
+
+\begin{thebibliography}{99}
+\bibitem{rovelli1996} C. Rovelli, \emph{Relational Quantum Mechanics}, International Journal of Theoretical Physics \textbf{35}, 1637--1678 (1996).
+\bibitem{zurek2003} W. H. Zurek, \emph{Decoherence, einselection, and the quantum origins of the classical}, Reviews of Modern Physics \textbf{75}, 715--775 (2003).
+\bibitem{zanardi2001} P. Zanardi, \emph{Virtual quantum subsystems}, Physical Review Letters \textbf{87}, 077901 (2001).
+\bibitem{zanardi2004} P. Zanardi, D. A. Lidar, and S. Lloyd, \emph{Quantum tensor product structures are observable-induced}, Physical Review Letters \textbf{92}, 060402 (2004).
+\bibitem{carroll2021} S. Carroll and A. Singh, \emph{Quantum mereology}, Physical Review A \textbf{103}, 022213 (2021).
+\bibitem{donnelly2016} W. Donnelly and L. Freidel, \emph{Local subsystems in gauge theory and gravity}, Journal of High Energy Physics \textbf{09}, 102 (2016).
+\bibitem{adlam2023} E. Adlam and C. Rovelli, \emph{Information is Physical: Cross-Perspective Links in Relational Quantum Mechanics}, Philosophy of Physics \textbf{1}(1) (2023).
+\bibitem{riedel2024} C. J. Riedel, \emph{Relational Quantum Mechanics, Quantum Relativism, and the Iteration of Relativity}, Studies in History and Philosophy of Science \textbf{104} (2024).
+\bibitem{weststeijn2021} T. Weststeijn, \emph{Wigner's Friend Scenarios and the Internal Consistency of Standard Quantum Mechanics}, Foundations of Physics \textbf{51}, 97 (2021).
+\bibitem{calosi2024} C. Calosi and C. J. Riedel, \emph{Relational Quantum Mechanics at the Crossroads}, Foundations of Physics \textbf{54} (2024).
+\end{thebibliography}
+
+\end{document}
