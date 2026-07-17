@@ -1,0 +1,130 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Variational Generation of Relational Structure\\in the Relational Emergence Model:\\{\normalsize Quadratic Dynamical Cost and Regime Competition}}
+\author{Yoshifumi Maruko\\Independent Researcher\\Yamagata, Japan}
+\date{2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Relational Quantum Mechanics (RQM) defines physical states relationally but does not specify how relational structure itself becomes articulated. The Relational Emergence Model (REM) introduces a generative layer beneath relational description.
+
+We model relational articulation as a variational selection problem over Hilbert-space factorizations. The selection functional takes the form
+\[
+\Phi = \Phi_S - \lambda C_H,
+\qquad
+C_H = \mathrm{Tr}(\rho H_{\partial F}^2) \geq 0,
+\]
+combining informational differentiation and a sign-definite boundary-fluctuation cost.
+
+The parameter $\lambda\geq0$ acts as an external control parameter governing the balance between informational structure and dynamical stability. A three-qubit example demonstrates regime competition between informationally optimal and dynamically stabilized factorizations.
+\end{abstract}
+
+\section{Introduction}
+Relational Quantum Mechanics proposes that physical states exist only relative to other systems. While this removes observer-independent states, it leaves open a prior question: how relational structure itself becomes articulated.
+
+The Relational Emergence Model introduces a generative layer beneath relational description. Rather than assuming subsystem structure, REM models relational articulation as a structured selection problem. Relational structure is not assumed; it is selected.
+
+\section{Variational Selection Principle}
+Hilbert space admits multiple inequivalent tensor-product structures:
+\[
+\mathcal H \cong \mathcal H_A \otimes \mathcal H_B.
+\]
+Candidate factorizations form a space
+\[
+\mathcal F\cong U(N)/(U(n_A)\otimes U(n_B)).
+\]
+We define
+\[
+F^*=\arg\max_F\Phi(F),
+\]
+with
+\[
+\Phi=\Phi_S-\lambda C_H.
+\]
+The informational contribution is
+\[
+\Phi_S=I(A:B),
+\]
+and the dynamical cost is
+\[
+C_H=\mathrm{Tr}(\rho H_{\partial F}^2)\geq0.
+\]
+The equivalent minimization form is
+\[
+\mathcal L=-\Phi_S+\lambda C_H.
+\]
+
+\section{Information-Theoretic Quantities}
+For $\rho_{AB}=|\Psi\rangle\langle\Psi|$,
+\[
+I(A:B)=S(\rho_A)+S(\rho_B)-S(\rho_{AB}),
+\]
+where
+\[
+S(\rho)=-\mathrm{Tr}(\rho\log_2\rho).
+\]
+For pure bipartitions,
+\[
+I(A:B)=2S(\rho_A).
+\]
+
+\section{Boundary Hamiltonian}
+For $H=\sum_\alpha h_\alpha$, define
+\[
+H_{\partial F}=\sum_{\alpha:\,\mathrm{supp}(h_\alpha)\cap A\neq\varnothing,\,\mathrm{supp}(h_\alpha)\cap B\neq\varnothing} h_\alpha.
+\]
+Thus
+\[
+H=H_A+H_B+H_{\partial F}.
+\]
+The quadratic cost measures susceptibility to boundary-crossing fluctuations rather than mean boundary energy.
+
+\section{Three-Qubit Illustration}
+Consider
+\[
+|\Psi\rangle=\sqrt{0.6}|000\rangle+\sqrt{0.3}|111\rangle+\sqrt{0.1}|101\rangle.
+\]
+For candidate bipartitions $A|BC$, $B|AC$, and $C|AB$, the informational and dynamical terms may favor different factorizations. The selected structure changes where
+\[
+\Phi(F_1,\lambda^*)=\Phi(F_2,\lambda^*),
+\]
+so
+\[
+\lambda^*=\frac{\Phi_S(F_1)-\Phi_S(F_2)}{C_H(F_1)-C_H(F_2)}.
+\]
+The numerical value is model dependent and is not proposed as a universal constant.
+
+\section{Physical Interpretation of $\lambda$}
+$\lambda$ is an effective tradeoff parameter rather than a fundamental universal constant. Candidate interpretations include an inverse-temperature-like parameter, a ratio of decoherence and internal dynamical timescales, and a scale-dependent coarse-graining parameter.
+
+A microscopic derivation from an explicit system--environment model remains future work.
+
+\section{Relation to REM5}
+REM5 replaces a sign-sensitive linear boundary expectation with a positive quadratic interaction cost. The form
+\[
+C_H=\mathrm{Tr}(\rho H_{\partial F}^2)
+\]
+removes ambiguity associated with negative boundary-energy expectation values and gives a non-negative dynamical penalty.
+
+\section{Scope and Limitations}
+The current three-qubit analysis is an existence-oriented toy model. It does not perform a global optimization over the complete continuous factorization manifold, derive $\lambda$ microscopically, or provide an experimental validation.
+
+\section{Conclusion}
+REM formulates relational articulation as a variational competition between informational differentiation and dynamical boundary cost. The quadratic form makes this competition sign definite and provides a basis for open-system and experimental extensions.
+
+\begin{thebibliography}{9}
+\bibitem{rovelli} C. Rovelli, Relational Quantum Mechanics, Int. J. Theor. Phys. 35, 1637 (1996).
+\bibitem{zurek} W. H. Zurek, Decoherence, einselection, and the quantum origins of the classical, Rev. Mod. Phys. 75, 715 (2003).
+\bibitem{carroll} S. Carroll and A. Singh, Quantum Mereology, Phys. Rev. A 103, 022213 (2021).
+\bibitem{rem5} Y. Maruko, Relational Emergence Model: Variational Selection of Tensor-Product Structure in Quantum Systems (2026).
+\end{thebibliography}
+
+\end{document}
