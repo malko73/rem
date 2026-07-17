@@ -1,0 +1,310 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{bm}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{mathtools}
+\usepackage{pgfplots}
+
+\pgfplotsset{compat=1.18}
+
+\hypersetup{
+colorlinks=true,
+linkcolor=blue,
+citecolor=blue,
+urlcolor=blue
+}
+
+\title{
+Selection Principles for the Differentiation Map in the Relational Emergence Model
+}
+
+\author{
+Yoshifumi Maruko
+}
+
+\date{2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+The Relational Emergence Model (REM) proposes that relational structure is generated rather than assumed.
+
+A central open problem concerns the selection mechanism of the differentiation map $\mathcal{D}$, which specifies a tensor-product decomposition of Hilbert space.
+
+This paper develops candidate selection principles based on informational and dynamical constraints.
+
+A variational formulation is introduced, together with toy models based on entanglement entropy, mutual information, and energetic stability.
+
+A concrete 3-qubit example shows that informational extremization induces nontrivial relational articulation.
+
+Information geometry, categorical quantum mechanics, and gauge-theoretic subsystem structure are discussed as mathematical frameworks for formalizing differentiation.
+
+These results support the REM thesis that relational structure may emerge through constrained articulation.
+
+\end{abstract}
+
+\section{Introduction}
+
+The Relational Emergence Model (REM) proposes that relational structure is generated rather than assumed.
+
+Differentiation is represented as:
+
+\begin{equation}
+\mathcal{D} :
+\mathcal{H}
+\rightarrow
+\mathcal{H}_S \otimes \mathcal{H}_O
+\end{equation}
+
+selecting a tensor-product decomposition of Hilbert space.
+
+Hilbert space admits multiple inequivalent factorizations:
+
+\begin{equation}
+\mathcal{H}
+\cong
+\mathcal{H}_A \otimes \mathcal{H}_B
+\end{equation}
+
+without a unique preferred structure.
+
+REM distinguishes:
+
+Layer 0:
+no preferred factorization
+
+Layer 1:
+explicit relational articulation
+
+This paper investigates principles governing this transition.
+
+\section{Variational formulation}
+
+Let:
+
+\begin{equation}
+\mathcal{F} = \{F_k\}
+\end{equation}
+
+be candidate factorizations.
+
+Define functional:
+
+\begin{equation}
+\Phi_k(|\Psi\rangle)
+\end{equation}
+
+Selection:
+
+\begin{equation}
+k^* =
+\arg\operatorname{ext}_k
+\Phi_k
+\end{equation}
+
+Examples:
+
+\begin{align}
+\Phi_S &= S(\rho_A) \\
+\Phi_I &= I(A:B) \\
+\Phi_H &= -\langle H_{\mathrm{eff}} \rangle
+\end{align}
+
+Combined functional:
+
+\begin{equation}
+\Phi = \Phi_S + \lambda \Phi_H
+\end{equation}
+
+Interpretation of $\lambda$:
+
+\begin{itemize}
+\item $\lambda=0$: purely informational articulation
+\item small $\lambda$: information-dominated regime
+\item large $\lambda$: dynamically stabilized articulation
+\end{itemize}
+
+\section{Information geometry of factorization space}
+
+We treat factorization space as a structured manifold:
+
+\begin{equation}
+\Phi : \mathcal{F} \rightarrow \mathbb{R}
+\end{equation}
+
+Stationary condition:
+
+\begin{equation}
+\delta \Phi = 0
+\end{equation}
+
+Metric structure:
+
+\begin{equation}
+ds^2 =
+\sum_{k,l}
+g_{kl}(\mathcal{F})
+dF^k dF^l
+\end{equation}
+
+Possible choices include Fisher metric, Bures metric, or relative-entropy geometry.
+
+Differentiation corresponds to extremal structure on $\mathcal{F}$.
+
+\section{Toy informational model}
+
+Von Neumann entropy:
+
+\begin{equation}
+S(\rho)
+=
+-\mathrm{Tr}(\rho \log_2 \rho)
+\end{equation}
+
+Mutual information:
+
+\begin{equation}
+I(A:B)
+=
+S(A)+S(B)-S(AB)
+\end{equation}
+
+\section{3-qubit example}
+
+\begin{equation}
+|\Psi\rangle
+=
+\sqrt{0.6}|000\rangle
++
+\sqrt{0.3}|111\rangle
++
+\sqrt{0.1}|101\rangle
+\end{equation}
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+partition & entropy & mutual information \\
+\midrule
+A vs BC & 0.971 & 1.942 \\
+B vs AC & 0.881 & 1.762 \\
+C vs AB & 0.971 & 1.942 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Category theoretic structure}
+
+Factorizations correspond to monoidal decompositions:
+
+\begin{equation}
+X \cong A \otimes B
+\end{equation}
+
+Differentiation may be expressed via Frobenius algebra structures:
+
+\begin{equation}
+\mu : A \otimes A \rightarrow A
+\end{equation}
+
+which define compositional structure selecting relational subsystems.
+
+\section{Gauge theoretic analogy}
+
+Gauge constraints prevent naive tensor decomposition:
+
+\begin{equation}
+\mathcal{H}
+\not\cong
+\mathcal{H}_A \otimes \mathcal{H}_B
+\end{equation}
+
+Extended Hilbert space introduces boundary degrees of freedom restoring subsystem factorization.
+
+Differentiation may analogously define relational subsystems consistent with global constraints.
+
+\section{Outlook}
+
+Possible directions include:
+
+\begin{itemize}
+\item information-geometric structure of $\mathcal{F}$
+\item categorical subsystem emergence
+\item tensor-network articulation
+\item renormalization of relational layers
+\item integration with quantum integrated information
+\end{itemize}
+
+Recent work (Zaghi 2025) defines integrated information using quantum Jensen-Shannon divergence minimized over bipartitions.
+
+Such approaches suggest extensions of $\Phi$ beyond entropy and mutual information toward integrated-information criteria.
+
+\section{Conclusion}
+
+Differentiation may be formulated as an optimization problem over Hilbert-space factorizations.
+
+Informational and dynamical constraints provide candidate principles.
+
+REM therefore admits mathematically structured extensions within quantum information theory.
+
+\appendix
+
+\section{Entropy derivation}
+
+\begin{equation}
+\rho_A =
+\begin{pmatrix}
+0.6 & 0 \\
+0 & 0.4
+\end{pmatrix}
+\end{equation}
+
+\begin{equation}
+S_A = 0.971
+\end{equation}
+
+\begin{equation}
+S_B = 0.881
+\end{equation}
+
+\begin{equation}
+S_C = 0.971
+\end{equation}
+
+For pure bipartitions:
+
+\begin{equation}
+I(A:\bar A) = 2 S(A)
+\end{equation}
+
+confirming consistency between entropy and mutual information criteria.
+
+\section{Mutual information values}
+
+\begin{align}
+I(A:BC) &= 1.942 \\
+I(B:AC) &= 1.762 \\
+I(C:AB) &= 1.942
+\end{align}
+
+\begin{thebibliography}{99}
+\bibitem{rovelli1996} Rovelli, C. Relational quantum mechanics. Int. J. Theor. Phys. 35, 1637 (1996).
+\bibitem{zanardi2001} Zanardi, P. Virtual quantum subsystems. Phys. Rev. Lett. 87, 077901 (2001).
+\bibitem{zanardi2004} Zanardi, P., Lidar, D., Lloyd, S. Observable-induced tensor product structures. Phys. Rev. Lett. 92, 060402 (2004).
+\bibitem{zurek2003} Zurek, W. Decoherence, einselection, and the quantum origins of classicality. Rev. Mod. Phys. 75, 715 (2003).
+\bibitem{carroll2021} Carroll, S., Singh, A. Quantum mereology. Phys. Rev. A 103, 022213 (2021).
+\bibitem{abramsky2009} Abramsky, S., Coecke, B. Categorical quantum mechanics. Handbook of Quantum Logic and Quantum Structures (2009).
+\bibitem{donnelly2016} Donnelly, W., Freidel, L. Local subsystems in gauge theory and gravity. JHEP 2016.
+\bibitem{adlam2023} Adlam, E., Rovelli, C. Information and relational quantum mechanics. Found. Phys. 53 (2023).
+\bibitem{riedel2024} Riedel, T. Relational quantum mechanics, quantum relativism, and the iteration of relativity. Stud. Hist. Phil. Sci. 104 (2024).
+\bibitem{zaghi2025} Zaghi, A. Integrated Information in Relational Quantum Dynamics. Entropy (2025).
+\end{thebibliography}
+
+\end{document}
