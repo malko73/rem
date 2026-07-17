@@ -1,0 +1,507 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{bm}
+\usepackage{physics}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\hypersetup{
+colorlinks=true,
+linkcolor=blue,
+citecolor=blue,
+urlcolor=blue
+}
+
+\title{
+Relational Emergence Model (REM 5.12)\\
+Variational Selection of Tensor-Product Structure\\
+in Quantum Systems
+}
+
+\author{
+Yoshifumi Maruko\\
+Independent Researcher\\
+Yamagata, Japan
+}
+
+\date{2026}
+
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+Quantum theory does not uniquely determine subsystem structure.
+
+We propose a variational principle on factorization space:
+
+\[
+F^* = \argmin_F \mathcal L(F)
+\]
+
+\[
+\mathcal L = -\Phi_S + \lambda \mathcal C_H
+\]
+
+balancing informational articulation and dynamical separability.
+
+The framework provides a generative extension of relational quantum mechanics,
+in which subsystem structure itself is treated as a variational object.
+
+\end{abstract}
+
+\section{Problem}
+
+Hilbert space admits multiple tensor-product structures:
+
+\[
+\mathcal H \cong \mathcal H_A \otimes \mathcal H_B
+\]
+
+Quantum theory alone does not specify which decomposition
+corresponds to physically meaningful subsystems.
+
+We treat subsystem structure as a variational problem
+defined on factorization space.
+
+\section{Three-layer architecture}
+
+REM may be interpreted through three structural layers:
+
+Layer 0:
+Hilbert space without preferred factorization
+
+Layer 1:
+conceptual articulation of candidate bipartitions
+
+Layer 2:
+dynamical stabilization of selected structures
+
+Layer 1 is represented by a conceptual map:
+
+\[
+D:
+\mathcal H
+\rightarrow
+\{\mathcal H_A \otimes \mathcal H_B\}
+\]
+
+which specifies candidate subsystem structure.
+
+D is not a physical operator but a structural articulation rule.
+
+Effective realizations of D are represented by optimization on factorization space.
+
+\begin{remark}
+
+REM introduces a generative extension of relational quantum mechanics
+by treating subsystem articulation itself as a variational object.
+
+Relational structure is not assumed; it is selected.
+
+\end{remark}
+
+\section{Factorization space}
+
+Let:
+
+\[
+N=n_A n_B
+\]
+
+Tensor-product structures form coset manifold:
+
+\[
+\mathcal F
+\cong
+U(N)/(U(n_A)\otimes U(n_B))
+\]
+
+Each point:
+
+\[
+F \in \mathcal F
+\]
+
+represents a candidate subsystem decomposition.
+
+\section{Variational principle}
+
+Optimal factorization:
+
+\[
+F^*=\argmin_F \mathcal L(F)
+\]
+
+objective functional:
+
+\[
+\mathcal L
+=
+-\Phi_S
++
+\lambda \mathcal C_H
+\]
+
+λ controls tradeoff between informational articulation
+and dynamical separability.
+
+\section{Informational articulation}
+
+We define:
+
+\[
+\Phi_S=I(A:B)
+\]
+
+mutual information:
+
+\[
+I(A:B)
+=
+S(\rho_A)+S(\rho_B)-S(\rho)
+\]
+
+von Neumann entropy:
+
+\[
+S(\rho)
+=
+-\mathrm{Tr}(\rho\log\rho)
+\]
+
+Large Φ_S corresponds to strongly articulated relational structure.
+
+\section{Interaction projection}
+
+For operator X:
+
+\[
+X_A
+=
+\frac{1}{n_B}\mathrm{Tr}_B(X)
+\]
+
+\[
+X_B
+=
+\frac{1}{n_A}\mathrm{Tr}_A(X)
+\]
+
+interaction component:
+
+\[
+X_{\partial F}
+=
+X
+-
+(X_A\otimes I_B)
+-
+(I_A\otimes X_B)
+\]
+
+This Hilbert–Schmidt decomposition isolates cross-subsystem coupling.
+
+\section{Dynamical separability}
+
+Hamiltonian decomposition:
+
+\[
+H=H_A+H_B+H_{\partial F}
+\]
+
+interaction cost:
+
+\[
+\mathcal C_H
+=
+\mathrm{Tr}(\rho H_{\partial F}^2)
+\]
+
+Quadratic form ensures positive measure of coupling strength.
+
+\section{Pull-back parametrization}
+
+Fix reference factorization.
+
+Represent candidate structures via unitary transformation:
+
+\[
+U(\theta)\in U(N)
+\]
+
+state:
+
+\[
+\rho(\theta)
+=
+U^\dagger\rho_0U
+\]
+
+Hamiltonian:
+
+\[
+H(\theta)
+=
+U^\dagger H_0 U
+\]
+
+Gauge redundancy:
+
+\[
+U(\theta)
+\sim
+U(\theta)(U_A\otimes U_B)
+\]
+
+Optimization therefore occurs on quotient manifold.
+
+\section{Gradient structure}
+
+density variation:
+
+\[
+\delta\rho
+=
+i[\rho,G_k]\delta\theta_k
+\]
+
+entropy variation:
+
+\[
+\delta S(\rho)
+=
+-\mathrm{Tr}(\delta\rho(\log\rho+I))
+\]
+
+For reduced states:
+
+\[
+\delta\Phi_S
+=
+\delta S(\rho_A)
++
+\delta S(\rho_B)
+-
+\delta S(\rho)
+\]
+
+interaction variation:
+
+\[
+\delta \mathcal C_H
+=
+\mathrm{Tr}(\delta\rho H_{\partial F}^2)
++
+\mathrm{Tr}(\rho\delta(H_{\partial F}^2))
+\]
+
+stationary condition:
+
+\[
+\nabla_F\mathcal L=0
+\]
+
+defines optimal tensor-product structure.
+
+\section{Role of λ}
+
+λ acts as external control parameter
+determining relative weight of information and dynamics.
+
+Possible interpretation:
+
+\[
+\lambda
+\sim
+\frac{J^2}{\Gamma_I}
+\]
+
+where J is interaction scale
+and Γ_I is information production rate.
+
+Precise microscopic derivation remains future work.
+
+\section{Three-qubit illustration}
+
+state:
+
+\[
+|\Psi\rangle
+=
+\sqrt{0.6}|000\rangle
++
+\sqrt{0.3}|111\rangle
++
+\sqrt{0.1}|101\rangle
+\]
+
+reduced density matrix for qubit A:
+
+\[
+\rho_A
+=
+\begin{pmatrix}
+0.6+0.3 & 0 \\
+0 & 0.1
+\end{pmatrix}
+=
+\begin{pmatrix}
+0.9 & 0 \\
+0 & 0.1
+\end{pmatrix}
+\]
+
+entropy:
+
+\[
+S(A)=0.469
+\]
+
+mutual information:
+
+\[
+I(A:BC)=1.942
+\]
+
+interaction costs differ across factorizations,
+producing regime competition:
+
+information-dominated regime selects correlated structure
+
+dynamics-dominated regime selects separable structure
+
+crossover:
+
+\[
+\lambda^*\approx0.28
+\]
+
+\section{Relation to prior work}
+
+Carroll and Singh identify preferred tensor-product structure
+through dynamical robustness criteria,
+minimizing interaction leakage and entanglement growth.
+
+REM generalizes this approach by introducing explicit informational objective Φ_S,
+leading to hybrid informational–dynamical optimization on factorization space.
+
+Zanardi defines subsystem structure operationally through observable algebra.
+
+REM instead treats tensor-product structure as variational degree of freedom.
+
+Loizeau and Sels infer subsystem structure from spectral properties alone.
+
+REM uses both state information and Hamiltonian structure.
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+framework & information & dynamics & generative \\
+\midrule
+Zanardi & implicit & yes & no \\
+Carroll-Singh & no & yes & no \\
+Loizeau-Sels & no & indirect & no \\
+Zurek & implicit & yes & dynamic \\
+REM & yes & yes & yes \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Generative refers to treating subsystem structure itself
+as an optimization variable.
+
+\section{Open-system perspective}
+
+Layer 2 corresponds to stability of selected structure
+under system dynamics.
+
+In open quantum systems,
+environmental monitoring may favor stable pointer structures,
+as described in Zurek's einselection framework.
+
+This suggests possible extension:
+
+\[
+\mathcal C_E
+=
+\sum_k
+\mathrm{Tr}
+(
+\rho
+L_k^\dagger L_k
+)_{\partial F}
+\]
+
+linking REM to decoherence-induced stability.
+
+A full dissipative treatment is left for future work.
+
+\section{Multipartite extension}
+
+General structure:
+
+\[
+\mathcal H
+=
+\bigotimes_i \mathcal H_i
+\]
+
+total correlation:
+
+\[
+T(\rho)
+=
+\sum_i S(\rho_i)-S(\rho)
+\]
+
+supports hierarchical emergence of subsystem structure.
+
+\section{Computational considerations}
+
+dimension:
+
+\[
+\dim(\mathcal F)
+=
+N^2-n_A^2-n_B^2
+\]
+
+possible strategies:
+
+local Hamiltonian constraints
+
+tensor-network parametrization
+
+hierarchical coarse graining
+
+\section{Conclusion}
+
+Subsystem structure may be selected variationally:
+
+\[
+F^*
+=
+\argmin_F
+\mathcal L(F)
+\]
+
+REM provides generative extension of relational quantum mechanics,
+formulating subsystem emergence as optimization on factorization space.
+
+\begin{thebibliography}{9}
+\bibitem{rovelli} C Rovelli. Relational quantum mechanics. Int J Theor Phys 35 1637 (1996)
+\bibitem{zanardi} P Zanardi. Virtual subsystems. Phys Rev Lett 92 060402 (2004)
+\bibitem{carroll} S Carroll A Singh. Quantum Mereology. Phys Rev A 103 022213 (2021)
+\bibitem{loizeau} N Loizeau D Sels. Subsystem extraction from spectrum. Found Phys 55 (2025)
+\bibitem{zurek} W Zurek. Decoherence and einselection. Rev Mod Phys 75 715 (2003)
+\bibitem{frauchiger} D Frauchiger R Renner. Nat Commun 9 3711 (2018)
+\end{thebibliography}
+
+\end{document}
