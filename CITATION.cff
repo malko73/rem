@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+title: "REM Reproducibility Package"
+message: "If you use this software or the accompanying manuscripts, please cite the Zenodo record."
+type: software
+authors:
+  - family-names: Maruko
+    given-names: Yoshifumi
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.19642303
+repository-code: "https://github.com/malko73/rem"
+license: CC-BY-4.0
+version: 0.1.0
+date-released: 2026-07-18
