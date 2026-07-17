@@ -1,9 +1,11 @@
 # REM Reproducibility Package
 
-Reference code and manuscript sources for the **Relational Emergence Model (REM)** research series by Yoshifumi Maruko.
+Reference code and manuscript working snapshots for the **Relational Emergence Model (REM)** research series by Yoshifumi Maruko.
 
 Primary record: **DOI 10.5281/zenodo.19642303**  
 Zenodo: https://zenodo.org/records/19642303
+
+> The Zenodo records are the authoritative published versions of the manuscripts. Files under `papers/` are repository working snapshots intended to support code-to-paper traceability and ongoing revision.
 
 ## Scope
 
@@ -19,7 +21,7 @@ It includes exact diagonalization for asymmetric XY chains, candidate contiguous
 ```text
 src/rem4_numerical.py   Exact-diagonalization scaffold
 src/rem3.py             Earlier exploratory simulation
-papers/                 LaTeX sources for the REM series
+papers/                 Working LaTeX snapshots for the REM series
 reproduce.sh            Main reproduction command
 tests/                  Numerical and output smoke tests
 outputs/                 Generated figures, excluded from Git
