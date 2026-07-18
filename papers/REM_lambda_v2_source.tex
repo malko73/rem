@@ -24,7 +24,7 @@ C_H = \mathrm{Tr}(\rho H_{\partial F}^2) \geq 0,
 \]
 combining informational differentiation and a sign-definite boundary-fluctuation cost.
 
-The parameter $\lambda\geq0$ acts as an external control parameter governing the balance between informational structure and dynamical stability. A three-qubit XY chain example demonstrates regime competition with crossover at $\lambda^*\approx0.165$, and a continuous manifold optimisation yields $\Phi=1.32$ compared to $\Phi=0.68$ for the best contiguous partition.
+The parameter $\lambda\geq0$ acts as an external control parameter governing the balance between informational structure and dynamical stability. A three-qubit XY chain example demonstrates regime competition with crossover at $\lambda^*\approx0.165$, and a continuous manifold optimisation (with correctly reconstructed $H_{\partial}(U)$) yields $\Phi=1.05$ compared to $\Phi=0.56$ for the best contiguous partition.
 \end{abstract}
 
 \section{Introduction}
@@ -86,13 +86,13 @@ We consider a three-site XY chain with Hamiltonian
 \[
 H = J_{12}(X_1X_2+Y_1Y_2) + J_{23}(X_2X_3+Y_2Y_3) + h\sum_i Z_i,
 \]
-and parameters $J_{12}=1.5$, $J_{23}=0.6$, $h=0.2$. The ground state is obtained by exact diagonalisation. Two contiguous candidate cuts are evaluated:
+and parameters $J_{12}=1.5$, $J_{23}=0.6$, $h=0.2$. The ground state is obtained by exact diagonalisation. The dynamical cost is evaluated as $C_H = \langle H_{\partial F}^2\rangle$ (the quadratic boundary-fluctuation measure, not the square of the mean). Two contiguous candidate cuts are evaluated:
 
 \[
 \begin{array}{lccc}
 \text{cut} & \Phi_S\ (\text{bits}) & C_H & \Phi(\lambda=0.2) \\ \midrule
-1\ (A|BC) & 1.972 & 7.759 & 0.421 \\
-2\ (AB|C) & 0.724 & 0.199 & 0.684
+1\ (A|BC) & 1.972 & 8.379 & 0.297 \\
+2\ (AB|C) & 0.724 & 0.819 & 0.560
 \end{array}
 \]
 
@@ -104,11 +104,17 @@ At $\lambda=0$, cut~1 (higher mutual information) is preferred; at $\lambda=0.2$
 \]
 
 \subsection{Continuous manifold optimisation}
-The contiguous cuts are a small subset of the full factorisation manifold $\mathcal F \cong U(8)/(U(4)\times U(2))$, which has real dimension $44$. The present numerical implementation explores a four-parameter generator submanifold. We perform gradient ascent on $\Phi$ over this submanifold using anti-Hermitian generators and numerical central-difference gradients. The best recovered factorisation achieves
+The contiguous cuts are a small subset of the full factorisation manifold $\mathcal F \cong U(8)/(U(4)\times U(2))$, which has real dimension $44$. The present numerical implementation explores a four-parameter generator submanifold. For each candidate unitary $U$, the rotated Hamiltonian $H_U = U H U^\dagger$ is decomposed into local and interaction components via partial-trace projection:
 \[
-\Phi_{\mathrm{continuous}} = 1.32,
+H_U = H_A(U) + H_B(U) + H_{\partial}(U),
 \]
-substantially exceeding the best contiguous cut ($\Phi=0.68$). This demonstrates that the discrete contiguous ansatz significantly constrains the search space; higher-scoring factorisations may lie outside the site-contiguous partitions.
+where $H_A(U) = \frac{1}{d_B}\mathrm{Tr}_B(H_U)\otimes I_B$ and analogously for $H_B(U)$, with a trace-adjustment term to remove double-counting of the identity. The dynamical cost $C_H(U) = \langle \psi_U | H_{\partial}(U)^2 | \psi_U \rangle$ then correctly depends on $U$.
+
+We perform gradient ascent on $\Phi$ over the four-parameter submanifold using anti-Hermitian generators and numerical central-difference gradients. The best recovered factorisation achieves
+\[
+\Phi_{\mathrm{continuous}} = 1.05,
+\]
+substantially exceeding the best contiguous cut ($\Phi=0.56$). This demonstrates that the discrete contiguous ansatz significantly constrains the search space; higher-scoring factorisations may lie outside the site-contiguous partitions.
 
 \section{Finite-size scaling}
 We extend the analysis to $N=3,4,6,8$ sites under three coupling profiles:
@@ -116,9 +122,9 @@ We extend the analysis to $N=3,4,6,8$ sites under three coupling profiles:
 \[
 \begin{array}{lcccc}
 \text{profile} & N=3 & N=4 & N=6 & N=8 \\ \midrule
-\text{weak center} & 0.165 & 0.196 & \text{---} & 0.161 \\
-\text{linear}       & 0.165 & 0.128 & 0.049 & 0.161 \\
-\text{step}         & 0.165 & 0.177 & 1.662 & 0.010
+\text{weak center} & 0.165 & 0.209 & \text{---} & 0.218 \\
+\text{linear}       & 0.165 & 0.148 & 0.035 & 0.098 \\
+\text{step}         & 0.165 & 0.184 & 3.324 & 0.008
 \end{array}
 \]
 
@@ -137,7 +143,7 @@ C_H=\mathrm{Tr}(\rho H_{\partial F}^2)
 removes ambiguity associated with negative boundary-energy expectation values and gives a non-negative dynamical penalty. In the earlier linear formulation, an antiferromagnetic ground state produced $\phi_h = -\langle H_{\partial F}\rangle > 0$, favouring the stronger bond---opposite to the intended interpretation. The quadratic form eliminates this sign ambiguity: $C_H \geq 0$ regardless of the sign of the boundary expectation, and the dynamics-only selection ($\lambda\to\infty$) always favours the cut with smallest boundary fluctuation cost.
 
 \section{Scope and Limitations}
-The current three-qubit analysis is an existence-oriented toy model. The continuous manifold optimisation uses a finite-difference gradient and a small number of generator parameters; it does not guarantee global optimality. The finite-size scaling covers only $N\leq8$ due to exponential growth of the Hilbert space. A microscopic derivation of $\lambda$ and an experimental validation remain for future work.
+The current three-qubit analysis is an existence-oriented toy model. The continuous manifold optimisation uses a finite-difference gradient, a four-parameter generator submanifold of the 44-dimensional quotient manifold, and reconstructed $H_{\partial}(U)$ via partial-trace projection; it does not guarantee global optimality. The finite-size scaling covers only $N\leq8$ due to exponential growth of the Hilbert space. A microscopic derivation of $\lambda$ and an experimental validation remain for future work.
 
 \section{Conclusion}
 REM formulates relational articulation as a variational competition between informational differentiation and dynamical boundary cost. The quadratic form makes this competition sign definite and provides a basis for open-system and experimental extensions. Numerical results on an XY chain confirm regime competition, quantify the crossover scale, and demonstrate that continuous manifold optimisation significantly outperforms the discrete contiguous ansatz.
