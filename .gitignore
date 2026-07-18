@@ -6,4 +6,5 @@ venv/
 outputs/*.png
 outputs/*.json
 !outputs/.gitkeep
+results/
 .DS_Store

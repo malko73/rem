@@ -61,23 +61,36 @@ def evaluate_factorization(
     r"""
     Evaluate Φ for a single factorization U.
 
-    Parameters
-    ----------
-    u : (2**n, 2**n) unitary
-        Basis rotation.  After applying U the physical cut A|B lies at
-        site position *cut* (i.e. sites 0..cut-1 are subsystem A).
+    Reconstructs H_∂(U) from the rotated Hamiltonian via partial-trace
+    projection onto the interaction component.
     """
+    cut = 2                       # sites 0,1 = A, site 2 = B
+    n_a, n_b = cut, n - cut       # 2, 1
+    d_a, d_b = 2 ** n_a, 2 ** n_b
+
     psi_rot = u @ psi
     h_rot = u @ h_total @ u.conj().T
-    # bond terms in the rotated basis: only the bond at the cut survives
-    # We evaluate the boundary energy from the rotated Hamiltonian itself.
-    cut = 2  # fixed: sites 0,1 = A, site 2 = B
     mi = mutual_information_for_cut(psi_rot, n, cut)
-    # dynamical cost: expectation of H^2 restricted to the cut-bond subspace
-    #   H_∂F = partial_trace(H_rot, keep=A) — nearest-neighbor after rotation
-    #   Simplified: use the squared expectation of the full rotated H
-    ebd = float(np.real(np.vdot(psi_rot, h_rot @ psi_rot)))
-    c_h = ebd * ebd
+
+    # Decompose H_U = H_A + H_B + H_∂  (Hilbert–Schmidt projection)
+    rho_rot = np.outer(psi_rot, psi_rot.conj())
+
+    # H_A = (1/d_B) * Tr_B(H_U) ⊗ I_B
+    h_a_partial = partial_trace(h_rot, list(range(n_a)), n)  # (d_a, d_a)
+    h_a = np.kron(h_a_partial / d_b, np.eye(d_b, dtype=complex))
+
+    # H_B = I_A ⊗ (1/d_A) * Tr_A(H_U)
+    h_b_partial = partial_trace(h_rot, list(range(n_a, n)), n)  # (d_b, d_b)
+    h_b = np.kron(np.eye(d_a, dtype=complex), h_b_partial / d_a)
+
+    # identity offset: Tr(H_U) / (d_A * d_B) * I
+    h_trace = float(np.trace(h_rot).real)
+    h_id = (h_trace / (d_a * d_b)) * np.eye(d_a * d_b, dtype=complex)
+
+    h_boundary = h_rot - h_a - h_b + h_id
+
+    # C_H = <psi_rot | H_∂^2 | psi_rot>
+    c_h = float(np.real(np.vdot(psi_rot, h_boundary @ (h_boundary @ psi_rot))))
     phi = mi - lambda_value * c_h
     return phi, mi, c_h
 
@@ -299,6 +312,12 @@ def boundary_energy(psi: Array, bond_term: Array) -> float:
     return float(np.real(np.vdot(psi, bond_term @ psi)))
 
 
+def boundary_cost_squared(psi: Array, bond_term: Array) -> float:
+    r"""C_H = <\psi| (bond_term)^2 |\psi> (quadratic, sign-definite)."""
+    # bond_term @ (bond_term @ psi) is faster than (bond_term @ bond_term) @ psi
+    return float(np.real(np.vdot(psi, bond_term @ (bond_term @ psi))))
+
+
 def schmidt_data(psi: Array, n: int, cut: int) -> Tuple[Array, Array, Array]:
     mat = psi.reshape((2 ** cut, 2 ** (n - cut)))
     u, s, vh = np.linalg.svd(mat, full_matrices=False)
@@ -334,10 +353,9 @@ def evaluate_cuts(
     for cut in range(1, n):
         bond = bond_terms[(cut - 1, cut)]
         mi = mutual_information_for_cut(psi, n, cut, base=base)
-        ebd = boundary_energy(psi, bond)
-        c_h = ebd * ebd            # C_H := <H^2> >= 0 (REM_lambda_v2 convention)
+        c_h = boundary_cost_squared(psi, bond)   # C_H := <H^2> >= 0
         phi = mi - lambda_value * c_h
-        out.append(CutMetrics(cut, mi, c_h, phi, ebd))
+        out.append(CutMetrics(cut, mi, c_h, phi, float('nan')))
     return out
 
 
