@@ -193,8 +193,15 @@ setting `tol_grad = 0.2`, `tol_phi = 5 × 10⁻⁴`, `patience = 10` gives:
 
 Across 30 seeds the final Φ is statistically indistinguishable
 (max individual degradation < 0.002).  No trial had a quality loss
-> 0.01.  The same mechanism is available for N = 4, 5 via the
-`optimize_factorization_adam` keyword arguments.
+> 0.01.
+
+For N = 4 and 5 the early-stopping mechanism is available via the same
+`optimize_factorization_adam` keyword arguments, but the convergence
+behaviour differs.  At a 150-step budget (the largest that runs reliably
+on a laptop for 16‑qubit matrices), the Φ‑change criterion
+(5 × 10⁻⁴ over 10 steps) is never met, and no step saving is observed.
+Larger systems require more steps to settle, and the practical benefit of
+early stopping is expected to be smaller than for N = 3.
 
 ## Limitations
 

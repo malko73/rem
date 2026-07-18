@@ -1,0 +1,215 @@
+{
+  "params": {
+    "outdir": "/Users/marukoshiki/Desktop/Programing/rem/analysis_output",
+    "trials": 30,
+    "steps": 150,
+    "lr": 0.01,
+    "tol_grad": 0.0,
+    "tol_phi": 0.0001,
+    "patience": 10,
+    "ns": [
+      4
+    ],
+    "j12": 1.5,
+    "j23": 0.6,
+    "h": 0.2,
+    "lambda_value": 0.2,
+    "seed_offset": 2000
+  },
+  "n": 4,
+  "n_a": 3,
+  "contiguous_phi": 1.7228679245283018,
+  "aggregate": {
+    "full_phi_mean": 2.057815524737166,
+    "full_phi_std": 0.03494725595058319,
+    "early_phi_mean": 2.057815524737166,
+    "early_phi_std": 0.03494725595058319,
+    "steps_mean": 150.0,
+    "steps_std": 0.0,
+    "steps_save_pct": 0.0,
+    "quality_loss_pct": 0.0,
+    "early_better_frac": 0.0
+  },
+  "trials": [
+    {
+      "seed": 2000,
+      "full_phi": 2.0463552004955714,
+      "early_phi": 2.0463552004955714,
+      "early_steps": 150
+    },
+    {
+      "seed": 2001,
+      "full_phi": 2.0210738928608567,
+      "early_phi": 2.0210738928608567,
+      "early_steps": 150
+    },
+    {
+      "seed": 2002,
+      "full_phi": 2.0522897788689227,
+      "early_phi": 2.0522897788689227,
+      "early_steps": 150
+    },
+    {
+      "seed": 2003,
+      "full_phi": 2.0009598338881087,
+      "early_phi": 2.0009598338881087,
+      "early_steps": 150
+    },
+    {
+      "seed": 2004,
+      "full_phi": 2.0695482881227543,
+      "early_phi": 2.0695482881227543,
+      "early_steps": 150
+    },
+    {
+      "seed": 2005,
+      "full_phi": 2.070674722207628,
+      "early_phi": 2.070674722207628,
+      "early_steps": 150
+    },
+    {
+      "seed": 2006,
+      "full_phi": 2.050073691132701,
+      "early_phi": 2.050073691132701,
+      "early_steps": 150
+    },
+    {
+      "seed": 2007,
+      "full_phi": 2.089726521330051,
+      "early_phi": 2.089726521330051,
+      "early_steps": 150
+    },
+    {
+      "seed": 2008,
+      "full_phi": 2.0218460812639987,
+      "early_phi": 2.0218460812639987,
+      "early_steps": 150
+    },
+    {
+      "seed": 2009,
+      "full_phi": 2.0596636117539227,
+      "early_phi": 2.0596636117539227,
+      "early_steps": 150
+    },
+    {
+      "seed": 2010,
+      "full_phi": 2.1114178096919187,
+      "early_phi": 2.1114178096919187,
+      "early_steps": 150
+    },
+    {
+      "seed": 2011,
+      "full_phi": 2.091894549179774,
+      "early_phi": 2.091894549179774,
+      "early_steps": 150
+    },
+    {
+      "seed": 2012,
+      "full_phi": 2.109376273566464,
+      "early_phi": 2.109376273566464,
+      "early_steps": 150
+    },
+    {
+      "seed": 2013,
+      "full_phi": 2.030740080497928,
+      "early_phi": 2.030740080497928,
+      "early_steps": 150
+    },
+    {
+      "seed": 2014,
+      "full_phi": 2.095877390383635,
+      "early_phi": 2.095877390383635,
+      "early_steps": 150
+    },
+    {
+      "seed": 2015,
+      "full_phi": 2.065692835292179,
+      "early_phi": 2.065692835292179,
+      "early_steps": 150
+    },
+    {
+      "seed": 2016,
+      "full_phi": 2.1029546313991476,
+      "early_phi": 2.1029546313991476,
+      "early_steps": 150
+    },
+    {
+      "seed": 2017,
+      "full_phi": 1.96652988818117,
+      "early_phi": 1.96652988818117,
+      "early_steps": 150
+    },
+    {
+      "seed": 2018,
+      "full_phi": 2.034189082787203,
+      "early_phi": 2.034189082787203,
+      "early_steps": 150
+    },
+    {
+      "seed": 2019,
+      "full_phi": 2.040259529303632,
+      "early_phi": 2.040259529303632,
+      "early_steps": 150
+    },
+    {
+      "seed": 2020,
+      "full_phi": 2.04528404623127,
+      "early_phi": 2.04528404623127,
+      "early_steps": 150
+    },
+    {
+      "seed": 2021,
+      "full_phi": 2.0906553634281018,
+      "early_phi": 2.0906553634281018,
+      "early_steps": 150
+    },
+    {
+      "seed": 2022,
+      "full_phi": 2.0392984885364553,
+      "early_phi": 2.0392984885364553,
+      "early_steps": 150
+    },
+    {
+      "seed": 2023,
+      "full_phi": 2.0057409686199157,
+      "early_phi": 2.0057409686199157,
+      "early_steps": 150
+    },
+    {
+      "seed": 2024,
+      "full_phi": 2.0996372527432414,
+      "early_phi": 2.0996372527432414,
+      "early_steps": 150
+    },
+    {
+      "seed": 2025,
+      "full_phi": 2.0689625644340564,
+      "early_phi": 2.0689625644340564,
+      "early_steps": 150
+    },
+    {
+      "seed": 2026,
+      "full_phi": 2.0556958050220953,
+      "early_phi": 2.0556958050220953,
+      "early_steps": 150
+    },
+    {
+      "seed": 2027,
+      "full_phi": 2.0986152669234044,
+      "early_phi": 2.0986152669234044,
+      "early_steps": 150
+    },
+    {
+      "seed": 2028,
+      "full_phi": 2.0264919060471795,
+      "early_phi": 2.0264919060471795,
+      "early_steps": 150
+    },
+    {
+      "seed": 2029,
+      "full_phi": 2.0729403879216908,
+      "early_phi": 2.0729403879216908,
+      "early_steps": 150
+    }
+  ]
+}

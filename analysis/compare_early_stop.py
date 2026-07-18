@@ -121,7 +121,7 @@ def main() -> None:
     parser.add_argument("--steps", type=int, default=200)
     parser.add_argument("--lr", type=float, default=0.01)
     parser.add_argument("--tol-grad", type=float, default=0.0,
-                        help="0 = auto: 0.05 (N=3), 0.01 (N=4), 0.005 (N=5)")
+                        help="0 = auto: 1e9 (phi-only), else explicit threshold")
     parser.add_argument("--tol-phi", type=float, default=1e-4)
     parser.add_argument("--patience", type=int, default=5)
     parser.add_argument("--ns", type=int, nargs="+", default=[3])
@@ -137,7 +137,7 @@ def main() -> None:
     for n in args.ns:
         n_params = {3: 4, 4: 16, 5: 20}.get(n, 4)
         couplings = [args.j12] + [args.j23] * (n - 2)
-        tol_grad = args.tol_grad if args.tol_grad > 0 else {3: 0.05, 4: 0.01, 5: 0.005}.get(n, 0.05)
+        tol_grad = args.tol_grad if args.tol_grad > 0 else 1e9  # phi-only by default
 
         h_total, bonds = rem4.xy_chain_hamiltonian(n, couplings, args.h)
         _, psi = rem4.ground_state(h_total)
