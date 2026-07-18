@@ -104,17 +104,61 @@ Beyond the site-contiguous partitions, the code searches a four-parameter genera
 
 - Best contiguous-cut Φ: **0.560**
 - Best recovered factorisation Φ: **1.05**
+- Mean Φ over 30 random seeds: **1.09 ± 0.22** (1.95× improvement)
+- No seed failed to improve over the contiguous best.
 
-The full quotient `U(8)/(U(4) ⊗ U(2))` has real dimension 45. The reported result is not a global optimum over that full space.
+The full quotient `U(8)/(U(4) ⊗ U(2))` has real dimension 44. The reported result is not a global optimum over that full space.
+
+## Robustness across system sizes
+
+The `evaluate_factorization` routine has been extended to accept an arbitrary
+`n_a` parameter, allowing the optimisation to target any factorisation of the
+form `A = sites[0, n_a)`, `B = sites[n_a, n)`.  This enables a systematic
+robustness study across N = 3, 4, 5.
+
+Procedure for each N:
+1. Determine the best site-contiguous cut `n_a` from the discrete set of candidates.
+2. Fix `n_a` to that value so the continuous optimisation explores the same
+   Hilbert–Schmidt boundary-reconstruction problem as the discrete benchmark.
+3. Run 30 independent seeds for each of two axes:
+   - **Axis A** (initial-θ): fixed generator basis, 30 random initial θ.
+   - **Axis B** (generator basis): 30 independent random generator bases + θ.
+
+| N | n_a | contiguous Φ | optimised Φ (mean ± σ) | improvement ratio | success rate |
+|---|-----|-------------|------------------------|-------------------|-------------|
+| 3 | 2   | 0.560       | 1.09 ± 0.22            | 1.95×             | 100% (60/60) |
+| 4 | 3   | 1.723       | 1.88 ± 0.03            | 1.09×             | 100% (60/60) |
+| 5 | 4   | 1.458       | 1.62 ± 0.03            | 1.11×             | 100% (60/60) |
+
+Across all 180 trials the continuous optimisation always beat the best
+contiguous-cut Φ.  The improvement is large when the discrete best is low
+(N=3: Φ~0.56 → ~1.09) and settles to a modest but consistent ~1.1× for
+N=4,5.  Scatter shrinks sharply with N: the standard deviation drops from
+22 % (N=3) to under 2 % (N=4,5), indicating that the random subspace
+dimension we use (n_params = 4 for N=3, 16 for N=4, 20 for N=5) captures
+a narrower fraction of the full manifold as the system grows.
+
+Raw data (180-trial JSON) and violin plots are in `analysis_output/`.
+
+**Caveat:** these results are conditioned on the chosen generator-subspace
+dimension, a fixed-step gradient-ascent optimiser (lr = 0.01, steps = 200,
+no momentum), and the particular Hamiltonian parameters
+(`J12=1.5, J23=0.6, h=0.2, λ=0.2`).  They do not represent a global
+optimum over the full factorisation manifold.
 
 ## Limitations
 
 The current numerical work is an existence-oriented toy-model study. It does not yet provide:
 
-- a guarantee of global optimality on the continuous manifold (finite-difference gradients, fixed generator basis);
+- a guarantee of global optimality on the continuous manifold (finite-difference gradients, fixed generator-basis subspace, no momentum);
 - a microscopic derivation of the tradeoff parameter λ;
 - a full system-environment decoherence calculation;
 - experimental validation.
+
+The robustness study in the previous section is conditioned on the
+generator-subspace dimension, a fixed-step gradient-ascent optimiser
+(lr = 0.01, steps = 200), and the single Hamiltonian point
+(J12=1.5, J23=0.6, h=0.2, λ=0.2).
 
 These limitations are part of the research program and should be retained when citing or extending the code.
 

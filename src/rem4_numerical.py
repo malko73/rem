@@ -56,21 +56,24 @@ def evaluate_factorization(
     u: Array,
     *,
     n: int,
+    n_a: int = 2,
     lambda_value: float,
 ) -> tuple[float, float, float]:
     r"""
     Evaluate Φ for a single factorization U.
 
-    Reconstructs H_∂(U) from the rotated Hamiltonian via partial-trace
-    projection onto the interaction component.
+    Parameters
+    ----------
+    n_a : int
+        Number of qubits in subsystem A (= cut position).
+        Default 2 gives A = sites [0,1], B = site 2 (the N=3 benchmark).
     """
-    cut = 2                       # sites 0,1 = A, site 2 = B
-    n_a, n_b = cut, n - cut       # 2, 1
+    n_b = n - n_a
     d_a, d_b = 2 ** n_a, 2 ** n_b
 
     psi_rot = u @ psi
     h_rot = u @ h_total @ u.conj().T
-    mi = mutual_information_for_cut(psi_rot, n, cut)
+    mi = mutual_information_for_cut(psi_rot, n, n_a)
 
     # Decompose H_U = H_A + H_B + H_∂  (Hilbert–Schmidt projection)
     rho_rot = np.outer(psi_rot, psi_rot.conj())
@@ -103,6 +106,7 @@ def _finite_diff_grad(
     generators: Array,
     *,
     n: int,
+    n_a: int = 2,
     lambda_value: float,
     eps: float = 1e-5,
 ) -> Array:
@@ -116,9 +120,9 @@ def _finite_diff_grad(
         u_hi = sla.expm(1j * np.einsum("ijk,k->ij", generators, th_hi))
         u_lo = sla.expm(1j * np.einsum("ijk,k->ij", generators, th_lo))
         phi_hi, _, _ = evaluate_factorization(
-            psi, h_total, bond_terms, u_hi, n=n, lambda_value=lambda_value)
+            psi, h_total, bond_terms, u_hi, n=n, n_a=n_a, lambda_value=lambda_value)
         phi_lo, _, _ = evaluate_factorization(
-            psi, h_total, bond_terms, u_lo, n=n, lambda_value=lambda_value)
+            psi, h_total, bond_terms, u_lo, n=n, n_a=n_a, lambda_value=lambda_value)
         grad[i] = (phi_hi - phi_lo) / (2.0 * eps)
     return grad
 
@@ -129,6 +133,7 @@ def optimize_factorization(
     bond_terms: Dict[Tuple[int, int], Array],
     *,
     n: int = 3,
+    n_a: int = 2,
     lambda_value: float = 0.2,
     n_params: int = 4,
     steps: int = 200,
@@ -137,8 +142,6 @@ def optimize_factorization(
 ) -> dict:
     """
     Gradient-ascent on Φ over the factorization manifold U(N)/(U(n_A)×U(n_B)).
-
-    Returns the best Φ, the optimal U, and the optimisation trajectory.
     """
     generators = _random_anti_hermitian(2**n, n_params)
     theta = N_RNG.standard_normal(n_params) * 0.1
@@ -150,10 +153,10 @@ def optimize_factorization(
     for step in range(steps):
         u = sla.expm(1j * np.einsum("ijk,k->ij", generators, theta))
         phi, mi, c_h = evaluate_factorization(
-            psi, h_total, bond_terms, u, n=n, lambda_value=lambda_value)
+            psi, h_total, bond_terms, u, n=n, n_a=n_a, lambda_value=lambda_value)
         grad = _finite_diff_grad(
             theta, psi, h_total, bond_terms, generators,
-            n=n, lambda_value=lambda_value)
+            n=n, n_a=n_a, lambda_value=lambda_value)
 
         # Adam-style update (simple moment approximation)
         theta += lr * grad
