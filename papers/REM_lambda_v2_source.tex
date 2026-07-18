@@ -104,11 +104,11 @@ At $\lambda=0$, cut~1 (higher mutual information) is preferred; at $\lambda=0.2$
 \]
 
 \subsection{Continuous manifold optimisation}
-The contiguous cuts are a small subset of the full factorisation manifold $\mathcal F \cong U(8)/(U(4)\times U(2))$, which has real dimension~4 for this system. We perform gradient ascent on $\Phi$ over $\mathcal F$ using anti-Hermitian generators and numerical central-difference gradients. The optimal recovered factorisation achieves
+The contiguous cuts are a small subset of the full factorisation manifold $\mathcal F \cong U(8)/(U(4)\times U(2))$, which has real dimension $44$. The present numerical implementation explores a four-parameter generator submanifold. We perform gradient ascent on $\Phi$ over this submanifold using anti-Hermitian generators and numerical central-difference gradients. The best recovered factorisation achieves
 \[
-\Phi_{\text{cont}} = 1.32,
+\Phi_{\mathrm{continuous}} = 1.32,
 \]
-substantially exceeding the best contiguous cut ($\Phi=0.68$). This demonstrates that the discrete contiguous ansatz significantly constrains the search space; the true optimal subsystem decomposition may lie outside any site-contiguous partition.
+substantially exceeding the best contiguous cut ($\Phi=0.68$). This demonstrates that the discrete contiguous ansatz significantly constrains the search space; higher-scoring factorisations may lie outside the site-contiguous partitions.
 
 \section{Finite-size scaling}
 We extend the analysis to $N=3,4,6,8$ sites under three coupling profiles:
