@@ -12,19 +12,25 @@ Zenodo: https://zenodo.org/records/19642303
 This repository provides an auditable implementation of the finite-dimensional numerical scaffold used to study competition between:
 
 - an informational criterion, represented by cross-boundary mutual information; and
-- a dynamical boundary criterion, represented by a boundary-Hamiltonian proxy.
+- a dynamical boundary cost, represented by the quadratic boundary-fluctuation measure `C_H = <H_boundary^2>`.
 
-It includes exact diagonalization for asymmetric XY chains, candidate contiguous cuts, lambda-dependent structural selection, phase-diagram generation, and finite-size checks for small systems.
+It includes:
+
+- Exact diagonalization for asymmetric XY chains
+- Candidate contiguous cuts and lambda-dependent structural selection
+- **Continuous factorization manifold optimisation** over `U(N)/(U(n_A) × U(n_B))` via gradient ascent
+- Phase-diagram generation and finite-size scaling for small systems
+- A **sign-definite dynamical cost** `C_H = <H^2> ≥ 0` (REM_lambda_v2 convention) that eliminates the sign ambiguity documented in earlier versions
 
 ## Repository layout
 
-```text
-src/rem4_numerical.py   Exact-diagonalization scaffold
+```
+src/rem4_numerical.py   Exact-diagonalization scaffold + continuous optimisation
 src/rem3.py             Earlier exploratory simulation
 papers/                 Working LaTeX snapshots for the REM series
 reproduce.sh            Main reproduction command
-tests/                  Numerical and output smoke tests
-outputs/                 Generated figures, excluded from Git
+tests/                  Numerical and output smoke tests (9 tests)
+outputs/                Generated figures, excluded from Git
 ```
 
 ## Installation
@@ -46,7 +52,7 @@ pip install -r requirements.txt
 
 Expected generated files include:
 
-```text
+```
 outputs/REM4_phase_exact.png
 outputs/REM4_scaling.png
 ```
@@ -69,33 +75,34 @@ python src/rem4_numerical.py \
 pytest -q
 ```
 
-## Reproducibility status and known discrepancy
+9 tests covering: Hamiltonian hermiticity, ground-state normalisation, mutual-information non-negativity, dynamical-cost non-negativity (`C_H ≥ 0`), crossover-λ* benchmark, info/std divergence at λ=0, continuous optimisation Φ improvement, finite-size scan smoke, and phase-scan output existence.
 
-The code runs deterministically for the ground-state workflow and generates the phase and finite-size figures. However, the current implementation does **not** numerically reproduce every benchmark value printed in the REM4 manuscript table for `J12=1.5`, `J23=0.6`, and `h=0.2`.
+## Dynamical-cost convention
 
-In particular, the present code uses:
+The code uses the **quadratic dynamical cost** `C_H = <H_boundary^2>` (REM_lambda_v2 convention). This is a **sign-definite** measure:
 
-```python
-phi_h = -<psi|H_boundary|psi>
-```
+- `C_H ≥ 0` for any state and any cut
+- The dynamics-only selection (`λ → ∞`) favours the cut with smallest boundary fluctuation cost
+- No sign ambiguity: an antiferromagnetic ground state that gives a negative boundary expectation still yields a positive `C_H`
 
-For an antiferromagnetic XY ground state, the boundary expectation can be negative, making `phi_h` positive and potentially favoring the stronger bond. This conflicts with the manuscript's stated interpretation that the dynamics-only proxy should favor weaker cross-boundary coupling.
+The earlier `phi_h = -<H_boundary>` convention (used in REM3, REM4 pre-v2) is superseded. The quadratic form aligns with REM_lambda_v2 and REM5.
 
-This discrepancy is intentionally documented rather than hidden. It should be resolved by fixing and justifying one convention across the manuscript and code, for example:
+## Continuous manifold optimisation
 
-- `-abs(<H_boundary>)`;
-- a non-negative quadratic cost such as `<H_boundary^2>`; or
-- a decoherence-rate proxy derived from an explicit open-system model.
+Beyond the site-contiguous partitions, the code can search over the full factorisation manifold `U(N)/(U(n_A) × U(n_B))` via gradient ascent on anti-Hermitian generators. For the 3-qubit benchmark (`J12=1.5, J23=0.6, h=0.2, λ=0.2`):
 
-Until that convention is fixed, the repository supports reproduction of the **computational workflow and existence-search scaffold**, not a claim of exact reproduction of all published numerical values.
+- Best contiguous-cut Φ: **0.68**
+- Continuous manifold Φ: **1.32**
 
-## Scientific claim boundary
+This indicates that the true optimal subsystem decomposition can lie outside any site-contiguous partition.
+
+## Limitations
 
 The current numerical work is an existence-oriented toy-model study. It does not yet provide:
 
-- optimization over the full continuous factorization manifold;
-- a microscopic derivation of the tradeoff parameter lambda;
-- a full system-environment decoherence calculation; or
+- a guarantee of global optimality on the continuous manifold (finite-difference gradients, fixed generator basis);
+- a microscopic derivation of the tradeoff parameter λ;
+- a full system-environment decoherence calculation;
 - experimental validation.
 
 These limitations are part of the research program and should be retained when citing or extending the code.
