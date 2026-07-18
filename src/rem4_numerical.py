@@ -141,7 +141,9 @@ def optimize_factorization(
     verbose: bool = True,
 ) -> dict:
     """
-    Gradient-ascent on Φ over the factorization manifold U(N)/(U(n_A)×U(n_B)).
+    Gradient-ascent on Φ over the factorization manifold.
+
+    Uses plain gradient ascent with fixed learning rate (no momentum).
     """
     generators = _random_anti_hermitian(2**n, n_params)
     theta = N_RNG.standard_normal(n_params) * 0.1
@@ -158,7 +160,6 @@ def optimize_factorization(
             theta, psi, h_total, bond_terms, generators,
             n=n, n_a=n_a, lambda_value=lambda_value)
 
-        # Adam-style update (simple moment approximation)
         theta += lr * grad
         history.append((phi, mi, c_h))
 
@@ -172,6 +173,70 @@ def optimize_factorization(
     return dict(best_phi=best_phi, best_u=best_u,
                 theta=theta, generators=generators,
                 history=np.array(history))
+
+
+def optimize_factorization_adam(
+    psi: Array,
+    h_total: Array,
+    bond_terms: Dict[Tuple[int, int], Array],
+    *,
+    n: int = 3,
+    n_a: int = 2,
+    lambda_value: float = 0.2,
+    n_params: int = 4,
+    steps: int = 200,
+    lr: float = 0.01,
+    beta1: float = 0.9,
+    beta2: float = 0.999,
+    eps: float = 1e-8,
+    verbose: bool = True,
+) -> dict:
+    """
+    Adam gradient-ascent on Φ over the factorization manifold.
+
+    Standard Adam (Kingma & Ba, 2015) adapted for gradient ascent:
+      m_t = β1·m_{t-1} + (1-β1)·g_t
+      v_t = β2·v_{t-1} + (1-β2)·g_t²
+      θ_t = θ_{t-1} + lr · m̂_t / (√v̂_t + ε)
+
+    where m̂ = m/(1-β1^t), v̂ = v/(1-β2^t).
+    """
+    generators = _random_anti_hermitian(2**n, n_params)
+    theta = N_RNG.standard_normal(n_params) * 0.1
+
+    m = np.zeros_like(theta)
+    v = np.zeros_like(theta)
+    best_phi = -1e9
+    best_u = None
+    history = []
+
+    for step in range(steps):
+        t = step + 1
+        u = sla.expm(1j * np.einsum("ijk,k->ij", generators, theta))
+        phi, mi, c_h = evaluate_factorization(
+            psi, h_total, bond_terms, u, n=n, n_a=n_a, lambda_value=lambda_value)
+        grad = _finite_diff_grad(
+            theta, psi, h_total, bond_terms, generators,
+            n=n, n_a=n_a, lambda_value=lambda_value)
+
+        m = beta1 * m + (1.0 - beta1) * grad
+        v = beta2 * v + (1.0 - beta2) * (grad ** 2)
+        m_hat = m / (1.0 - beta1 ** t)
+        v_hat = v / (1.0 - beta2 ** t)
+        theta += lr * m_hat / (np.sqrt(v_hat) + eps)
+
+        history.append((phi, mi, c_h))
+        if phi > best_phi:
+            best_phi = phi
+            best_u = u.copy()
+
+        if verbose and step % 50 == 0:
+            print(f"  [{step:3d}] Φ={phi:.6f}  MI={mi:.6f}  C_H={c_h:.6f}")
+
+    return dict(best_phi=best_phi, best_u=best_u,
+                theta=theta, generators=generators,
+                history=np.array(history))
+
 
 try:
     import scipy.linalg as sla

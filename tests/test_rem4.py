@@ -211,6 +211,46 @@ def test_continuous_optimization_improves_phi():
     assert result["best_u"] is not None
 
 
+def test_adam_optimization_improves_phi():
+    """Adam optimiser should also beat the best contiguous-cut Φ."""
+    n = 3
+    h_total, bonds = rem4.xy_chain_hamiltonian(n, [1.5, 0.6], 0.2)
+    _, psi = rem4.ground_state(h_total)
+    metrics = rem4.evaluate_cuts(psi, n, bonds, lambda_value=0.2)
+    best_contiguous = max(m.phi for m in metrics)
+
+    rem4.N_RNG = np.random.default_rng(seed=12345)
+    result = rem4.optimize_factorization_adam(
+        psi, h_total, bonds, n=n, lambda_value=0.2,
+        n_params=4, steps=50, lr=0.01, verbose=False,
+    )
+    assert result["best_phi"] >= best_contiguous - 0.01, (
+        f"cont Φ={best_contiguous:.4f} but adam Φ={result['best_phi']:.4f}"
+    )
+    assert result["best_u"] is not None
+
+
+def test_adam_vs_sgd_same_seed():
+    """Under identical seed+params, Adam should not produce identical Φ to SGD."""
+    n = 3
+    h_total, bonds = rem4.xy_chain_hamiltonian(n, [1.5, 0.6], 0.2)
+    _, psi = rem4.ground_state(h_total)
+
+    rem4.N_RNG = np.random.default_rng(seed=999)
+    result_sgd = rem4.optimize_factorization(
+        psi, h_total, bonds, n=n, lambda_value=0.2,
+        n_params=4, steps=50, lr=0.01, verbose=False,
+    )
+
+    rem4.N_RNG = np.random.default_rng(seed=999)
+    result_adam = rem4.optimize_factorization_adam(
+        psi, h_total, bonds, n=n, lambda_value=0.2,
+        n_params=4, steps=50, lr=0.01, verbose=False,
+    )
+    assert not np.isclose(result_sgd["best_phi"], result_adam["best_phi"],
+                          rtol=1e-5), "Adam and SGD gave identical Φ—suspicious"
+
+
 # ── finite-size / smoke tests ───────────────────────────────────────
 
 def test_finite_size_scan_runs():

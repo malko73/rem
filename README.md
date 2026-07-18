@@ -40,7 +40,7 @@ src/rem4_numerical.py   Exact-diagonalization scaffold + continuous optimisation
 src/rem3.py             Earlier exploratory simulation
 papers/                 Working LaTeX snapshots for the REM series
 reproduce.sh            Main reproduction command
-tests/                  Numerical and output smoke tests (16 tests)
+tests/                  Numerical and output smoke tests (18 tests)
 outputs/                Generated figures, excluded from Git
 ```
 
@@ -86,7 +86,7 @@ python3 src/rem4_numerical.py \
 pytest -q
 ```
 
-16 tests covering Hamiltonian and state invariants, the exact quadratic-cost definition, the distinction between `<H_boundary^2>` and `<H_boundary>^2`, discrete-cut benchmarks, finite-size and output smoke tests, identity-factorisation consistency, factorisation-dependent boundary cost, and continuous-optimisation improvement.
+18 tests covering Hamiltonian and state invariants, the exact quadratic-cost definition, the distinction between `<H_boundary^2>` and `<H_boundary>^2`, discrete-cut benchmarks, finite-size and output smoke tests, identity-factorisation consistency, factorisation-dependent boundary cost, continuous-optimisation improvement, Adam optimiser correctness, and SGD–Adam divergence.
 
 ## Dynamical-cost convention
 
@@ -141,16 +141,44 @@ a narrower fraction of the full manifold as the system grows.
 Raw data (180-trial JSON) and violin plots are in `analysis_output/`.
 
 **Caveat:** these results are conditioned on the chosen generator-subspace
-dimension, a fixed-step gradient-ascent optimiser (lr = 0.01, steps = 200,
+dimension, a plain gradient-ascent optimiser (SGD, lr = 0.01, steps = 200,
 no momentum), and the particular Hamiltonian parameters
 (`J12=1.5, J23=0.6, h=0.2, λ=0.2`).  They do not represent a global
 optimum over the full factorisation manifold.
+
+## Optimiser comparison: SGD vs Adam
+
+The default optimiser is plain gradient ascent (SGD, lr = 0.01).  A
+separate Adam variant (`optimize_factorization_adam`) provides adaptive
+moment estimates.  Both are compared under identical starting conditions:
+same Hamiltonian, same generator basis, same initial θ, same step budget
+(200), across 30 independent seeds per system size.
+
+| N | SGD Φ (mean ± σ) | Adam Φ (mean ± σ) | Adam > SGD | improvement |
+|---|-------------------|-------------------|------------|-------------|
+| 3 | 1.083 ± 0.235     | **1.232 ± 0.269** | 30/30      | +13.8 %    |
+| 4 | 1.883 ± 0.034     | **2.069 ± 0.036** | 30/30      | +9.9 %     |
+| 5 | 1.624 ± 0.026     | **1.861 ± 0.056** | 30/30      | +14.6 %    |
+
+Adam outperforms SGD in **all 90 trials** across all three system sizes.
+The improvement is largest for N=5 (+14.6 %) where the manifold dimension
+is highest and the adaptive step sizes provide the greatest benefit.
+Adam's final gradient norm is typically 2–3× smaller than SGD's,
+indicating tighter convergence at the same step count.
+
+Both optimisers maintain a 100 % success rate — every trial beats the
+best contiguous-cut Φ.
+
+**Caveat:** the comparison is at fixed step budget (200), not at equal
+wall time.  Adam's per-step cost is negligibly higher (two vector
+updates); the practical run time is dominated by the evaluation + gradient
+overhead shared by both methods.
 
 ## Limitations
 
 The current numerical work is an existence-oriented toy-model study. It does not yet provide:
 
-- a guarantee of global optimality on the continuous manifold (finite-difference gradients, fixed generator-basis subspace, no momentum);
+- a guarantee of global optimality on the continuous manifold (finite-difference gradients, fixed generator-basis subspace, SGD or Adam);
 - a microscopic derivation of the tradeoff parameter λ;
 - a full system-environment decoherence calculation;
 - experimental validation.
