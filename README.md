@@ -1,5 +1,24 @@
 # REM Reproducibility Package
 
+> **⚠️ Numerical correction in progress (2026-07-18)**
+>
+> The numerical implementation accompanying REM_lambda v3 (DOI 10.5281/zenodo.21427451)
+> has two known issues that affect all published numerical values:
+>
+> 1. **Discrete-cut cost**: `C_H` is computed as `<H_boundary>^2` rather than the
+>    intended `<H_boundary^2>`. These differ by the variance of `H_boundary`.
+> 2. **Continuous manifold optimisation**: The dynamical cost in `evaluate_factorization`
+>    is independent of the unitary `U` because `<Uψ|UHU†|Uψ> = <ψ|H|ψ>`.
+>    The optimiser thus maximises mutual information only, not the full REM functional.
+>
+> All numerical values in v3 (`λ*≈0.165`, `Φ: 0.68→1.32`, finite-size scaling table)
+> are **under re-evaluation**. A corrected version (v4) is in preparation.
+>
+> The theoretical framework (`Φ = Φ_S - λC_H`, `C_H = Tr(ρ H_∂F^2)`) remains unchanged.
+> The issues are strictly in the computational implementation.
+>
+> See [GitHub issue #3](https://github.com/malko73/rem/issues/3) for tracking.
+
 Reference code and manuscript working snapshots for the **Relational Emergence Model (REM)** research series by Yoshifumi Maruko.
 
 Primary record: **DOI 10.5281/zenodo.21427451** (REM_lambda Version 3)  
