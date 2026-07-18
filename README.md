@@ -1,28 +1,17 @@
 # REM Reproducibility Package
 
-> **⚠️ Numerical correction in progress (2026-07-18)**
->
-> The numerical implementation accompanying REM_lambda v3 (DOI 10.5281/zenodo.21427451)
-> has two known issues that affect all published numerical values:
->
-> 1. **Discrete-cut cost**: `C_H` is computed as `<H_boundary>^2` rather than the
->    intended `<H_boundary^2>`. These differ by the variance of `H_boundary`.
-> 2. **Continuous manifold optimisation**: The dynamical cost in `evaluate_factorization`
->    is independent of the unitary `U` because `<Uψ|UHU†|Uψ> = <ψ|H|ψ>`.
->    The optimiser thus maximises mutual information only, not the full REM functional.
->
-> All numerical values in v3 (`λ*≈0.165`, `Φ: 0.68→1.32`, finite-size scaling table)
-> are **under re-evaluation**. A corrected version (v4) is in preparation.
->
-> The theoretical framework (`Φ = Φ_S - λC_H`, `C_H = Tr(ρ H_∂F^2)`) remains unchanged.
-> The issues are strictly in the computational implementation.
->
-> See [GitHub issue #3](https://github.com/malko73/rem/issues/3) for tracking.
+> **REM_lambda Version 4 (2026-07-18)** corrects the numerical implementation
+> distributed with Version 3. The dynamical cost now uses
+> `C_H = <H_boundary^2>` and continuous optimisation reconstructs the
+> factorisation-dependent boundary interaction. Version 4 supersedes the
+> numerical values reported in Version 3; the theoretical REM functional is unchanged.
 
 Reference code and manuscript working snapshots for the **Relational Emergence Model (REM)** research series by Yoshifumi Maruko.
 
-Primary record: **DOI 10.5281/zenodo.21427451** (REM_lambda Version 3)  
-Zenodo: https://zenodo.org/records/21427451
+Primary record: **DOI 10.5281/zenodo.21427776** (REM_lambda Version 4)
+Zenodo: https://zenodo.org/records/21427776
+
+Superseded numerical release: **DOI 10.5281/zenodo.21427451** (REM_lambda Version 3)
 
 Earlier record: **DOI 10.5281/zenodo.19642303** (REM1 reproducibility package, REM_lambda v2)  
 Zenodo: https://zenodo.org/records/19642303
@@ -40,9 +29,9 @@ It includes:
 
 - Exact diagonalization for asymmetric XY chains
 - Candidate contiguous cuts and lambda-dependent structural selection
-- **Continuous factorization manifold optimisation** over `U(N)/(U(n_A) × U(n_B))` via gradient ascent
+- **Continuous factorization manifold optimisation** over a four-parameter submanifold via gradient ascent
 - Phase-diagram generation and finite-size scaling for small systems
-- A **sign-definite dynamical cost** `C_H = <H^2> ≥ 0` (REM_lambda_v2 convention) that eliminates the sign ambiguity documented in earlier versions
+- A **sign-definite dynamical cost** `C_H = <H_boundary^2> ≥ 0` that eliminates the sign ambiguity documented in earlier versions
 
 ## Repository layout
 
@@ -51,7 +40,7 @@ src/rem4_numerical.py   Exact-diagonalization scaffold + continuous optimisation
 src/rem3.py             Earlier exploratory simulation
 papers/                 Working LaTeX snapshots for the REM series
 reproduce.sh            Main reproduction command
-tests/                  Numerical and output smoke tests (9 tests)
+tests/                  Numerical and output smoke tests (16 tests)
 outputs/                Generated figures, excluded from Git
 ```
 
@@ -97,26 +86,26 @@ python src/rem4_numerical.py \
 pytest -q
 ```
 
-9 tests covering: Hamiltonian hermiticity, ground-state normalisation, mutual-information non-negativity, dynamical-cost non-negativity (`C_H ≥ 0`), crossover-λ* benchmark, info/std divergence at λ=0, continuous optimisation Φ improvement, finite-size scan smoke, and phase-scan output existence.
+16 tests covering Hamiltonian and state invariants, the exact quadratic-cost definition, the distinction between `<H_boundary^2>` and `<H_boundary>^2`, discrete-cut benchmarks, finite-size and output smoke tests, identity-factorisation consistency, factorisation-dependent boundary cost, and continuous-optimisation improvement.
 
 ## Dynamical-cost convention
 
-The code uses the **quadratic dynamical cost** `C_H = <H_boundary^2>` (REM_lambda_v2 convention). This is a **sign-definite** measure:
+The code uses the **quadratic dynamical cost** `C_H = <H_boundary^2>`. This is a **sign-definite** measure:
 
 - `C_H ≥ 0` for any state and any cut
 - The dynamics-only selection (`λ → ∞`) favours the cut with smallest boundary fluctuation cost
 - No sign ambiguity: an antiferromagnetic ground state that gives a negative boundary expectation still yields a positive `C_H`
 
-The earlier `phi_h = -<H_boundary>` convention (used in REM3, REM4 pre-v2) is superseded. The quadratic form aligns with REM_lambda_v2 and REM5.
+The earlier `phi_h = -<H_boundary>` convention (used in REM3 and pre-v4 numerical snapshots) is superseded. The quadratic form aligns with REM_lambda v4 and REM5.
 
 ## Continuous manifold optimisation
 
-Beyond the site-contiguous partitions, the code can search over the full factorisation manifold `U(N)/(U(n_A) × U(n_B))` via gradient ascent on anti-Hermitian generators. For the 3-qubit benchmark (`J12=1.5, J23=0.6, h=0.2, λ=0.2`):
+Beyond the site-contiguous partitions, the code searches a four-parameter generator submanifold of the factorisation space. For the three-qubit benchmark (`J12=1.5, J23=0.6, h=0.2, λ=0.2`):
 
-- Best contiguous-cut Φ: **0.68**
-- Continuous manifold Φ: **1.32**
+- Best contiguous-cut Φ: **0.560**
+- Best recovered factorisation Φ: **1.05**
 
-This indicates that the true optimal subsystem decomposition can lie outside any site-contiguous partition.
+The full quotient `U(8)/(U(4) ⊗ U(2))` has real dimension 45. The reported result is not a global optimum over that full space.
 
 ## Limitations
 
@@ -136,11 +125,11 @@ Please cite the Zenodo record:
 ```bibtex
 @misc{maruko2026rem,
   author       = {Yoshifumi Maruko},
-  title        = {Relational Emergence Model: A Generative Extension of Relational Quantum Mechanics},
+  title        = {Variational Generation of Relational Structure in the Relational Emergence Model: Quadratic Dynamical Cost and Regime Competition},
   year         = {2026},
   publisher    = {Zenodo},
-  doi          = {10.5281/zenodo.19642303},
-  url          = {https://doi.org/10.5281/zenodo.19642303}
+  doi          = {10.5281/zenodo.21427776},
+  url          = {https://doi.org/10.5281/zenodo.21427776}
 }
 ```
 
