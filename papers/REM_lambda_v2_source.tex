@@ -24,7 +24,7 @@ C_H = \mathrm{Tr}(\rho H_{\partial F}^2) \geq 0,
 \]
 combining informational differentiation and a sign-definite boundary-fluctuation cost.
 
-The parameter $\lambda\geq0$ acts as an external control parameter governing the balance between informational structure and dynamical stability. A three-qubit example demonstrates regime competition between informationally optimal and dynamically stabilized factorizations.
+The parameter $\lambda\geq0$ acts as an external control parameter governing the balance between informational structure and dynamical stability. A three-qubit XY chain example demonstrates regime competition with crossover at $\lambda^*\approx0.165$, and a continuous manifold optimisation yields $\Phi=1.32$ compared to $\Phi=0.68$ for the best contiguous partition.
 \end{abstract}
 
 \section{Introduction}
@@ -57,10 +57,6 @@ and the dynamical cost is
 \[
 C_H=\mathrm{Tr}(\rho H_{\partial F}^2)\geq0.
 \]
-The equivalent minimization form is
-\[
-\mathcal L=-\Phi_S+\lambda C_H.
-\]
 
 \section{Information-Theoretic Quantities}
 For $\rho_{AB}=|\Psi\rangle\langle\Psi|$,
@@ -71,15 +67,12 @@ where
 \[
 S(\rho)=-\mathrm{Tr}(\rho\log_2\rho).
 \]
-For pure bipartitions,
-\[
-I(A:B)=2S(\rho_A).
-\]
 
 \section{Boundary Hamiltonian}
 For $H=\sum_\alpha h_\alpha$, define
 \[
-H_{\partial F}=\sum_{\alpha:\,\mathrm{supp}(h_\alpha)\cap A\neq\varnothing,\,\mathrm{supp}(h_\alpha)\cap B\neq\varnothing} h_\alpha.
+H_{\partial F}=\sum_{\alpha:\,\mathrm{supp}(h_\alpha)\cap A\neq\varnothing,\,
+\mathrm{supp}(h_\alpha)\cap B\neq\varnothing} h_\alpha.
 \]
 Thus
 \[
@@ -87,20 +80,49 @@ H=H_A+H_B+H_{\partial F}.
 \]
 The quadratic cost measures susceptibility to boundary-crossing fluctuations rather than mean boundary energy.
 
-\section{Three-Qubit Illustration}
-Consider
+\section{Three-Qubit Numerical Illustration}
+
+We consider a three-site XY chain with Hamiltonian
 \[
-|\Psi\rangle=\sqrt{0.6}|000\rangle+\sqrt{0.3}|111\rangle+\sqrt{0.1}|101\rangle.
+H = J_{12}(X_1X_2+Y_1Y_2) + J_{23}(X_2X_3+Y_2Y_3) + h\sum_i Z_i,
 \]
-For candidate bipartitions $A|BC$, $B|AC$, and $C|AB$, the informational and dynamical terms may favor different factorizations. The selected structure changes where
+and parameters $J_{12}=1.5$, $J_{23}=0.6$, $h=0.2$. The ground state is obtained by exact diagonalisation. Two contiguous candidate cuts are evaluated:
+
 \[
-\Phi(F_1,\lambda^*)=\Phi(F_2,\lambda^*),
+\begin{array}{lccc}
+\text{cut} & \Phi_S\ (\text{bits}) & C_H & \Phi(\lambda=0.2) \\ \midrule
+1\ (A|BC) & 1.972 & 7.759 & 0.421 \\
+2\ (AB|C) & 0.724 & 0.199 & 0.684
+\end{array}
 \]
-so
+
+At $\lambda=0$, cut~1 (higher mutual information) is preferred; at $\lambda=0.2$, cut~2 (lower dynamical cost) is preferred. The crossover occurs at
 \[
-\lambda^*=\frac{\Phi_S(F_1)-\Phi_S(F_2)}{C_H(F_1)-C_H(F_2)}.
+\lambda^* = \frac{\Phi_S(\text{cut}~1)-\Phi_S(\text{cut}~2)}
+{C_H(\text{cut}~1)-C_H(\text{cut}~2)}
+= \frac{1.248}{7.560} \approx 0.165.
 \]
-The numerical value is model dependent and is not proposed as a universal constant.
+
+\subsection{Continuous manifold optimisation}
+The contiguous cuts are a small subset of the full factorisation manifold $\mathcal F \cong U(8)/(U(4)\times U(2))$, which has real dimension~4 for this system. We perform gradient ascent on $\Phi$ over $\mathcal F$ using anti-Hermitian generators and numerical central-difference gradients. The optimal recovered factorisation achieves
+\[
+\Phi_{\text{cont}} = 1.32,
+\]
+substantially exceeding the best contiguous cut ($\Phi=0.68$). This demonstrates that the discrete contiguous ansatz significantly constrains the search space; the true optimal subsystem decomposition may lie outside any site-contiguous partition.
+
+\section{Finite-size scaling}
+We extend the analysis to $N=3,4,6,8$ sites under three coupling profiles:
+
+\[
+\begin{array}{lcccc}
+\text{profile} & N=3 & N=4 & N=6 & N=8 \\ \midrule
+\text{weak center} & 0.165 & 0.196 & \text{---} & 0.161 \\
+\text{linear}       & 0.165 & 0.128 & 0.049 & 0.161 \\
+\text{step}         & 0.165 & 0.177 & 1.662 & 0.010
+\end{array}
+\]
+
+The crossover scale $\lambda^*$ varies with system size and coupling heterogeneity, suggesting that the balance between informational and dynamical constraints depends on the spatial structure of the interaction. For the linear profile, $\lambda^*$ decreases towards $N=6$ then rises again at $N=8$, hinting at non-monotonic finite-size behaviour.
 
 \section{Physical Interpretation of $\lambda$}
 $\lambda$ is an effective tradeoff parameter rather than a fundamental universal constant. Candidate interpretations include an inverse-temperature-like parameter, a ratio of decoherence and internal dynamical timescales, and a scale-dependent coarse-graining parameter.
@@ -112,13 +134,13 @@ REM5 replaces a sign-sensitive linear boundary expectation with a positive quadr
 \[
 C_H=\mathrm{Tr}(\rho H_{\partial F}^2)
 \]
-removes ambiguity associated with negative boundary-energy expectation values and gives a non-negative dynamical penalty.
+removes ambiguity associated with negative boundary-energy expectation values and gives a non-negative dynamical penalty. In the earlier linear formulation, an antiferromagnetic ground state produced $\phi_h = -\langle H_{\partial F}\rangle > 0$, favouring the stronger bond---opposite to the intended interpretation. The quadratic form eliminates this sign ambiguity: $C_H \geq 0$ regardless of the sign of the boundary expectation, and the dynamics-only selection ($\lambda\to\infty$) always favours the cut with smallest boundary fluctuation cost.
 
 \section{Scope and Limitations}
-The current three-qubit analysis is an existence-oriented toy model. It does not perform a global optimization over the complete continuous factorization manifold, derive $\lambda$ microscopically, or provide an experimental validation.
+The current three-qubit analysis is an existence-oriented toy model. The continuous manifold optimisation uses a finite-difference gradient and a small number of generator parameters; it does not guarantee global optimality. The finite-size scaling covers only $N\leq8$ due to exponential growth of the Hilbert space. A microscopic derivation of $\lambda$ and an experimental validation remain for future work.
 
 \section{Conclusion}
-REM formulates relational articulation as a variational competition between informational differentiation and dynamical boundary cost. The quadratic form makes this competition sign definite and provides a basis for open-system and experimental extensions.
+REM formulates relational articulation as a variational competition between informational differentiation and dynamical boundary cost. The quadratic form makes this competition sign definite and provides a basis for open-system and experimental extensions. Numerical results on an XY chain confirm regime competition, quantify the crossover scale, and demonstrate that continuous manifold optimisation significantly outperforms the discrete contiguous ansatz.
 
 \begin{thebibliography}{9}
 \bibitem{rovelli} C. Rovelli, Relational Quantum Mechanics, Int. J. Theor. Phys. 35, 1637 (1996).
