@@ -191,8 +191,8 @@ def dominant_schmidt_angle(psi: Array, n: int, cut_a: int, cut_b: int) -> float:
 class CutMetrics:
     cut: int
     phi_s: float
-    phi_h: float
-    phi: float
+    c_h: float         # dynamical cost C_H = <H_boundary^2> >= 0
+    phi: float          # Phi = phi_s - lambda * c_h
     boundary_energy: float
 
 
@@ -208,9 +208,9 @@ def evaluate_cuts(
         bond = bond_terms[(cut - 1, cut)]
         mi = mutual_information_for_cut(psi, n, cut, base=base)
         ebd = boundary_energy(psi, bond)
-        phi_h = -ebd
-        phi = mi + lambda_value * phi_h
-        out.append(CutMetrics(cut, mi, phi_h, phi, ebd))
+        c_h = ebd * ebd            # C_H := <H^2> >= 0 (REM_lambda_v2 convention)
+        phi = mi - lambda_value * c_h
+        out.append(CutMetrics(cut, mi, c_h, phi, ebd))
     return out
 
 
@@ -219,7 +219,8 @@ def rem_selected_cut(metrics: Sequence[CutMetrics]) -> int:
 
 
 def std_selected_cut(metrics: Sequence[CutMetrics]) -> int:
-    return max(metrics, key=lambda x: x.phi_h).cut
+    # dynamics-only: smallest C_H cost
+    return min(metrics, key=lambda x: x.c_h).cut
 
 
 def info_selected_cut(metrics: Sequence[CutMetrics]) -> int:
@@ -227,11 +228,12 @@ def info_selected_cut(metrics: Sequence[CutMetrics]) -> int:
 
 
 def lambda_star_for_two_cuts(c1: CutMetrics, c2: CutMetrics) -> float | None:
+    # Solve: phi_s1 - lambda*c_h1 = phi_s2 - lambda*c_h2
     dphi_s = c1.phi_s - c2.phi_s
-    dphi_h = c2.phi_h - c1.phi_h
-    if abs(dphi_h) < 1e-12:
+    dc_h = c1.c_h - c2.c_h
+    if abs(dc_h) < 1e-12:
         return None
-    return dphi_s / dphi_h
+    return dphi_s / dc_h
 
 
 def first_crossover_lambda(psi: Array, n: int, bond_terms: Dict[Tuple[int, int], Array]) -> float | None:
@@ -407,10 +409,10 @@ def finite_size_scan(
 
 
 def print_metrics_table(metrics: Sequence[CutMetrics]) -> None:
-    print("cut\tPhi_S(bits)\tPhi_H\tPhi\t<E_boundary>")
+    print("cut\tPhi_S(bits)\tC_H\tPhi\t<E_boundary>")
     for metric in metrics:
         print(
-            f"{metric.cut}\t{metric.phi_s:.6f}\t{metric.phi_h:.6f}\t"
+            f"{metric.cut}\t{metric.phi_s:.6f}\t{metric.c_h:.6f}\t"
             f"{metric.phi:.6f}\t{metric.boundary_energy:.6f}"
         )
 
