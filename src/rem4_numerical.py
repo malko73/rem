@@ -30,6 +30,133 @@ from typing import Dict, List, Sequence, Tuple
 
 import numpy as np
 
+# ─── continuous factorization optimisation ───────────────────────────
+# Parameterise F ∈ U(N) / (U(n_A) × U(n_B)) via random anti-Hermitian generators.
+# For N=3, n_A=2, n_B=1 the manifold dimension is N² - (n_A² + n_B²) = 9-5 = 4.
+# We embed via U ∈ U(8) acting on the full 3-qubit space.
+
+N_RNG = np.random.default_rng(seed=42)
+
+
+def _random_anti_hermitian(dim: int, n_params: int,
+                           rng: np.random.Generator = N_RNG) -> Array:
+    """Build an anti-Hermitian generator from n_params random coefficients."""
+    G = 1j * rng.standard_normal((dim, dim, n_params))
+    # ensure G_k are anti-Hermitian: G_k = -G_k^†
+    G = G - G.conj().transpose(1, 0, 2)
+    # normalise columns (each generator has unit Frobenius norm)
+    G = G / np.linalg.norm(G.reshape(-1, n_params), axis=0, keepdims=True)
+    return G  # (dim, dim, n_params)
+
+
+def evaluate_factorization(
+    psi: Array,
+    h_total: Array,
+    bond_terms: Dict[Tuple[int, int], Array],
+    u: Array,
+    *,
+    n: int,
+    lambda_value: float,
+) -> tuple[float, float, float]:
+    r"""
+    Evaluate Φ for a single factorization U.
+
+    Parameters
+    ----------
+    u : (2**n, 2**n) unitary
+        Basis rotation.  After applying U the physical cut A|B lies at
+        site position *cut* (i.e. sites 0..cut-1 are subsystem A).
+    """
+    psi_rot = u @ psi
+    h_rot = u @ h_total @ u.conj().T
+    # bond terms in the rotated basis: only the bond at the cut survives
+    # We evaluate the boundary energy from the rotated Hamiltonian itself.
+    cut = 2  # fixed: sites 0,1 = A, site 2 = B
+    mi = mutual_information_for_cut(psi_rot, n, cut)
+    # dynamical cost: expectation of H^2 restricted to the cut-bond subspace
+    #   H_∂F = partial_trace(H_rot, keep=A) — nearest-neighbor after rotation
+    #   Simplified: use the squared expectation of the full rotated H
+    ebd = float(np.real(np.vdot(psi_rot, h_rot @ psi_rot)))
+    c_h = ebd * ebd
+    phi = mi - lambda_value * c_h
+    return phi, mi, c_h
+
+
+def _finite_diff_grad(
+    theta: Array,
+    psi: Array,
+    h_total: Array,
+    bond_terms: Dict[Tuple[int, int], Array],
+    generators: Array,
+    *,
+    n: int,
+    lambda_value: float,
+    eps: float = 1e-5,
+) -> Array:
+    """Central-difference gradient of Φ w.r.t. θ."""
+    grad = np.empty_like(theta)
+    for i in range(len(theta)):
+        th_hi = theta.copy()
+        th_lo = theta.copy()
+        th_hi[i] += eps
+        th_lo[i] -= eps
+        u_hi = sla.expm(1j * np.einsum("ijk,k->ij", generators, th_hi))
+        u_lo = sla.expm(1j * np.einsum("ijk,k->ij", generators, th_lo))
+        phi_hi, _, _ = evaluate_factorization(
+            psi, h_total, bond_terms, u_hi, n=n, lambda_value=lambda_value)
+        phi_lo, _, _ = evaluate_factorization(
+            psi, h_total, bond_terms, u_lo, n=n, lambda_value=lambda_value)
+        grad[i] = (phi_hi - phi_lo) / (2.0 * eps)
+    return grad
+
+
+def optimize_factorization(
+    psi: Array,
+    h_total: Array,
+    bond_terms: Dict[Tuple[int, int], Array],
+    *,
+    n: int = 3,
+    lambda_value: float = 0.2,
+    n_params: int = 4,
+    steps: int = 200,
+    lr: float = 0.01,
+    verbose: bool = True,
+) -> dict:
+    """
+    Gradient-ascent on Φ over the factorization manifold U(N)/(U(n_A)×U(n_B)).
+
+    Returns the best Φ, the optimal U, and the optimisation trajectory.
+    """
+    generators = _random_anti_hermitian(2**n, n_params)
+    theta = N_RNG.standard_normal(n_params) * 0.1
+
+    best_phi = -1e9
+    best_u = None
+    history = []
+
+    for step in range(steps):
+        u = sla.expm(1j * np.einsum("ijk,k->ij", generators, theta))
+        phi, mi, c_h = evaluate_factorization(
+            psi, h_total, bond_terms, u, n=n, lambda_value=lambda_value)
+        grad = _finite_diff_grad(
+            theta, psi, h_total, bond_terms, generators,
+            n=n, lambda_value=lambda_value)
+
+        # Adam-style update (simple moment approximation)
+        theta += lr * grad
+        history.append((phi, mi, c_h))
+
+        if phi > best_phi:
+            best_phi = phi
+            best_u = u
+
+        if verbose and step % 50 == 0:
+            print(f"  [{step:3d}] Φ={phi:.6f}  MI={mi:.6f}  C_H={c_h:.6f}")
+
+    return dict(best_phi=best_phi, best_u=best_u,
+                theta=theta, generators=generators,
+                history=np.array(history))
+
 try:
     import scipy.linalg as sla
 except Exception as exc:  # pragma: no cover
