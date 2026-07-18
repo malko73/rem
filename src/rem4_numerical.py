@@ -189,6 +189,9 @@ def optimize_factorization_adam(
     beta1: float = 0.9,
     beta2: float = 0.999,
     eps: float = 1e-8,
+    tol_grad: float | None = None,
+    tol_phi: float | None = None,
+    patience: int = 5,
     verbose: bool = True,
 ) -> dict:
     """
@@ -200,6 +203,16 @@ def optimize_factorization_adam(
       θ_t = θ_{t-1} + lr · m̂_t / (√v̂_t + ε)
 
     where m̂ = m/(1-β1^t), v̂ = v/(1-β2^t).
+
+    Parameters
+    ----------
+    tol_grad : float, optional
+        Stop early when ‖grad‖ < tol_grad *AND* Φ change (over `patience`
+        consecutive steps) < tol_phi.  Default None = no early stopping.
+    tol_phi : float, optional
+        Φ-change threshold for early stopping.  Ignored if tol_grad is None.
+    patience : int
+        Number of consecutive steps both conditions must hold before stopping.
     """
     generators = _random_anti_hermitian(2**n, n_params)
     theta = N_RNG.standard_normal(n_params) * 0.1
@@ -209,6 +222,10 @@ def optimize_factorization_adam(
     best_phi = -1e9
     best_u = None
     history = []
+    converged_at = steps        # steps = not converged
+
+    # Early-stopping state
+    phi_window = [] if (tol_grad is not None and tol_phi is not None) else None
 
     for step in range(steps):
         t = step + 1
@@ -233,9 +250,26 @@ def optimize_factorization_adam(
         if verbose and step % 50 == 0:
             print(f"  [{step:3d}] Φ={phi:.6f}  MI={mi:.6f}  C_H={c_h:.6f}")
 
+        # Early-stopping check
+        if phi_window is not None:
+            gn = float(np.linalg.norm(grad))
+            phi_window.append(phi)
+            if len(phi_window) > patience + 1:
+                phi_window.pop(0)
+
+            if len(phi_window) == patience + 1:
+                phi_change = abs(phi_window[-1] - phi_window[0]) / max(1.0, abs(phi_window[0]))
+                if gn < tol_grad and phi_change < tol_phi:
+                    converged_at = step + 1
+                    if verbose:
+                        print(f"  [{step:3d}] early stop: |grad|={gn:.6f} < {tol_grad}, "
+                              f"ΔΦ/Φ={phi_change:.6f} < {tol_phi}")
+                    break
+
     return dict(best_phi=best_phi, best_u=best_u,
                 theta=theta, generators=generators,
-                history=np.array(history))
+                history=np.array(history),
+                converged_at=converged_at)
 
 
 try:

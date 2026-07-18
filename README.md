@@ -174,6 +174,28 @@ wall time.  Adam's per-step cost is negligibly higher (two vector
 updates); the practical run time is dominated by the evaluation + gradient
 overhead shared by both methods.
 
+## Early stopping
+
+The Adam optimiser supports early stopping via `tol_grad` (gradient-norm
+threshold) and `tol_phi` (relative Φ-change threshold over a `patience`
+window).  When both criteria hold for `patience` consecutive steps the run
+terminates early.
+
+With `max_steps = 500` the Adam optimiser does not saturate: at step 200
+most seeds have not reached a stationary point, so early stopping under a
+200-step budget is ineffective.  Increasing the budget to 500 steps and
+setting `tol_grad = 0.2`, `tol_phi = 5 × 10⁻⁴`, `patience = 10` gives:
+
+| Mode      | Φ (mean ± σ) | steps (mean) | step saving |
+|-----------|--------------|--------------|-------------|
+| Full 500  | 1.251 ± 0.273 | 500          | —           |
+| Early     | 1.249 ± 0.272 | 233          | **53 %**    |
+
+Across 30 seeds the final Φ is statistically indistinguishable
+(max individual degradation < 0.002).  No trial had a quality loss
+> 0.01.  The same mechanism is available for N = 4, 5 via the
+`optimize_factorization_adam` keyword arguments.
+
 ## Limitations
 
 The current numerical work is an existence-oriented toy-model study. It does not yet provide:
