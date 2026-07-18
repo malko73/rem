@@ -49,9 +49,9 @@ outputs/                Generated figures, excluded from Git
 Python 3.11 or newer is recommended.
 
 ```bash
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install --upgrade pip
+python3 -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
@@ -71,7 +71,7 @@ outputs/REM4_scaling.png
 For a faster smoke run:
 
 ```bash
-python src/rem4_numerical.py \
+python3 src/rem4_numerical.py \
   --outdir outputs \
   --mode all \
   --state-mode ground \
