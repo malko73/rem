@@ -2,7 +2,10 @@
 
 Reference code and manuscript working snapshots for the **Relational Emergence Model (REM)** research series by Yoshifumi Maruko.
 
-Primary record: **DOI 10.5281/zenodo.19642303**  
+Primary record: **DOI 10.5281/zenodo.21427451** (REM_lambda Version 3)  
+Zenodo: https://zenodo.org/records/21427451
+
+Earlier record: **DOI 10.5281/zenodo.19642303** (REM1 reproducibility package, REM_lambda v2)  
 Zenodo: https://zenodo.org/records/19642303
 
 > The Zenodo records are the authoritative published versions of the manuscripts. Files under `papers/` are repository working snapshots intended to support code-to-paper traceability and ongoing revision.
