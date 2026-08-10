@@ -439,9 +439,10 @@ def dominant_schmidt_angle(psi: Array, n: int, cut_a: int, cut_b: int) -> float:
 class CutMetrics:
     cut: int
     phi_s: float
-    c_h: float         # dynamical cost C_H = <H_boundary^2> >= 0
+    c_h: float         # dynamical cost C_H = <H_boundary^2> >= 0 (second moment M2)
     phi: float          # Phi = phi_s - lambda * c_h
-    boundary_energy: float
+    boundary_energy: float  # <H_boundary> (mean)
+    var: float = 0.0    # Var(H_boundary) = <H^2> - <H>^2
 
 
 def evaluate_cuts(
@@ -455,9 +456,11 @@ def evaluate_cuts(
     for cut in range(1, n):
         bond = bond_terms[(cut - 1, cut)]
         mi = mutual_information_for_cut(psi, n, cut, base=base)
-        c_h = boundary_cost_squared(psi, bond)   # C_H := <H^2> >= 0
+        c_h = boundary_cost_squared(psi, bond)   # C_H := <H^2> >= 0 (M2)
+        e_mean = boundary_energy(psi, bond)      # <H_boundary>
+        var = c_h - e_mean * e_mean              # Var = <H^2> - <H>^2
         phi = mi - lambda_value * c_h
-        out.append(CutMetrics(cut, mi, c_h, phi, float('nan')))
+        out.append(CutMetrics(cut, mi, c_h, phi, e_mean, var))
     return out
 
 
@@ -656,11 +659,11 @@ def finite_size_scan(
 
 
 def print_metrics_table(metrics: Sequence[CutMetrics]) -> None:
-    print("cut\tPhi_S(bits)\tC_H\tPhi\t<E_boundary>")
+    print("cut\tPhi_S(bits)\tC_H=<H^2>\tVar(H)\tPhi\t<E_boundary>")
     for metric in metrics:
         print(
             f"{metric.cut}\t{metric.phi_s:.6f}\t{metric.c_h:.6f}\t"
-            f"{metric.phi:.6f}\t{metric.boundary_energy:.6f}"
+            f"{metric.var:.6f}\t{metric.phi:.6f}\t{metric.boundary_energy:.6f}"
         )
 
 
