@@ -1,6 +1,6 @@
 {
   "params": {
-    "outdir": "/Users/marukoshiki/Desktop/Programing/rem/analysis_output",
+    "outdir": "analysis_output",
     "trials": 30,
     "steps": 500,
     "lr": 0.01,
@@ -20,196 +20,196 @@
   "n_a": 2,
   "contiguous_phi": 0.5602404345024756,
   "aggregate": {
-    "full_phi_mean": 1.2505248675424596,
-    "full_phi_std": 0.2728478449001781,
-    "early_phi_mean": 1.2491186828876095,
-    "early_phi_std": 0.27246375347801627,
-    "steps_mean": 233.26666666666668,
-    "steps_std": 102.9494805987653,
-    "steps_save_pct": 53.346666666666664,
+    "full_phi_mean": 0.6902764207328924,
+    "full_phi_std": 0.21782675778114652,
+    "early_phi_mean": 0.6902717322893445,
+    "early_phi_std": 0.21781929646116435,
+    "steps_mean": 276.5,
+    "steps_std": 148.71017674210015,
+    "steps_save_pct": 44.699999999999996,
     "quality_loss_pct": 0.0,
     "early_better_frac": 0.0
   },
   "trials": [
     {
       "seed": 2000,
-      "full_phi": 1.4831676360934616,
-      "early_phi": 1.482062124050046,
-      "early_steps": 272
-    },
-    {
-      "seed": 2001,
-      "full_phi": 1.007276595352663,
-      "early_phi": 1.0072328652877123,
-      "early_steps": 156
-    },
-    {
-      "seed": 2002,
-      "full_phi": 1.1634509232357197,
-      "early_phi": 1.1623195038431675,
-      "early_steps": 235
-    },
-    {
-      "seed": 2003,
-      "full_phi": 1.4432161886810224,
-      "early_phi": 1.4420863573032368,
-      "early_steps": 158
-    },
-    {
-      "seed": 2004,
-      "full_phi": 1.0933521028121487,
-      "early_phi": 1.0898379686986348,
-      "early_steps": 229
-    },
-    {
-      "seed": 2005,
-      "full_phi": 1.1340387015052873,
-      "early_phi": 1.1337411352946747,
-      "early_steps": 142
-    },
-    {
-      "seed": 2006,
-      "full_phi": 1.754316106451819,
-      "early_phi": 1.7532938790708175,
-      "early_steps": 188
-    },
-    {
-      "seed": 2007,
-      "full_phi": 1.1607232293934961,
-      "early_phi": 1.160007620320155,
-      "early_steps": 220
-    },
-    {
-      "seed": 2008,
-      "full_phi": 1.007809290705908,
-      "early_phi": 1.0058828822183794,
-      "early_steps": 214
-    },
-    {
-      "seed": 2009,
-      "full_phi": 1.491479970481402,
-      "early_phi": 1.490335089169917,
-      "early_steps": 479
-    },
-    {
-      "seed": 2010,
-      "full_phi": 1.0338309519918503,
-      "early_phi": 1.0330560048357265,
-      "early_steps": 188
-    },
-    {
-      "seed": 2011,
-      "full_phi": 0.9989638584038752,
-      "early_phi": 0.9987809765537505,
-      "early_steps": 206
-    },
-    {
-      "seed": 2012,
-      "full_phi": 1.2927844391316967,
-      "early_phi": 1.2917386209775505,
-      "early_steps": 213
-    },
-    {
-      "seed": 2013,
-      "full_phi": 0.7919993706977388,
-      "early_phi": 0.7915851520784574,
-      "early_steps": 307
-    },
-    {
-      "seed": 2014,
-      "full_phi": 1.5988247970318592,
-      "early_phi": 1.5979646759681514,
-      "early_steps": 229
-    },
-    {
-      "seed": 2015,
-      "full_phi": 1.2246717628127992,
-      "early_phi": 1.2227615289818958,
-      "early_steps": 389
-    },
-    {
-      "seed": 2016,
-      "full_phi": 0.6578891213399296,
-      "early_phi": 0.6558369593378534,
-      "early_steps": 53
-    },
-    {
-      "seed": 2017,
-      "full_phi": 0.7458019539357315,
-      "early_phi": 0.7456514189807735,
-      "early_steps": 96
-    },
-    {
-      "seed": 2018,
-      "full_phi": 1.3753745739100522,
-      "early_phi": 1.372644530456416,
-      "early_steps": 297
-    },
-    {
-      "seed": 2019,
-      "full_phi": 1.64259344281376,
-      "early_phi": 1.637549718665365,
-      "early_steps": 218
-    },
-    {
-      "seed": 2020,
-      "full_phi": 1.2822848160338727,
-      "early_phi": 1.281976045523288,
-      "early_steps": 119
-    },
-    {
-      "seed": 2021,
-      "full_phi": 1.2180747095828606,
-      "early_phi": 1.2164140720400476,
-      "early_steps": 346
-    },
-    {
-      "seed": 2022,
-      "full_phi": 1.720449794839777,
-      "early_phi": 1.7200613232685291,
-      "early_steps": 197
-    },
-    {
-      "seed": 2023,
-      "full_phi": 1.2639095240520963,
-      "early_phi": 1.2615075089698684,
-      "early_steps": 74
-    },
-    {
-      "seed": 2024,
-      "full_phi": 1.501794043275745,
-      "early_phi": 1.5000340016717315,
-      "early_steps": 165
-    },
-    {
-      "seed": 2025,
-      "full_phi": 1.5885742632497406,
-      "early_phi": 1.58348842801636,
-      "early_steps": 318
-    },
-    {
-      "seed": 2026,
-      "full_phi": 1.1642431174338246,
-      "early_phi": 1.1629891396078582,
-      "early_steps": 350
-    },
-    {
-      "seed": 2027,
-      "full_phi": 1.086426874922737,
-      "early_phi": 1.0858998710745271,
+      "full_phi": 0.724885516231853,
+      "early_phi": 0.724885516231853,
       "early_steps": 253
     },
     {
+      "seed": 2001,
+      "full_phi": 0.6352899225784024,
+      "early_phi": 0.6352899225784024,
+      "early_steps": 48
+    },
+    {
+      "seed": 2002,
+      "full_phi": 0.5620373253026479,
+      "early_phi": 0.5620373253026479,
+      "early_steps": 277
+    },
+    {
+      "seed": 2003,
+      "full_phi": 0.4517798317262879,
+      "early_phi": 0.4517798317262879,
+      "early_steps": 444
+    },
+    {
+      "seed": 2004,
+      "full_phi": 0.746906981767038,
+      "early_phi": 0.746906981767038,
+      "early_steps": 332
+    },
+    {
+      "seed": 2005,
+      "full_phi": 0.5146213110480509,
+      "early_phi": 0.5146213110480509,
+      "early_steps": 327
+    },
+    {
+      "seed": 2006,
+      "full_phi": 0.5205171881906739,
+      "early_phi": 0.5205171881906739,
+      "early_steps": 199
+    },
+    {
+      "seed": 2007,
+      "full_phi": 0.6479254369658927,
+      "early_phi": 0.6479254369658927,
+      "early_steps": 161
+    },
+    {
+      "seed": 2008,
+      "full_phi": 0.7400514419507991,
+      "early_phi": 0.7400514419507991,
+      "early_steps": 81
+    },
+    {
+      "seed": 2009,
+      "full_phi": 0.6311708474581416,
+      "early_phi": 0.6311708474581416,
+      "early_steps": 101
+    },
+    {
+      "seed": 2010,
+      "full_phi": 0.7588899483910707,
+      "early_phi": 0.7588899483910707,
+      "early_steps": 500
+    },
+    {
+      "seed": 2011,
+      "full_phi": 1.0369940510134616,
+      "early_phi": 1.0368533977070244,
+      "early_steps": 302
+    },
+    {
+      "seed": 2012,
+      "full_phi": 0.8589876185928674,
+      "early_phi": 0.8589876185928674,
+      "early_steps": 349
+    },
+    {
+      "seed": 2013,
+      "full_phi": 0.5970498965333294,
+      "early_phi": 0.5970498965333294,
+      "early_steps": 197
+    },
+    {
+      "seed": 2014,
+      "full_phi": 0.6628539434182021,
+      "early_phi": 0.6628539434182021,
+      "early_steps": 500
+    },
+    {
+      "seed": 2015,
+      "full_phi": 0.4762564071143066,
+      "early_phi": 0.4762564071143066,
+      "early_steps": 267
+    },
+    {
+      "seed": 2016,
+      "full_phi": 0.47438190170845895,
+      "early_phi": 0.47438190170845895,
+      "early_steps": 302
+    },
+    {
+      "seed": 2017,
+      "full_phi": 0.4795817825869229,
+      "early_phi": 0.4795817825869229,
+      "early_steps": 225
+    },
+    {
+      "seed": 2018,
+      "full_phi": 1.017266367853059,
+      "early_phi": 1.017266367853059,
+      "early_steps": 500
+    },
+    {
+      "seed": 2019,
+      "full_phi": 1.047568793909224,
+      "early_phi": 1.047568793909224,
+      "early_steps": 121
+    },
+    {
+      "seed": 2020,
+      "full_phi": 0.6843896695762381,
+      "early_phi": 0.6843896695762381,
+      "early_steps": 29
+    },
+    {
+      "seed": 2021,
+      "full_phi": 0.4431781619842331,
+      "early_phi": 0.4431781619842331,
+      "early_steps": 213
+    },
+    {
+      "seed": 2022,
+      "full_phi": 0.7488135689768725,
+      "early_phi": 0.7488135689768725,
+      "early_steps": 500
+    },
+    {
+      "seed": 2023,
+      "full_phi": 0.5645532122860593,
+      "early_phi": 0.5645532122860593,
+      "early_steps": 320
+    },
+    {
+      "seed": 2024,
+      "full_phi": 1.066633348308204,
+      "early_phi": 1.066633348308204,
+      "early_steps": 75
+    },
+    {
+      "seed": 2025,
+      "full_phi": 1.3211243175409597,
+      "early_phi": 1.3211243175409597,
+      "early_steps": 364
+    },
+    {
+      "seed": 2026,
+      "full_phi": 0.5862068876865322,
+      "early_phi": 0.5862068876865322,
+      "early_steps": 455
+    },
+    {
+      "seed": 2027,
+      "full_phi": 0.4444223877037137,
+      "early_phi": 0.4444223877037137,
+      "early_steps": 25
+    },
+    {
       "seed": 2028,
-      "full_phi": 1.2883574060592782,
-      "early_phi": 1.2878789087377165,
-      "early_steps": 489
+      "full_phi": 0.4852853055887928,
+      "early_phi": 0.4852853055887928,
+      "early_steps": 396
     },
     {
       "seed": 2029,
-      "full_phi": 1.300066460041631,
-      "early_phi": 1.2989421756256794,
-      "early_steps": 198
+      "full_phi": 0.7786692479944746,
+      "early_phi": 0.7786692479944746,
+      "early_steps": 432
     }
   ]
 }

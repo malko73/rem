@@ -32,8 +32,12 @@ import numpy as np
 
 # ─── continuous factorization optimisation ───────────────────────────
 # Parameterise F ∈ U(N) / (U(n_A) × U(n_B)) via random anti-Hermitian generators.
-# For N=3, n_A=2, n_B=1 the manifold dimension is N² - (n_A² + n_B²) = 9-5 = 4.
-# We embed via U ∈ U(8) acting on the full 3-qubit space.
+# Generators G_k are anti-Hermitian (G_k^dagger = -G_k), so U = exp(Σ θ_k G_k)
+# is unitary (NOT exp(i Σ θ_k G_k), which would be a positive Hermitian matrix).
+# NOTE: the quotient U(D)/(U(d_A)×U(d_B)) with D = 2^n, d_A = 2^nA, d_B = 2^nB has
+# real dimension D² - (d_A² + d_B² - 1) = D² - d_A² - d_B² + 1 (the U(1) kernel of
+# the tensor-product map U(d_A)×U(d_B) → U(D) is modded out). For n=3, n_A=2:
+# D=8, d_A=4, d_B=2 → dim = 64 - 16 - 4 + 1 = 45 (not 44; 44 ignores the kernel).
 
 N_RNG = np.random.default_rng(seed=42)
 
@@ -117,8 +121,8 @@ def _finite_diff_grad(
         th_lo = theta.copy()
         th_hi[i] += eps
         th_lo[i] -= eps
-        u_hi = sla.expm(1j * np.einsum("ijk,k->ij", generators, th_hi))
-        u_lo = sla.expm(1j * np.einsum("ijk,k->ij", generators, th_lo))
+        u_hi = sla.expm(np.einsum("ijk,k->ij", generators, th_hi))
+        u_lo = sla.expm(np.einsum("ijk,k->ij", generators, th_lo))
         phi_hi, _, _ = evaluate_factorization(
             psi, h_total, bond_terms, u_hi, n=n, n_a=n_a, lambda_value=lambda_value)
         phi_lo, _, _ = evaluate_factorization(
@@ -153,7 +157,7 @@ def optimize_factorization(
     history = []
 
     for step in range(steps):
-        u = sla.expm(1j * np.einsum("ijk,k->ij", generators, theta))
+        u = sla.expm(np.einsum("ijk,k->ij", generators, theta))
         phi, mi, c_h = evaluate_factorization(
             psi, h_total, bond_terms, u, n=n, n_a=n_a, lambda_value=lambda_value)
         grad = _finite_diff_grad(
@@ -229,7 +233,7 @@ def optimize_factorization_adam(
 
     for step in range(steps):
         t = step + 1
-        u = sla.expm(1j * np.einsum("ijk,k->ij", generators, theta))
+        u = sla.expm(np.einsum("ijk,k->ij", generators, theta))
         phi, mi, c_h = evaluate_factorization(
             psi, h_total, bond_terms, u, n=n, n_a=n_a, lambda_value=lambda_value)
         grad = _finite_diff_grad(

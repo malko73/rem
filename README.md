@@ -5,6 +5,15 @@
 > `C_H = <H_boundary^2>` and continuous optimisation reconstructs the
 > factorisation-dependent boundary interaction. Version 4 supersedes the
 > numerical values reported in Version 3; the theoretical REM functional is unchanged.
+>
+> **2026-08-11 unitarity hotfix**: the continuous optimiser previously built
+> `U = exp(i Σ θ_k G_k)` from anti-Hermitian generators `G_k`, which yields a
+> positive Hermitian matrix — NOT unitary. It now correctly builds
+> `U = exp(Σ θ_k G_k)`, which is unitary. **All continuous-optimisation numbers
+> in this README were re-verified after this fix (2026-08-11) and supersede the
+> values in the Version 4 Zenodo record** (whose continuous-optimisation
+> results were affected by the bug). Discrete-cut results (C_H, λ*) are
+> unaffected.
 
 Reference code and manuscript working snapshots for the **Relational Emergence Model (REM)** research series by Yoshifumi Maruko.
 
@@ -100,14 +109,16 @@ The earlier `phi_h = -<H_boundary>` convention (used in REM3 and pre-v4 numerica
 
 ## Continuous manifold optimisation
 
-Beyond the site-contiguous partitions, the code searches a four-parameter generator submanifold of the factorisation space. For the three-qubit benchmark (`J12=1.5, J23=0.6, h=0.2, λ=0.2`):
+Beyond the site-contiguous partitions, the code searches a four-parameter generator submanifold of the factorisation space. For the three-qubit benchmark (`J12=1.5, J23=0.6, h=0.2, λ=0.2`), **after the 2026-08-11 unitarity fix**:
 
 - Best contiguous-cut Φ: **0.560**
-- Best recovered factorisation Φ: **1.05**
-- Mean Φ over 30 random seeds: **1.09 ± 0.22** (1.95× improvement)
-- No seed failed to improve over the contiguous best.
+- SGD (30 seeds): **0.581 ± 0.112** (success rate 60%)
+- Adam (30 seeds): **0.654 ± 0.191** (success rate 67%)
+- The improvement over contiguous is modest at N=3 and strongly depends on the random generator basis.
 
-The full quotient `U(8)/(U(4) ⊗ U(2))` has real dimension 44. The reported result is not a global optimum over that full space.
+The full quotient `U(8)/(U(4) ⊗ U(2))` has real dimension **45** (dim U(8)=64 minus 19 = dim of the embedded U(4)×U(2) image, which includes the U(1) kernel: 16+4−1). The reported result is not a global optimum over that full space.
+
+> ⚠️ Superseded (pre-fix) values: best recovered Φ **1.05**, mean **1.09 ± 0.22** (1.95×). Those were artifacts of the non-unitary `exp(iGθ)` map and are no longer reproducible.
 
 ## Robustness across system sizes
 
@@ -126,25 +137,28 @@ Procedure for each N:
 
 | N | n_a | contiguous Φ | optimised Φ (mean ± σ) | improvement ratio | success rate |
 |---|-----|-------------|------------------------|-------------------|-------------|
-| 3 | 2   | 0.560       | 1.09 ± 0.22            | 1.95×             | 100% (60/60) |
-| 4 | 3   | 1.723       | 1.88 ± 0.03            | 1.09×             | 100% (60/60) |
-| 5 | 4   | 1.458       | 1.62 ± 0.03            | 1.11×             | 100% (60/60) |
+| 3 | 2   | 0.560       | A: 0.661 ± 0.120 / B: 0.568 ± 0.116 | A: 1.18× / B: 1.01× | A: 87% / B: 43% |
+| 4 | 3   | 1.723       | A: 1.719 ± 0.060 / B: 1.700 ± 0.054 | A: 1.00× / B: 0.99× | A: 57% / B: 47% |
+| 5 | 4   | 1.458       | A: 1.437 ± 0.049 / B: 1.445 ± 0.038 | A: 0.99× / B: 0.99× | A: 47% / B: 53% |
 
-Across all 180 trials the continuous optimisation always beat the best
-contiguous-cut Φ.  The improvement is large when the discrete best is low
-(N=3: Φ~0.56 → ~1.09) and settles to a modest but consistent ~1.1× for
-N=4,5.  Scatter shrinks sharply with N: the standard deviation drops from
-22 % (N=3) to under 2 % (N=4,5), indicating that the random subspace
-dimension we use (n_params = 4 for N=3, 16 for N=4, 20 for N=5) captures
-a narrower fraction of the full manifold as the system grows.
+(A = fixed generator basis, random initial θ; B = random generator basis + θ. 30 trials per axis, post unitarity-fix.)
+
+**2026-08-11 re-verification conclusion**: after the unitarity fix the continuous
+optimiser no longer reliably beats the best contiguous cut. Only the N=3
+initial-θ axis shows a robust improvement (87% success, 1.18×); the
+generator-basis axis and all N=4,5 axes are essentially coin flips (43–57%,
+±1–2%). The pre-fix claim "180/180 trials beat contiguous, up to 1.95×" is
+**not reproducible** and was an artifact of the non-unitary map. The earlier
+statement that scatter shrinks sharply with N no longer holds.
 
 Raw data (180-trial JSON) and violin plots are in `analysis_output/`.
 
 **Caveat:** these results are conditioned on the chosen generator-subspace
-dimension, a plain gradient-ascent optimiser (SGD, lr = 0.01, steps = 200,
-no momentum), and the particular Hamiltonian parameters
+dimension, a plain gradient-ascent optimiser (SGD or Adam, lr = 0.01,
+steps = 200, no momentum), and the particular Hamiltonian parameters
 (`J12=1.5, J23=0.6, h=0.2, λ=0.2`).  They do not represent a global
-optimum over the full factorisation manifold.
+optimum over the full factorisation manifold. Improving the generator
+subspace / initialisation strategy is an open Phase B problem.
 
 ## Optimiser comparison: SGD vs Adam
 
@@ -156,18 +170,15 @@ same Hamiltonian, same generator basis, same initial θ, same step budget
 
 | N | SGD Φ (mean ± σ) | Adam Φ (mean ± σ) | Adam > SGD | improvement |
 |---|-------------------|-------------------|------------|-------------|
-| 3 | 1.083 ± 0.235     | **1.232 ± 0.269** | 30/30      | +13.8 %    |
-| 4 | 1.883 ± 0.034     | **2.069 ± 0.036** | 30/30      | +9.9 %     |
-| 5 | 1.624 ± 0.026     | **1.861 ± 0.056** | 30/30      | +14.6 %    |
+| 3 | 0.581 ± 0.112     | **0.654 ± 0.191** | 20/30      | +12.5 %    |
+| 4 | 1.709 ± 0.064     | **1.752 ± 0.031** | 22/30      | +2.5 %     |
+| 5 | 1.454 ± 0.049     | **1.480 ± 0.028** | 21/30      | +1.8 %     |
 
-Adam outperforms SGD in **all 90 trials** across all three system sizes.
-The improvement is largest for N=5 (+14.6 %) where the manifold dimension
-is highest and the adaptive step sizes provide the greatest benefit.
-Adam's final gradient norm is typically 2–3× smaller than SGD's,
-indicating tighter convergence at the same step count.
-
-Both optimisers maintain a 100 % success rate — every trial beats the
-best contiguous-cut Φ.
+Adam outperforms SGD in the majority of trials at all three system sizes,
+with a much tighter spread (σ roughly halved at N=4,5), and is the only
+optimiser that reliably beats the contiguous-cut Φ at N=4,5 (Adam success
+100%/97% vs SGD 53%/60%).  The improvement is modest (≤ 12.5 %) and the
+absolute Φ values are far below the pre-fix (non-unitary) numbers.
 
 **Caveat:** the comparison is at fixed step budget (200), not at equal
 wall time.  Adam's per-step cost is negligibly higher (two vector
@@ -188,8 +199,10 @@ setting `tol_grad = 0.2`, `tol_phi = 5 × 10⁻⁴`, `patience = 10` gives:
 
 | Mode      | Φ (mean ± σ) | steps (mean) | step saving |
 |-----------|--------------|--------------|-------------|
-| Full 500  | 1.251 ± 0.273 | 500          | —           |
-| Early     | 1.249 ± 0.272 | 233          | **53 %**    |
+| Full 500  | 0.690 ± 0.218 | 500          | —           |
+| Early     | 0.690 ± 0.218 | 277          | **45 %**    |
+
+(Post unitarity-fix, 2026-08-11. Pre-fix values were 1.251 ± 0.273 / 233 steps / 53 %.)
 
 Across 30 seeds the final Φ is statistically indistinguishable
 (max individual degradation < 0.002).  No trial had a quality loss

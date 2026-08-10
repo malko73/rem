@@ -1,0 +1,26 @@
+=================================================================
+  Optimiser Comparison (N=3, 30 seeds, 200 steps)
+=================================================================
+  Best contiguous-cut Φ = 0.5602
+
+  Metric                    SGD             Adam           
+  ------------------------- --------------- ---------------
+  Φ mean                    1.0826          1.2323         
+  Φ std                     0.2353          0.2687         
+  Φ min                     0.6504          0.6579         
+  Φ max                     1.6065          1.7543         
+  success rate              100           % 100           %
+  Adam beats SGD            —               100           %
+
+  Final gradient norm (avg, last 5 steps) indicates convergence quality.
+
+  Final |grad| (mean)       0.2566          0.0874         
+  Final |grad| (std)        0.0911          0.0822         
+
+  Findings:
+  - Adam beats SGD in all 30/30 trials (mean Φ 1.2323 vs 1.0826)
+  - Improvement over SGD: +13.8%
+  - Both optimisers: 100% success rate (always beat contiguous)
+  - Adam's final gradient norm is ~66% lower => better convergence
+  - Caveat: comparison at fixed step budget (200), not at equal wall time
+    (Adam's per-step cost is ~ identical to SGD since moment updates are negligible).
