@@ -1,0 +1,365 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{}
+
+\begin{document}
+
+\section{Relational Emergence Model
+(REM)}\label{relational-emergence-model-rem}
+
+\subsection{Core Specification v2.0 (Frozen 2026-08-11)}\label{core-specification-v2.0}
+
+This version supersedes v1.1. Changes: open-system general form
+Φ(F; λ, ρ, L, τ) = I\_ρ(F) − λ C\_dyn(F; ρ, L, τ) with [λ] = T;
+C\_H^closed downgraded to a closed-system structural surrogate;
+Monotonic Tradeoff Theorem extended to signed dynamical functionals.
+
+\section{0. Core Statement}\label{core-statement}
+
+REM treats tensor-product structure of Hilbert space as a variable
+structure selected via competing informational and dynamical
+constraints.
+
+REM is a structural selection framework, not a modification of quantum
+dynamics.
+
+\section{1. Three-Layer Architecture}\label{three-layer-architecture}
+
+\subsection{Layer 0 --- Pre-relational
+description}\label{layer-0-pre-relational-description}
+
+Hilbert space H is considered without specifying a preferred
+tensor-product decomposition.
+
+Layer 0 does not represent a physical substrate. It denotes absence of
+articulated relational structure.
+
+\subsection{Layer 1 --- Relational
+articulation}\label{layer-1-relational-articulation}
+
+Differentiation introduces an explicit tensor structure:
+
+D : H → H\_S ⊗ H\_O
+
+A quantum state admits Schmidt representation:
+
+\textbar Ψ⟩ → Σ c\_i \textbar s\_i⟩ ⊗ \textbar o\_i⟩
+
+Relational structure becomes explicit.
+
+\subsection{Layer 2 --- Phenomenal
+stabilization}\label{layer-2-phenomenal-stabilization}
+
+Environmental decoherence stabilizes articulated correlations:
+
+E(ρ) = Σ p\_i \textbar s\_i⟩⟨s\_i\textbar{} ⊗
+\textbar e\_i⟩⟨e\_i\textbar{}
+
+Ordering relation:
+
+D → E
+
+\section{2. Differentiation map}\label{differentiation-map}
+
+D is a structural selection map.
+
+D is not a dynamical law and is not a unitary operator.
+
+D is defined implicitly through a selection problem over candidate
+factorizations.
+
+Variational principles provide tractable models for D but do not exhaust
+its possible formalizations.
+
+\section{3. Factorization space}\label{factorization-space}
+
+Candidate tensor decompositions:
+
+F = \{F\_k\}
+
+Finite-dimensional approximation:
+
+F ≅ U(N)/(U(n\_A) ⊗ U(n\_B))
+
+This representation is heuristic and applies primarily in
+finite-dimensional Hilbert spaces.
+
+\section{4. Variational ansatz}\label{variational-ansatz}
+
+General form (open-system REM, 2026-08-11):
+
+Φ(F; λ, ρ, L, τ) = I\_ρ(F) − λ C\_dyn(F; ρ, L, τ)
+
+I\_ρ is the mutual information of the (possibly mixed) state ρ across F.
+
+Closed-system approximation (REM_lambda v4 and earlier):
+
+Φ\_closed(F) = I(F) − λ C\_H^closed(F)
+
+Higher-order generalization:
+
+Φ(F) = I − λ C\_dyn + Σ μ\_i Φ\_i
+
+Optimal factorization:
+
+F* = argmax\_F Φ(F)
+
+The functional provides an effective model for relational selection.
+
+\section{5. Informational functional}\label{informational-functional}
+
+Φ\_S = I(A:B)
+
+I(A:B) = S(ρ\_A) + S(ρ\_B) − S(ρ\_AB)
+
+Von Neumann entropy:
+
+S(ρ) = −Tr(ρ log ρ)
+
+Units may be nats or bits depending on logarithm base.
+
+\section{6. Dynamical functional}\label{dynamical-functional}
+
+C\_dyn measures dynamical (open-system) coupling across candidate
+partitions. It is environment-dependent: C\_dyn = C\_dyn(F; ρ, L, τ).
+Formal name: signed dynamical functional — the SIGN of C\_dyn matters
+(negative values reward rather than penalize a structure; "cost" is used
+only informally).
+
+First operational realization (2026-08-11, Phase C):
+
+C\_Γ^(0)(F; ρ, L) = Γ\_F^exact(0) = − Re⟨Q\_F ρ, Q\_F L(ρ)⟩\_HS / |Q\_F ρ|\_2²
+
+with Q\_F = I − D\_F (D\_F: dephasing projection onto the initial Schmidt
+basis of F), L the Lindblad Liouvillian of the fixed environment, and
+⟨A,B⟩\_HS = Tr(A†B). This is the initial structural decoherence rate.
+For pure states it is independent of the Schmidt null-subspace completion.
+A finite-time variant C\_dyn^(τ) = −(1/τ) log(C\_F(τ)/C\_F(0)) is the
+natural extension when the timescale τ matters.
+
+SIGN: C\_Γ^(0) is a SIGNED rate. Random-state audit (2026-08-11, 400
+configs) found negative values (1.25%, min ≈ −1.6) — initial coherence
+increase is possible; the quantity is a signed structural decoherence
+rate, not a non-negative cost, and must not be forced through max(0,·).
+
+Closed-system surrogate (REM_lambda v4 convention):
+
+C\_H^closed(F) = Tr(ρ H\_∂F²)
+
+H\_∂F represents interaction terms spanning the factorization
+boundary. C\_H^closed is the boundary-energy second moment, not the
+variance: C\_H^closed = ⟨H\_∂F²⟩ ≠ Var(H\_∂F) = ⟨H\_∂F²⟩ − ⟨H\_∂F⟩².
+It is a closed-system structural surrogate, not an open-system stability
+cost (C0–C2, 2026-08-11).
+
+Dimensions (canonical, frozen 2026-08-11): [C\_dyn] = T⁻¹ and [λ] = T,
+so λ C\_dyn is dimensionless. λ is the characteristic timescale
+comparing informational articulation and dynamical stability. The
+finite-time variant C\_dyn^(τ) also has [C\_dyn^(τ)] = T⁻¹, so the same
+dimensionful λ applies. The normalized representation
+C̃\_dyn = τ₀ C\_dyn, λ̃ = λ/τ₀ (Φ = I − λ̃ C̃\_dyn) is mathematically
+equivalent and kept only as an optional representation; the canonical
+form introduces no new reference time τ₀.
+
+The earlier linear ansatz Φ\_H = −Tr(ρ H\_boundary) is superseded.
+
+Interpretation:
+
+dynamical self-containment measure.
+
+\section{7. Interpretation of λ}\label{interpretation-of-ux3bb}
+
+Primary meaning:
+
+relative weighting between informational articulation and dynamical
+self-containment.
+
+Secondary interpretations:
+
+effective thermodynamic analogy:
+
+Φ ≈ S − βE
+
+emergent scale parameter:
+
+λ = λ(Λ)
+
+timescale relation:
+
+λ \textasciitilde{} τ\_D / τ\_dyn
+
+λ is an effective parameter, not a universal constant.
+
+\section{8. Crossover structure}\label{crossover-structure}
+
+λ* defined by:
+
+Φ(F1, λ\emph{) = Φ(F2, λ})
+
+λ* is model dependent.
+
+REM predicts existence of crossover regimes, not universal λ* values.
+
+\section{8a. Monotonic Tradeoff Theorem}\label{monotonic-tradeoff-theorem}
+
+Let Φ\_λ(F) = S(F) − λ C(F) with λ ≥ 0, and let F\*(λ) denote a global
+maximizer of Φ\_λ.
+
+Theorem (Monotonic Tradeoff). If λ₂ > λ₁ ≥ 0, then
+
+C(F\*(λ₂)) ≤ C(F\*(λ₁)),  and  S(F\*(λ₂)) ≤ S(F\*(λ₁)).
+
+Proof. Let F₁ = F\*(λ₁) and F₂ = F\*(λ₂). Global optimality gives
+
+S₁ − λ₁C₁ ≥ S₂ − λ₁C₂
+S₂ − λ₂C₂ ≥ S₁ − λ₂C₁
+
+Adding the two inequalities yields
+
+(λ₂ − λ₁)(C₁ − C₂) ≥ 0
+
+so C₂ ≤ C₁. Substituting into the first inequality,
+
+S₁ − S₂ ≥ λ₁(C₁ − C₂) ≥ 0
+
+so S₂ ≤ S₁. □
+
+The theorem holds for any non-negative cost functional C of the
+factorization — in particular both the second moment C\_H = ⟨H\_∂²⟩ and
+the variance Var(H\_∂) — and requires only that F\*(λ) is a global
+maximizer.
+
+In the open-system generalization the theorem applies unchanged for a
+FIXED environment L, state ρ, and timescale τ: C\_dyn(F; ρ, L, τ) is a
+well-defined functional of F for each fixed (ρ, L, τ), so the
+monotonicity C(F\*(λ₂)) ≤ C(F\*(λ₁)) and S(F\*(λ₂)) ≤ S(F\*(λ₁)) holds
+per environment (the proof requires only λ ≥ 0; the cost C may be
+signed, as in the C\_Γ^(0) realization).
+
+\section{9. Role of toy models}\label{role-of-toy-models}
+
+Small systems illustrate nontrivial structure in factorization
+landscape.
+
+Toy models serve as existence proofs.
+
+They do not claim empirical completeness.
+
+\section{10. Relation to prior work}\label{relation-to-prior-work}
+
+REM is situated within ongoing discussions concerning the non-uniqueness of subsystem structure in quantum theory.
+
+Zanardi, Lidar, and Whaley (2004) demonstrated that tensor product structure is not uniquely determined by the Hilbert space alone, providing an algebraic classification of admissible subsystem decompositions. However, no physical selection principle was proposed for choosing among admissible factorizations.
+
+Cotler, Penington, and Ranard (2019) showed that preferred factorizations may arise through optimization procedures, but the associated objective function was not interpreted as expressing a competition between informational and dynamical constraints.
+
+Carroll and Singh (2021) proposed a quantum mereological framework in which subsystem structure is constrained by dynamical considerations. Their construction emphasizes quasi-classical persistence but does not formulate the selection problem as a variational competition between informational articulation and dynamical self-containment.
+
+Donnelly and Freidel (2016) demonstrated that subsystem structure in gauge theories is nontrivial due to boundary degrees of freedom, indicating that factorization is not generically available as a primitive notion.
+
+Rovelli (1996) introduced relational quantum mechanics, in which physical states are defined relative to interactions between systems. However, the theory does not specify how the relational partition itself is determined.
+
+Zurek (2003) showed that environment-induced decoherence selects stable pointer observables, thereby explaining classical phenomenology once subsystem structure is assumed.
+
+REM contributes a complementary structural proposal:
+
+the tensor product structure itself is treated as a variable object selected through a variational competition between informational articulation and dynamical self-containment.
+
+Within this framework, crossover behaviour between competing structural criteria is characterized by an effective parameter λ, producing regime-dependent preferred factorizations.
+
+REM therefore addresses a structural layer prior to relational state assignment and decoherence-based stabilization.
+
+\section{11. Scope of theory}\label{scope-of-theory}
+
+REM addresses structural selection problem.
+
+REM does not introduce new dynamical laws, hidden variables, or
+modifications to quantum mechanics.
+
+REM provides structural constraints on subsystem articulation.
+
+\section{12. Terminology}\label{terminology}
+
+differentiation: selection of relational tensor structure
+
+factorization: tensor product decomposition
+
+articulation: explicit correlation structure
+
+self-containment: weak dynamical coupling across partition
+
+crossover: change in preferred factorization regime
+
+\section{13. Extension directions}\label{extension-directions}
+
+multi-qubit scaling
+
+tensor-network articulation
+
+continuous Hilbert spaces
+
+renormalization structure
+
+quantum channel formulations of differentiation
+
+\section{14. Status of theory}\label{status-of-theory}
+
+REM is a structured foundational proposal.
+
+It provides a mathematically formulated research program for relational
+structure selection.
+
+Future work will determine empirical and mathematical generality.
+
+\end{document}

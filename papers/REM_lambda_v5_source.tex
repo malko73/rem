@@ -1,0 +1,220 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Variational Generation of Relational Structure\\\\in the Relational Emergence Model:\\\\{\normalsize Quadratic Dynamical Cost, Regime Competition, and Open-System Extension}}
+\author{Yoshifumi Maruko\\\\Independent Researcher\\\\Yamagata, Japan}
+\date{2026 (v5, revised 2026-08-11)}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Relational Quantum Mechanics (RQM) defines physical states relationally but does not specify how relational structure itself becomes articulated. The Relational Emergence Model (REM) introduces a generative layer beneath relational description.
+
+We model relational articulation as a variational selection problem over Hilbert-space factorizations. The closed-system selection functional takes the form
+\[
+\Phi = \Phi_S - \lambda C_H,
+\qquad
+C_H = \mathrm{Tr}(\rho H_{\partial F}^2) \geq 0,
+\]
+combining informational differentiation and a sign-definite boundary-fluctuation cost. This version (v5) re-scopes $C_H$ as a \emph{closed-system structural surrogate}: it is a well-defined variational cost within the closed-system model, but open-system tests (2026-08-11) show that it does not predict the actual decoherence-rate ordering of candidate factorizations.
+
+The general open-system form is
+\[
+\Phi(F;\lambda,\rho,\mathcal L,\tau)
+= I_\rho(F) - \lambda C_{\mathrm{dyn}}(F;\rho,\mathcal L,\tau),
+\qquad [\lambda]=T,
+\]
+where $C_{\mathrm{dyn}}$ is a signed dynamical functional depending on the environment Liouvillian $\mathcal L$ and timescale $\tau$. The first operational realization is the initial structural decoherence rate
+\[
+C_\Gamma^{(0)}(F;\rho,\mathcal L) = \Gamma_F^{\mathrm{exact}}(0).
+\]
+
+A three-qubit XY chain example demonstrates regime competition with a structural crossover at $\lambda^*\approx0.165$ under the closed-system surrogate. Open-system validation (C0--C2) shows that under identical uniform dephasing the initial decoherence rate is factorization-independent ($\Gamma_1=\Gamma_2$), under non-uniform noise the ordering follows the environment and flips under mirroring, and a norm-type Liouvillian boundary cost does not track $\Gamma_F$. $C_\Gamma^{(0)}$ is therefore proposed as the first operational open-system cost.
+\end{abstract}
+
+\section{Introduction}
+Relational Quantum Mechanics proposes that physical states exist only relative to other systems. While this removes observer-independent states, it leaves open a prior question: how relational structure itself becomes articulated.
+
+The Relational Emergence Model introduces a generative layer beneath relational description. Rather than assuming subsystem structure, REM models relational articulation as a structured selection problem. Relational structure is not assumed; it is selected.
+
+\section{Variational Selection Principle}
+Hilbert space admits multiple inequivalent tensor-product structures:
+\[
+\mathcal H \cong \mathcal H_A \otimes \mathcal H_B.
+\]
+Candidate factorizations form a space
+\[
+\mathcal F\cong U(N)/(U(n_A)\otimes U(n_B)).
+\]
+We define
+\[
+F^*=\arg\max_F\Phi(F),
+\]
+with
+\[
+\Phi=\Phi_S-\lambda C_H.
+\]
+The informational contribution is
+\[
+\Phi_S=I(A:B),
+\]
+and the dynamical cost is
+\[
+C_H=\mathrm{Tr}(\rho H_{\partial F}^2)\geq0.
+\]
+
+In this version (v5) the closed-system functional $\Phi=\Phi_S-\lambda C_H$ is retained as the \emph{closed-system structural surrogate} $\Phi_{\mathrm{closed}}$, preserving continuity with earlier numerical results. The general open-system form is
+\[
+\Phi(F;\lambda,\rho,\mathcal L,\tau)=I_\rho(F)-\lambda C_{\mathrm{dyn}}(F;\rho,\mathcal L,\tau),
+\]
+where $\mathcal L$ is the Lindblad Liouvillian of the fixed environment, $\tau$ a timescale, and $C_{\mathrm{dyn}}$ a signed dynamical functional with $[C_{\mathrm{dyn}}]=T^{-1}$ and $[\lambda]=T$ (a characteristic timescale). The first operational realization is
+\[
+C_\Gamma^{(0)}(F;\rho,\mathcal L)=\Gamma_F^{\mathrm{exact}}(0)
+=-\frac{\mathrm{Re}\langle Q_F\rho,\,Q_F\mathcal L(\rho)\rangle_{\mathrm{HS}}}{|Q_F\rho|_2^2},
+\qquad
+Q_F=I-D_F,
+\]
+with $D_F$ the dephasing projection onto the initial Schmidt basis of $F$ and $\langle A,B\rangle_{\mathrm{HS}}=\mathrm{Tr}(A^\dagger B)$. A finite-time variant $C_{\mathrm{dyn}}^{(\tau)}=-(1/\tau)\log(C_F(\tau)/C_F(0))$ shares the same dimension $T^{-1}$ and therefore the same $\lambda$.
+
+\section{Information-Theoretic Quantities}
+For $\rho_{AB}=|\Psi\rangle\langle\Psi|$,
+\[
+I(A:B)=S(\rho_A)+S(\rho_B)-S(\rho_{AB}),
+\]
+where
+\[
+S(\rho)=-\mathrm{Tr}(\rho\log_2\rho).
+\]
+
+\section{Boundary Hamiltonian}
+For $H=\sum_\alpha h_\alpha$, define
+\[
+H_{\partial F}=\sum_{\alpha:\,\mathrm{supp}(h_\alpha)\cap A\neq\varnothing,\,
+\mathrm{supp}(h_\alpha)\cap B\neq\varnothing} h_\alpha.
+\]
+Thus
+\[
+H=H_A+H_B+H_{\partial F}.
+\]
+The quadratic cost measures susceptibility to boundary-crossing fluctuations rather than mean boundary energy.
+
+\section{Three-Qubit Numerical Illustration}
+
+We consider a three-site XY chain with Hamiltonian
+\[
+H = J_{12}(X_1X_2+Y_1Y_2) + J_{23}(X_2X_3+Y_2Y_3) + h\sum_i Z_i,
+\]
+and parameters $J_{12}=1.5$, $J_{23}=0.6$, $h=0.2$. The ground state is obtained by exact diagonalisation. The dynamical cost is evaluated as $C_H = \langle H_{\partial F}^2\rangle$ (the quadratic boundary-fluctuation measure, not the square of the mean). Two contiguous candidate cuts are evaluated:
+
+\[
+\begin{array}{lccc}
+\text{cut} & \Phi_S\ (\text{bits}) & C_H & \Phi(\lambda=0.2) \\ \midrule
+1\ (A|BC) & 1.972 & 8.379 & 0.297 \\
+2\ (AB|C) & 0.724 & 0.819 & 0.560
+\end{array}
+\]
+
+At $\lambda=0$, cut~1 (higher mutual information) is preferred; at $\lambda=0.2$, cut~2 (lower dynamical cost) is preferred. The crossover occurs at
+\[
+\lambda^* = \frac{\Phi_S(\text{cut}~1)-\Phi_S(\text{cut}~2)}
+{C_H(\text{cut}~1)-C_H(\text{cut}~2)}
+= \frac{1.248}{7.560} \approx 0.165.
+\]
+In v5 this is re-scoped as a \emph{structural crossover under the closed-system surrogate}: it characterizes the competition between the informational and the closed-system boundary-fluctuation terms within $\Phi_{\mathrm{closed}}$, and is not claimed to be a physical crossover of the open-system dynamics (see the Open-System Validation section).
+
+\subsection{Continuous manifold optimisation}
+The contiguous cuts are a small subset of the full factorisation manifold $\mathcal F \cong U(8)/(U(4)\times U(2))$, which has real dimension $45$ (accounting for the $U(1)$ kernel of the tensor-product embedding; an earlier value $44$ neglected it). The present numerical implementation explores a four-parameter generator submanifold. For each candidate unitary $U$, the rotated Hamiltonian $H_U = U H U^\dagger$ is decomposed into local and interaction components via partial-trace projection:
+\[
+H_U = H_A(U) + H_B(U) + H_{\partial}(U),
+\]
+where $H_A(U) = \frac{1}{d_B}\mathrm{Tr}_B(H_U)\otimes I_B$ and analogously for $H_B(U)$, with a trace-adjustment term to remove double-counting of the identity. The dynamical cost $C_H(U) = \langle \psi_U | H_{\partial}(U)^2 | \psi_U \rangle$ then correctly depends on $U$.
+
+\emph{Correction (v5):} an earlier version used $U=\exp(i\sum_k\theta_k G_k)$ with anti-Hermitian generators $G_k$, which yields a positive Hermitian matrix rather than a unitary (verified $\|U^\dagger U-I\|=0.30$). The corrected construction $U=\exp(\sum_k\theta_k G_k)$ is unitary ($\|U^\dagger U-I\|\approx10^{-16}$). All continuous-optimisation numbers below are the corrected (post-fix) values.
+
+We perform gradient ascent on $\Phi$ over the four-parameter submanifold using anti-Hermitian generators and numerical central-difference gradients (SGD) or Adam (30 seeds each, $N=3$):
+\[
+\begin{array}{lccc}
+\text{optimiser} & \Phi\ (\text{mean}\pm\sigma) & \text{success vs contiguous} & \text{contiguous}\ \Phi \\ \midrule
+\text{SGD} & 0.581\pm0.112 & 60\% & 0.560 \\
+\text{Adam} & 0.654\pm0.191 & 67\% & 0.560
+\end{array}
+\]
+After the unitarity correction the continuous optimisation no longer reliably beats the best contiguous cut at $N=3$; at $N=4,5$ Adam achieves $100\%/97\%$ success with modest gains ($1.752\pm0.031$ vs $1.723$; $1.480\pm0.028$ vs $1.458$). The earlier claim of a $1.95\times$ improvement ($\Phi=1.05$) was an artifact of the non-unitary map and is retracted. The discrete contiguous ansatz remains a useful benchmark, but establishing global optimality on the full manifold is an open problem (Phase B of the research roadmap).
+
+\section{Finite-size scaling}
+We extend the analysis to $N=3,4,6,8$ sites under three coupling profiles:
+
+\[
+\begin{array}{lcccc}
+\text{profile} & N=3 & N=4 & N=6 & N=8 \\ \midrule
+\text{weak center} & 0.165 & 0.209 & \text{---} & 0.218 \\
+\text{linear}       & 0.165 & 0.148 & 0.035 & 0.098 \\
+\text{step}         & 0.165 & 0.184 & 3.324 & 0.008
+\end{array}
+\]
+
+The crossover scale $\lambda^*$ varies with system size and coupling heterogeneity, suggesting that the balance between informational and dynamical constraints depends on the spatial structure of the interaction. For the linear profile, $\lambda^*$ decreases towards $N=6$ then rises again at $N=8$, hinting at non-monotonic finite-size behaviour.
+
+\section{Physical Interpretation of $\lambda$}
+Within the closed-system surrogate, $\lambda$ is an effective tradeoff parameter rather than a fundamental universal constant; candidate interpretations include an inverse-temperature-like parameter, a ratio of decoherence and internal dynamical timescales, and a scale-dependent coarse-graining parameter.
+
+In the general open-system form the dimensional analysis is cleaner: $[C_{\mathrm{dyn}}]=T^{-1}$, so $[\lambda]=T$. $\lambda$ is thus naturally interpreted as a \emph{characteristic timescale} comparing informational articulation and dynamical stability, and the same dimensionful $\lambda$ applies to the finite-time variant $C_{\mathrm{dyn}}^{(\tau)}$.
+
+A microscopic derivation of $\lambda$ from an explicit system--environment model remains future work.
+
+\section{Open-System Validation (2026-08-11)}
+To test whether the closed-system surrogate $C_H=\langle H_{\partial F}^2\rangle$ predicts the actual open-system stability of candidate factorizations, we solved the Lindblad master equation for the $N=3$ XY benchmark with a $64\times64$ vectorised Liouvillian (SciPy implementation), keeping $H$, $\rho_0$, and the collapse operators $\{L_i\}$ identical for both cuts. The factorization-specific coherence
+\[
+C_F(t)=\|\rho(t)-D_F[\rho(t)]\|_2
+\]
+measures the amount of Schmidt-basis coherence retained by cut $F$, and the primary indicator is the exact initial rate
+\[
+\Gamma_F^{\mathrm{exact}}(0)=-\left.\frac{d}{dt}\log C_F(t)\right|_{t=0}.
+\]
+
+\textbf{C0 (uniform pure dephasing, $L_i=\sqrt{\gamma/2}\,Z_i$, $\gamma=1$):}
+$\Gamma_1^{\mathrm{exact}}=\Gamma_2^{\mathrm{exact}}=2.000000$ exactly. Despite $C_H$ differing by a factor $\sim10$ (8.38 vs 0.82), the initial structural decoherence rate is factorization-independent. The variance alternative is likewise degenerate ($\mathrm{Var}(H_{\partial})=0.62069$ for both cuts).
+
+\textbf{C1 (four pre-registered environments):}
+\[
+\begin{array}{lccc}
+\text{environment} & \Gamma_1^{\mathrm{exact}} & \Gamma_2^{\mathrm{exact}} & R_\Gamma=\Gamma_1/\Gamma_2 \\ \midrule
+\text{dephasing } \gamma=(0.5,1,2) & 1.621 & 2.769 & 0.586 \\
+\text{dephasing } \gamma=(2,1,0.5)\ \text{(mirror)} & 2.939 & 1.963 & 1.497 \\
+\text{amplitude damping } \kappa=1 & 2.000 & 2.000 & 1.000 \\
+\text{mixed } \gamma=\kappa=0.5 & 2.000 & 2.000 & 1.000
+\end{array}
+\]
+Under uniform or symmetric noise the rates are exactly factorization-independent; under non-uniform noise the ordering follows the noise profile and flips under mirroring. The closed-system ratio $R_{C_H}=10.23$ is reproduced in no environment.
+
+\textbf{C2 (Liouvillian boundary cost):} projecting the Liouvillian onto the local superoperator space $S_F=\{L_A\otimes I_{B^2}+I_{A^2}\otimes L_B\}$ and computing the boundary-residual norms $C_{\mathcal L}^{\mathrm{global}}$, $C_{\mathcal L}^{\rho}$ yields ratios that do not track $R_\Gamma$ (always $>1$ or always $<1$ across environments); the alignment diagnostic is degenerate under amplitude damping. The norm-type boundary cost is therefore not promoted to canonical status.
+
+\textbf{Conclusion of the validation:} the closed-system second moment $C_H$ is not supported as an open-system stability proxy. The environment-dependent signed dynamical functional $C_{\mathrm{dyn}}(F;\rho,\mathcal L,\tau)$ is required, with $C_\Gamma^{(0)}=\Gamma_F^{\mathrm{exact}}(0)$ as its first operational realization. A random-state audit (400 configurations) found negative $\Gamma_F^{\mathrm{exact}}$ in 1.25\% of cases, so $C_{\mathrm{dyn}}$ is a \emph{signed} functional (negative values reward, rather than penalize, a structure).
+
+\section{Relation to REM5}
+REM5 replaces a sign-sensitive linear boundary expectation with a positive quadratic interaction cost. The form
+\[
+C_H=\mathrm{Tr}(\rho H_{\partial F}^2)
+\]
+removes ambiguity associated with negative boundary-energy expectation values and gives a non-negative dynamical penalty. In the earlier linear formulation, an antiferromagnetic ground state produced $\phi_h = -\langle H_{\partial F}\rangle > 0$, favouring the stronger bond---opposite to the intended interpretation. The quadratic form eliminates this sign ambiguity: $C_H \geq 0$ regardless of the sign of the boundary expectation, and the dynamics-only selection ($\lambda\to\infty$) always favours the cut with smallest boundary fluctuation cost.
+
+\section{Scope and Limitations}
+The current three-qubit analysis is an existence-oriented toy model. The continuous manifold optimisation uses a finite-difference gradient, a four-parameter generator submanifold of the 45-dimensional quotient manifold, and reconstructed $H_{\partial}(U)$ via partial-trace projection; it does not guarantee global optimality. Version 5 corrects the unitary construction of the optimiser (see the Continuous Manifold Optimisation section) and re-scopes all continuous-optimisation claims accordingly. The finite-size scaling covers only $N\leq8$ due to exponential growth of the Hilbert space. A microscopic derivation of $\lambda$ and an experimental validation remain for future work. The open-system validation (C0--C2) is restricted to $N=3$ with local Markovian noise channels; it establishes that the closed-system surrogate does not predict open-system stability in this benchmark, and motivates $C_\Gamma^{(0)}$ as the first operational open-system cost, pending further tests (non-Markovian environments, larger $N$, experimental checks).
+
+\section{Conclusion}
+REM formulates relational articulation as a variational competition between informational differentiation and dynamical stability. Version 5 retains the quadratic closed-system cost as a structural surrogate and introduces the general open-system form $\Phi(F;\lambda,\rho,\mathcal L,\tau)=I_\rho(F)-\lambda C_{\mathrm{dyn}}(F;\rho,\mathcal L,\tau)$, with $\lambda$ a characteristic timescale and $C_\Gamma^{(0)}=\Gamma_F^{\mathrm{exact}}(0)$ the first operational realization. Numerical results on an XY chain confirm regime competition under the closed-system surrogate, quantify the crossover scale, and correct the earlier continuous-optimisation claims after the unitarity fix. Open-system validation shows that structural stability is not a property of the Hamiltonian alone but depends on the relation $(\rho,\mathcal L,F)$: the environment determines which factorization is dynamically preferred. This is consistent with REM's original relational thesis and strengthens its physical basis.
+
+\begin{thebibliography}{9}
+\bibitem{rovelli} C. Rovelli, Relational Quantum Mechanics, Int. J. Theor. Phys. 35, 1637 (1996).
+\bibitem{zurek} W. H. Zurek, Decoherence, einselection, and the quantum origins of the classical, Rev. Mod. Phys. 75, 715 (2003).
+\bibitem{carroll} S. Carroll and A. Singh, Quantum Mereology, Phys. Rev. A 103, 022213 (2021).
+\bibitem{rem5} Y. Maruko, Relational Emergence Model: Variational Selection of Tensor-Product Structure in Quantum Systems (2026).
+\end{thebibliography}
+
+\end{document}
