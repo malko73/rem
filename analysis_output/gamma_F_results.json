@@ -5,6 +5,7 @@
     "var": 0.6206896551724119,
     "mean": -2.785430072655779,
     "c0": 0.7003481383306863,
+    "gamma_exact": 2.0,
     "gamma0": 1.9928675646404446,
     "gamma_fit": 1.738430051140899,
     "c_t": [
@@ -818,6 +819,7 @@
     "var": 0.6206896551724145,
     "mean": -0.44566881162492333,
     "c0": 0.35835533949700815,
+    "gamma_exact": 2.0000000000000004,
     "gamma0": 1.9961530155061824,
     "gamma_fit": 1.4987723763920993,
     "c_t": [
@@ -1628,8 +1630,8 @@
   "verdict": {
     "verdict": 2,
     "text": "Gamma_1 ~ Gamma_2: consistent with Var degeneracy; the M2 crossover lambda* ~ 0.165 may be a second-moment proxy artifact.",
-    "gamma1": 1.9928675646404446,
-    "gamma2": 1.9961530155061824,
+    "gamma1": 2.0,
+    "gamma2": 2.0000000000000004,
     "gamma1_fit": 1.738430051140899,
     "gamma2_fit": 1.4987723763920993
   },

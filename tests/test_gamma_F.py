@@ -120,14 +120,14 @@ def test_gamma_measurements_finite_and_consistent():
 
 def test_classify_returns_case():
     # g1 < g2 -> case 3 (Gamma_1 < Gamma_2, falsification)
-    d1 = dict(gamma0=0.5, gamma_fit=0.5)
-    d2 = dict(gamma0=1.0, gamma_fit=1.0)
+    d1 = dict(gamma0=0.5, gamma_fit=0.5, gamma_exact=0.5)
+    d2 = dict(gamma0=1.0, gamma_fit=1.0, gamma_exact=1.0)
     assert gf.classify_case(d1, d2)["verdict"] == 3
     # g1 > g2 -> case 1 (Gamma_2 < Gamma_1, supports M2)
-    d1 = dict(gamma0=1.0, gamma_fit=1.0)
-    d2 = dict(gamma0=0.5, gamma_fit=0.5)
+    d1 = dict(gamma0=1.0, gamma_fit=1.0, gamma_exact=1.0)
+    d2 = dict(gamma0=0.5, gamma_fit=0.5, gamma_exact=0.5)
     assert gf.classify_case(d1, d2)["verdict"] == 1
     # equal -> case 2 (Var degeneracy consistent)
-    d1 = dict(gamma0=0.5, gamma_fit=0.5)
-    d2 = dict(gamma0=0.5, gamma_fit=0.5)
+    d1 = dict(gamma0=0.5, gamma_fit=0.5, gamma_exact=0.5)
+    d2 = dict(gamma0=0.5, gamma_fit=0.5, gamma_exact=0.5)
     assert gf.classify_case(d1, d2)["verdict"] == 2

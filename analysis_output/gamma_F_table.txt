@@ -1,11 +1,11 @@
 # Phase C0 — M2 / Var vs Gamma_F (identical fixed environment, pure dephasing)
 # H = XY(1.5,0.6,h=0.2), rho0 = ground state, L_i = sqrt(gamma/2) Z_i, gamma=1.0
-# Gamma^(0) over t<= 0.05; Gamma^fit over t<= 0.5
+# Gamma^exact: analytic t=0 derivative (primary). Gamma^(0): log-linear fit over t<= 0.05; Gamma^fit over t<= 0.5
 
-| cut | M2=<H^2> | Var(H) | <H> | C_F(0) | Gamma_F^(0) | Gamma_F^fit |
-|-----|----------|--------|-----|--------|-------------|-------------|
-| 1 | 8.379310 | 0.620690 | -2.785430 | 0.700348 | 1.992868 | 1.738430 |
-| 2 | 0.819310 | 0.620690 | -0.445669 | 0.358355 | 1.996153 | 1.498772 |
+| cut | M2=<H^2> | Var(H) | <H> | C_F(0) | Gamma^exact | Gamma^(0) | Gamma^fit |
+|-----|----------|--------|-----|--------|-------------|-----------|-----------|
+| 1 | 8.379310 | 0.620690 | -2.785430 | 0.700348 | 2.000000 | 1.992868 | 1.738430 |
+| 2 | 0.819310 | 0.620690 | -0.445669 | 0.358355 | 2.000000 | 1.996153 | 1.498772 |
 
 case 2: Gamma_1 ~ Gamma_2: consistent with Var degeneracy; the M2 crossover lambda* ~ 0.165 may be a second-moment proxy artifact.
-Gamma1=1.992868  Gamma2=1.996153
+Gamma1=2.000000  Gamma2=2.000000

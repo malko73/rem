@@ -84,16 +84,44 @@ def pauli_z(n: int, site: int) -> np.ndarray:
     return out
 
 
-def liouvillian(h_total: np.ndarray, gamma: float, n: int = 3) -> np.ndarray:
-    """Vectorised Lindblad Liouvillian (dense 64x64)."""
+def sigma_minus(n: int, site: int) -> np.ndarray:
+    """sigma_- = |0><1| on `site` (0-indexed) in the n-qubit Hilbert space."""
+    sm = np.array([[0.0, 0.0], [1.0, 0.0]], dtype=complex)
+    ops = [np.eye(2, dtype=complex)] * n
+    ops[site] = sm
+    out = ops[0]
+    for op in ops[1:]:
+        out = np.kron(out, op)
+    return out
+
+
+def liouvillian_env(h_total: np.ndarray, gamma_vec, kappa_vec, n: int = 3) -> np.ndarray:
+    """Vectorised Lindblad Liouvillian with per-site dephasing + amplitude damping.
+
+    L_i^deph = sqrt(gamma_i/2) Z_i   ->  (gamma_i/2)(Z rho Z - rho)
+    L_i^damp = sqrt(kappa_i) sigma_-  ->  kappa (s_- rho s_+ - 1/2 {s_+ s_-, rho})
+    """
     dim = 2**n
     I = np.eye(dim, dtype=complex)
-    # vec(A rho B) = (B^T ⊗ A) vec(rho); commutator -i[H,rho] -> -i(H⊗I - I⊗H^T)
     L = -1j * (np.kron(h_total, I) - np.kron(I, h_total.conj()))
     for site in range(n):
-        z = pauli_z(n, site)
-        L += (gamma / 2.0) * (np.kron(z, z) - np.kron(I, I))
+        g = gamma_vec[site]
+        k = kappa_vec[site]
+        if g > 0:
+            z = pauli_z(n, site)
+            L += (g / 2.0) * (np.kron(z, z) - np.kron(I, I))
+        if k > 0:
+            sm = sigma_minus(n, site)
+            spsm = sm.conj().T @ sm                 # sigma_+ sigma_-
+            L += k * (np.kron(sm.conj(), sm)
+                      - 0.5 * np.kron(I, spsm)
+                      - 0.5 * np.kron(spsm.conj(), I))
     return L
+
+
+def liouvillian(h_total: np.ndarray, gamma: float, n: int = 3) -> np.ndarray:
+    """Uniform pure-dephasing Liouvillian (backward-compatible wrapper)."""
+    return liouvillian_env(h_total, [gamma] * n, [0.0] * n, n=n)
 
 
 def solve_dynamics(L: np.ndarray, rho0: np.ndarray, t_grid: np.ndarray) -> np.ndarray:
@@ -137,6 +165,25 @@ def coherence_norm(rho: np.ndarray, basis: np.ndarray) -> float:
     return float(np.linalg.norm(rho - dephasing_projection(rho, basis), ord="fro"))
 
 
+def gamma_exact(rho0: np.ndarray, L: np.ndarray, basis: np.ndarray) -> float:
+    """Exact t=0 structural decoherence rate.
+
+    With Q_F = I - D_F and X_F = Q_F rho0, C_F = |X_F|_2, the exact
+    initial logarithmic derivative is
+
+        Gamma_F^exact(0) = - Re <X_F, Q_F L(rho0)>_HS / |X_F|_2^2
+    """
+    q = lambda r: r - dephasing_projection(r, basis)          # noqa: E731
+    x = q(rho0)
+    lrho = (L @ rho0.reshape(-1, order="F")).reshape(rho0.shape, order="F")
+    qlrho = q(lrho)
+    num = np.real(np.trace(x.conj().T @ qlrho))
+    den = float(np.linalg.norm(x, ord="fro") ** 2)
+    if den < 1e-300:
+        return float("nan")
+    return float(-num / den)
+
+
 def log_linear_slope(t: np.ndarray, c: np.ndarray) -> float:
     """Slope of log(c) vs t by least squares (i.e. -Gamma if c ~ c0 e^{-G t})."""
     mask = c > 1e-12
@@ -167,6 +214,7 @@ def run_cut(psi: np.ndarray, h_total: np.ndarray, gamma: float,
     rho0 = np.outer(psi, psi.conj())
     basis = schmidt_basis(psi, n, cut)
     c0 = coherence_norm(rho0, basis)
+    g_exact = gamma_exact(rho0, L, basis)
 
     rho_t = solve_dynamics(L, rho0, t_grid)
     c_t = np.array([coherence_norm(rho_t[i].reshape((8, 8), order="F"), basis)
@@ -185,13 +233,17 @@ def run_cut(psi: np.ndarray, h_total: np.ndarray, gamma: float,
 
     return dict(
         cut=cut, m2=float(m2), var=float(var), mean=float(mean),
-        c0=float(c0), gamma0=float(gamma0), gamma_fit=float(gamma_fit),
+        c0=float(c0), gamma_exact=float(g_exact),
+        gamma0=float(gamma0), gamma_fit=float(gamma_fit),
         c_t=c_t.tolist(), hd_t=hd_t.tolist(),
     )
 
 
 def classify_case(d1: dict, d2: dict, rel_tol: float = 0.05) -> dict:
-    g1, g2 = d1["gamma0"], d2["gamma0"]
+    # primary indicator: exact t=0 derivative (fall back to window estimate)
+    g1e, g2e = float(d1["gamma_exact"]), float(d2["gamma_exact"])
+    g1 = g1e if np.isfinite(g1e) else float(d1["gamma0"])
+    g2 = g2e if np.isfinite(g2e) else float(d2["gamma0"])
     if g2 < g1 * (1 - rel_tol):
         verdict = 1
         text = ("Gamma_2 < Gamma_1: the cut with lower M2 is more stable under "
@@ -213,15 +265,16 @@ def write_table(d1: dict, d2: dict, verdict: dict, outpath: Path) -> None:
     rows = [
         "# Phase C0 — M2 / Var vs Gamma_F (identical fixed environment, pure dephasing)",
         f"# H = XY(1.5,0.6,h=0.2), rho0 = ground state, L_i = sqrt(gamma/2) Z_i, gamma={GAMMA}",
-        f"# Gamma^(0) over t<= {T_INIT}; Gamma^fit over t<= {T_FIT}",
+        "# Gamma^exact: analytic t=0 derivative (primary). Gamma^(0): log-linear fit over t<= "
+        f"{T_INIT}; Gamma^fit over t<= {T_FIT}",
         "",
-        "| cut | M2=<H^2> | Var(H) | <H> | C_F(0) | Gamma_F^(0) | Gamma_F^fit |",
-        "|-----|----------|--------|-----|--------|-------------|-------------|",
+        "| cut | M2=<H^2> | Var(H) | <H> | C_F(0) | Gamma^exact | Gamma^(0) | Gamma^fit |",
+        "|-----|----------|--------|-----|--------|-------------|-----------|-----------|",
     ]
     for d in (d1, d2):
         rows.append(
             f"| {d['cut']} | {d['m2']:.6f} | {d['var']:.6f} | {d['mean']:+.6f} | "
-            f"{d['c0']:.6f} | {d['gamma0']:.6f} | {d['gamma_fit']:.6f} |"
+            f"{d['c0']:.6f} | {d['gamma_exact']:.6f} | {d['gamma0']:.6f} | {d['gamma_fit']:.6f} |"
         )
     rows += [
         "",
