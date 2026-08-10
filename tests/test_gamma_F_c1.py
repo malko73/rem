@@ -91,3 +91,24 @@ def test_c1_classify_all_m2_is_A():
 def test_c1_classify_env_dependent_is_C():
     v = c1.classify_c1(_fake_results([1.02, 1.5, 0.99]))
     assert v["verdict"] == "C1-C"
+
+
+def test_sigma_minus_is_lowering():
+    """sigma_- must be |0><1| = [[0,1],[0,0]] and satisfy sigma_-|1> = |0>."""
+    sm = gf.sigma_minus(1, 0)
+    assert np.allclose(sm, [[0, 1], [0, 0]])
+    zero = np.array([1, 0], dtype=complex)
+    one = np.array([0, 1], dtype=complex)
+    assert np.allclose(sm @ one, zero), "sigma_- |1> must equal |0>"
+    assert np.allclose(sm @ zero, 0), "sigma_- |0> must vanish"
+
+
+def test_gamma_exact_gauge_robust():
+    """Gamma^exact must be invariant under null-subspace completion (C1.5)."""
+    psi, h_total = gf.build_system()
+    L = gf.liouvillian(h_total, gf.GAMMA, n=3)
+    for cut in (1, 2):
+        g = gf.gauge_spread(psi, L, cut, n_seeds=30, seed0=11)
+        assert g["rel_std"] < 1e-8, \
+            f"cut {cut}: Gamma^exact depends on SVD completion " \
+            f"(rel_std={g['rel_std']:.2e})"

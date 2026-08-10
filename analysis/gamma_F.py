@@ -85,8 +85,13 @@ def pauli_z(n: int, site: int) -> np.ndarray:
 
 
 def sigma_minus(n: int, site: int) -> np.ndarray:
-    """sigma_- = |0><1| on `site` (0-indexed) in the n-qubit Hilbert space."""
-    sm = np.array([[0.0, 0.0], [1.0, 0.0]], dtype=complex)
+    """sigma_- = |0><1| on `site` (0-indexed) in the n-qubit Hilbert space.
+
+    In the (|0>, |1>) convention |0>=(1,0)^T, |1>=(0,1)^T, so
+    |0><1| = [[0,1],[0,0]]. (The earlier code used [[0,0],[1,0]] = |1><0|,
+    which is the raising operator; fixed 2026-08-11.)
+    """
+    sm = np.array([[0.0, 1.0], [0.0, 0.0]], dtype=complex)
     ops = [np.eye(2, dtype=complex)] * n
     ops[site] = sm
     out = ops[0]
@@ -193,6 +198,60 @@ def log_linear_slope(t: np.ndarray, c: np.ndarray) -> float:
     y = np.log(c[mask])
     slope, _ = np.polyfit(x, y, 1)
     return float(slope)
+
+
+def _random_unitary(dim: int, rng: np.random.Generator) -> np.ndarray:
+    """Random unitary from the QR of a complex Gaussian matrix."""
+    m = rng.standard_normal((dim, dim)) + 1j * rng.standard_normal((dim, dim))
+    q, _ = np.linalg.qr(m)
+    return q
+
+
+def random_null_rotated_basis(psi: np.ndarray, n: int, cut: int,
+                              rng: np.random.Generator) -> np.ndarray:
+    """Schmidt basis with ONLY the null subspace rotated by a random unitary.
+
+    The Schmidt support (rank r) is fixed; the arbitrary completion of the
+    zero-singular-value part of U (d_a columns) and Vh (d_b rows) is rotated.
+    Used to test whether D_F / Gamma_F^exact depend on the SVD completion.
+    """
+    d_a, d_b = 2**cut, 2 ** (n - cut)
+    mat = psi.reshape((d_a, d_b))
+    u, s, vh = np.linalg.svd(mat, full_matrices=True)
+    rank = int(np.sum(s > 1e-10))
+    u_new = u.copy()
+    if d_a - rank > 0:
+        u_new[:, rank:] = u[:, rank:] @ _random_unitary(d_a - rank, rng)
+    vh_new = vh.copy()
+    if d_b - rank > 0:
+        vh_new[rank:, :] = _random_unitary(d_b - rank, rng) @ vh[rank:, :]
+    basis = np.zeros((d_a * d_b, d_a * d_b), dtype=complex)
+    for k in range(d_a):
+        for l in range(d_b):
+            basis[:, k * d_b + l] = np.kron(u_new[:, k], vh_new[l, :])
+    return basis
+
+
+def gauge_spread(psi: np.ndarray, L: np.ndarray, cut: int,
+                 n_seeds: int = 100, seed0: int = 0) -> dict:
+    """Gamma_F^exact across random null-subspace completions (C1.5 test).
+
+    For a pure state the exact rate is analytically completion-independent
+    (X = (I-D_F)rho0 has D_F X = 0 and D_F is self-adjoint, so the numerator
+    Re<X, Q_F L(rho0)> reduces to Re<X, L(rho0)>); this verifies it numerically.
+    """
+    rho0 = np.outer(psi, psi.conj())
+    base = gamma_exact(rho0, L, schmidt_basis(psi, 3, cut))
+    vals = []
+    for i in range(n_seeds):
+        rng = np.random.default_rng(seed0 + i)
+        basis = random_null_rotated_basis(psi, 3, cut, rng)
+        vals.append(gamma_exact(rho0, L, basis))
+    vals = np.array(vals)
+    rel_std = float(vals.std() / abs(base)) if abs(base) > 1e-12 else float("nan")
+    return dict(base=float(base), mean=float(vals.mean()), std=float(vals.std()),
+                rel_std=rel_std, min=float(vals.min()), max=float(vals.max()),
+                n_seeds=n_seeds)
 
 
 def run_cut(psi: np.ndarray, h_total: np.ndarray, gamma: float,
