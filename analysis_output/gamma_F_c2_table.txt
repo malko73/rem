@@ -1,0 +1,13 @@
+# Phase C2 — Liouvillian boundary cost vs Gamma_F (2026-08-11)
+# L_dF = L - P_F^local L; P_F^local = HS projection onto {L_A x I + I x L_B}
+
+| env | R_Gamma(exact) | R_L(global) | R_L(rho) | R_L(align) | R_Gamma(fit) |
+|-----|----------------|-------------|----------|------------|--------------|
+| A1_deph_0512 | 0.5856 | 4.1589 | 0.5966 | -0.2841 | 0.8075 |
+| A2_deph_2105 | 1.4974 | 6.0902 | 0.4445 | 0.5683 | 1.6096 |
+| B_ampdamp | 1.0000 | 5.2908 | 0.6546 | -8629322287419466.0000 | 1.0300 |
+| C_mixed | 1.0000 | 5.7590 | 0.4147 | 0.7501 | 1.0778 |
+
+Spearman(global)=0.949  Spearman(rho)=-0.316
+max |log R_L - log R_G| : global=1.960  rho=1.215
+verdict: C2-B — Gamma^exact is robust but the norm-type C_L costs do not track it across environments -> keep Gamma^exact as the operational canonical cost (or investigate alignment diagnostics).

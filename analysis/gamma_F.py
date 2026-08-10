@@ -254,6 +254,127 @@ def gauge_spread(psi: np.ndarray, L: np.ndarray, cut: int,
                 n_seeds=n_seeds)
 
 
+# ─── C2: Liouvillian boundary cost ───────────────────────────────────
+# L_dF = L - P_F^local L, where P_F^local projects onto
+#   S_F = { L_A (x) I_{B^2} + I_{A^2} (x) L_B }
+# (Hilbert-Schmidt orthogonal projection, computed via basis + pseudoinverse
+# so it does not depend on the Lindblad jump-operator representation).
+
+def _super_embed_A(op_a: np.ndarray, d_a: int, d_b: int) -> np.ndarray:
+    """Embed op_a (d_a^2 x d_a^2 superoperator on A) as op_a ⊗ I_{B^2}.
+
+    Index convention matches the physical one (site 0 = most significant):
+    row = p*d_b + r with p the A index (high bits), r the B index (low bits).
+    """
+    dim = d_a * d_b
+    m = np.zeros((dim * dim, dim * dim), dtype=complex)
+    for p in range(d_a):
+        for q in range(d_a):
+            for pp in range(d_a):
+                for qq in range(d_a):
+                    val = op_a[p * d_a + q, pp * d_a + qq]
+                    if abs(val) < 1e-15:
+                        continue
+                    for r in range(d_b):
+                        for s in range(d_b):
+                            row = p * d_b + r
+                            col = q * d_b + s
+                            row2 = pp * d_b + r
+                            col2 = qq * d_b + s
+                            m[col * dim + row, col2 * dim + row2] = val
+    return m
+
+
+def _super_embed_B(op_b: np.ndarray, d_a: int, d_b: int) -> np.ndarray:
+    """Embed op_b (d_b^2 x d_b^2 superoperator on B) as I_{A^2} ⊗ op_b.
+
+    Index convention: row = p*d_b + r with p the A index (high bits),
+    r the B index (low bits); op_b acts on r/s only.
+    """
+    dim = d_a * d_b
+    m = np.zeros((dim * dim, dim * dim), dtype=complex)
+    for p in range(d_a):
+        for q in range(d_a):
+            for r in range(d_b):
+                for s in range(d_b):
+                    for pp in range(d_a):
+                        for qq in range(d_a):
+                            for rr in range(d_b):
+                                for ss in range(d_b):
+                                    val = op_b[r * d_b + s, rr * d_b + ss]
+                                    if abs(val) < 1e-15:
+                                        continue
+                                    row = p * d_b + r
+                                    col = q * d_b + s
+                                    row2 = pp * d_b + rr
+                                    col2 = qq * d_b + ss
+                                    m[col * dim + row, col2 * dim + row2] = val
+    return m
+
+
+def local_projection_data(n: int, cut: int) -> tuple:
+    """Return (basis_matrix, pinv_gram) for the projection onto S_F.
+
+    basis_matrix: (dim^2, n_basis) with n_basis = d_A^4 + d_B^4.
+    Projection of a flat vector v is B (B†B)^+ B† v.
+    """
+    d_a, d_b = 2**cut, 2 ** (n - cut)
+    dim = d_a * d_b
+    vecs = []
+    for a in range(d_a ** 2):
+        for b in range(d_a ** 2):
+            op_a = np.zeros((d_a ** 2, d_a ** 2), dtype=complex)
+            op_a[a, b] = 1.0
+            vecs.append(_super_embed_A(op_a, d_a, d_b).reshape(-1))
+    for a in range(d_b ** 2):
+        for b in range(d_b ** 2):
+            op_b = np.zeros((d_b ** 2, d_b ** 2), dtype=complex)
+            op_b[a, b] = 1.0
+            vecs.append(_super_embed_B(op_b, d_a, d_b).reshape(-1))
+    bmat = np.stack(vecs, axis=1)                    # (dim^2, n_basis)
+    gram = bmat.conj().T @ bmat
+    pinv_gram = np.linalg.pinv(gram)
+    return bmat, pinv_gram
+
+
+def boundary_residual(L: np.ndarray, n: int, cut: int) -> np.ndarray:
+    """L_dF = L - P_F^local L (flat projection via pseudoinverse)."""
+    bmat, pinv_gram = local_projection_data(n, cut)
+    l_flat = L.reshape(-1)
+    proj = bmat @ (pinv_gram @ (bmat.conj().T @ l_flat))
+    return (l_flat - proj).reshape(L.shape)
+
+
+def c_L_global(L: np.ndarray, l_df: np.ndarray) -> float:
+    """State-independent cost: |L_dF|_HS^2 / |L|_HS^2."""
+    return float(np.linalg.norm(l_df, ord="fro") ** 2
+                 / max(np.linalg.norm(L, ord="fro") ** 2, 1e-300))
+
+
+def c_L_rho(l_df: np.ndarray, rho0: np.ndarray) -> float:
+    """State-dependent cost: |L_dF(rho0)|_2^2 / |rho0|_2^2."""
+    lrho = (l_df @ rho0.reshape(-1, order="F")).reshape(rho0.shape, order="F")
+    return float(np.linalg.norm(lrho, ord="fro") ** 2
+                 / max(np.linalg.norm(rho0, ord="fro") ** 2, 1e-300))
+
+
+def c_L_align(rho0: np.ndarray, l_df: np.ndarray, basis: np.ndarray) -> float:
+    """Diagnostic alignment: -Re<Q_F rho, Q_F L_dF(rho)> / |Q_F rho|^2.
+
+    NOT a canonical candidate — used to diagnose why norm-type costs agree or
+    disagree with the actual Gamma_F.
+    """
+    q = lambda r: r - dephasing_projection(r, basis)              # noqa: E731
+    x = q(rho0)
+    lrho = (l_df @ rho0.reshape(-1, order="F")).reshape(rho0.shape, order="F")
+    qlrho = q(lrho)
+    num = np.real(np.trace(x.conj().T @ qlrho))
+    den = float(np.linalg.norm(x, ord="fro") ** 2)
+    if den < 1e-300:
+        return float("nan")
+    return float(-num / den)
+
+
 def run_cut(psi: np.ndarray, h_total: np.ndarray, gamma: float,
             t_grid: np.ndarray, L: np.ndarray, cut: int) -> dict:
     """Measure M2, Var, Gamma^(0), Gamma^fit for one contiguous cut."""
