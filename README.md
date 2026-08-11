@@ -1,23 +1,29 @@
 # REM Reproducibility Package
 
-> **REM_lambda Version 4 (2026-07-18)** corrects the numerical implementation
-> distributed with Version 3. The dynamical cost now uses
-> `C_H = <H_boundary^2>` and continuous optimisation reconstructs the
-> factorisation-dependent boundary interaction. Version 4 supersedes the
-> numerical values reported in Version 3; the theoretical REM functional is unchanged.
->
-> **2026-08-11 unitarity hotfix**: the continuous optimiser previously built
-> `U = exp(i Σ θ_k G_k)` from anti-Hermitian generators `G_k`, which yields a
-> positive Hermitian matrix — NOT unitary. It now correctly builds
-> `U = exp(Σ θ_k G_k)`, which is unitary. **All continuous-optimisation numbers
-> in this README were re-verified after this fix (2026-08-11) and supersede the
-> values in the Version 4 Zenodo record** (whose continuous-optimisation
-> results were affected by the bug). Discrete-cut results (C_H, λ*) are
-> unaffected.
+> **REM_lambda Version 5 (2026-08-11)** is a corrective revision of
+> Version 4, addressing two independent issues found in post-publication
+> validation. (1) The continuous optimiser previously built
+> `U = exp(i Σ θ_k G_k)` from anti-Hermitian generators, which is NOT
+> unitary; it now builds `U = exp(Σ θ_k G_k)`, and all
+> continuous-optimisation numbers were recomputed — the earlier
+> `Φ ≈ 1.05` / "1.95× improvement" claim is withdrawn, and the quotient
+> dimension is corrected 44 → 45. (2) Open-system falsification tests
+> (C0–C2) show that `C_H = <H_boundary^2>` does not predict
+> factorization-dependent decoherence stability; it is retained only as a
+> closed-system structural surrogate. The canonical form is generalised
+> to `Φ(F; λ, ρ, L, τ) = I_ρ(F) − λ C_dyn(F; ρ, L, τ)` with the signed
+> structural decoherence rate `C_Γ^(0) = Γ_F^exact(0)` as the first
+> operational realization. See `CHANGELOG.md` for the full correction
+> list. Version 4 is retained as part of the publication history; the
+> discrete-cut XY benchmark and `λ* ≈ 0.165` (re-scoped to a surrogate
+> crossover) are unchanged.
 
 Reference code and manuscript working snapshots for the **Relational Emergence Model (REM)** research series by Yoshifumi Maruko.
 
-Primary record: **DOI 10.5281/zenodo.21427776** (REM_lambda Version 4)
+Primary record: **DOI 10.5281/zenodo.21880505** (REM_lambda Version 5)
+Zenodo: https://zenodo.org/records/21880505
+
+Previous version: **DOI 10.5281/zenodo.21427776** (REM_lambda Version 4)
 Zenodo: https://zenodo.org/records/21427776
 
 Superseded numerical release: **DOI 10.5281/zenodo.21427451** (REM_lambda Version 3)
@@ -239,11 +245,11 @@ Please cite the Zenodo record:
 ```bibtex
 @misc{maruko2026rem,
   author       = {Yoshifumi Maruko},
-  title        = {Variational Generation of Relational Structure in the Relational Emergence Model: Quadratic Dynamical Cost and Regime Competition},
+  title        = {Competing Informational and Dynamical Criteria for Subsystem Structure: Relational Emergence Model — Revised Version 5},
   year         = {2026},
   publisher    = {Zenodo},
-  doi          = {10.5281/zenodo.21427776},
-  url          = {https://doi.org/10.5281/zenodo.21427776}
+  doi          = {10.5281/zenodo.21880505},
+  url          = {https://doi.org/10.5281/zenodo.21880505}
 }
 ```
 
