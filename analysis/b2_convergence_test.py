@@ -1,25 +1,13 @@
 #!/usr/bin/env python3
 """
-Phase B2 — Canonical Open REM continuous TPS optimization.
+Phase B2 convergence test: 20 trials × 300 steps to assess optimizer convergence.
 
-Purpose: test whether F* = F*(ρ, L, λ) by running the canonical open-system
-objective Φ(F; λ, ρ, L) = I_ρ(F) - λ Γ_F^exact(0) on the 45-dim quotient
-for the 5 C1 environments.
+Purpose: determine if 50 steps is insufficient (B2-C verdict). If within-environment
+distance decreases significantly with 300 steps, the issue is optimizer convergence.
+If it remains ~0.87, the landscape is genuinely multi-modal.
 
-Environments (from C1):
-  1. uniform dephasing (γ=1.0)
-  2. A1: dephasing γ=(0.5, 1.0, 2.0)
-  3. A2: dephasing γ=(2.0, 1.0, 0.5)  [mirror of A1]
-  4. amplitude damping κ=1.0
-  5. mixed γ=κ=0.5
-
-For each environment, run 100 trials (50 SGD + 50 Adam) and compute:
-  - best/median/mean/std/min Φ
-  - success rate (vs contiguous best)
-  - distinct maxima estimate
-  - convergence distribution
-
-Key test: do A1 and A2 (mirror environments) yield different F*?
+This test runs on A1 and A2 environments only (mirror pair, most important for
+F* = F*(ρ, L, λ) verification).
 """
 from __future__ import annotations
 
@@ -53,16 +41,13 @@ assert spec3.loader is not None
 sys.modules[spec3.name] = gamma_F
 spec3.loader.exec_module(gamma_F)
 
-N = 3
-N_A = 2
-D_A, D_B = 2 ** N_A, 2 ** (N - N_A)
-DIM = 2 ** N
-COUPLINGS = [1.5, 0.6]
-H_FIELD = 0.2
+N, N_A = 3, 2
+D_A, D_B = 4, 2
+DIM = 8
 LAMBDA = 0.2
-STEPS = 200
+STEPS = 300
 LR = 0.01
-N_TRIALS_PER_ENV = 100
+N_TRIALS = 20
 SEED0 = 20260816
 
 
@@ -72,9 +57,8 @@ def canonical_open_objective(rho_U: np.ndarray, Y_U: np.ndarray, n_a: int) -> di
     psi_U = evecs_psi[:, np.argmax(evals_psi)]
     I_F = rem4.mutual_information_for_cut(psi_U, N, n_a)
 
-    # Schmidt basis of the rotated state
     basis = gamma_F.schmidt_basis(psi_U, N, n_a)
-    q = lambda r: r - gamma_F.dephasing_projection(r, basis)  # noqa: E731
+    q = lambda r: r - gamma_F.dephasing_projection(r, basis)
     x = q(rho_U)
     qy = q(Y_U)
     num = np.real(np.trace(x.conj().T @ qy))
@@ -89,7 +73,6 @@ def canonical_open_objective(rho_U: np.ndarray, Y_U: np.ndarray, n_a: int) -> di
 
 
 def liouvillian_dephasing(h_total: np.ndarray, gamma_vec: list[float]) -> np.ndarray:
-    """Build vectorised Lindblad Liouvillian L for pure dephasing."""
     dim = 2 ** N
     I = np.eye(dim, dtype=complex)
     L = -1j * (np.kron(I, h_total) - np.kron(h_total.conj(), I))
@@ -98,47 +81,10 @@ def liouvillian_dephasing(h_total: np.ndarray, gamma_vec: list[float]) -> np.nda
         if g > 0:
             z = gamma_F.pauli_z(N, site)
             L += (g / 2.0) * (np.kron(z, z) - np.kron(I, I))
-    return L
-
-
-def liouvillian_amp_damping(h_total: np.ndarray, kappa_vec: list[float]) -> np.ndarray:
-    """Build vectorised Lindblad Liouvillian L for amplitude damping."""
-    dim = 2 ** N
-    I = np.eye(dim, dtype=complex)
-    L = -1j * (np.kron(I, h_total) - np.kron(h_total.conj(), I))
-    for site in range(N):
-        k = kappa_vec[site]
-        if k > 0:
-            sm = gamma_F.sigma_minus(N, site)
-            spsm = sm.conj().T @ sm
-            L += k * (np.kron(sm.conj(), sm)
-                      - 0.5 * np.kron(I, spsm)
-                      - 0.5 * np.kron(spsm.conj(), I))
-    return L
-
-
-def liouvillian_mixed(h_total: np.ndarray, gamma_vec: list[float], kappa_vec: list[float]) -> np.ndarray:
-    """Build vectorised Lindblad Liouvillian L for mixed dephasing + damping."""
-    dim = 2 ** N
-    I = np.eye(dim, dtype=complex)
-    L = -1j * (np.kron(I, h_total) - np.kron(h_total.conj(), I))
-    for site in range(N):
-        g = gamma_vec[site]
-        k = kappa_vec[site]
-        if g > 0:
-            z = gamma_F.pauli_z(N, site)
-            L += (g / 2.0) * (np.kron(z, z) - np.kron(I, I))
-        if k > 0:
-            sm = gamma_F.sigma_minus(N, site)
-            spsm = sm.conj().T @ sm
-            L += k * (np.kron(sm.conj(), sm)
-                      - 0.5 * np.kron(I, spsm)
-                      - 0.5 * np.kron(spsm.conj(), I))
     return L
 
 
 def apply_tps(psi0: np.ndarray, L: np.ndarray, U: np.ndarray):
-    """Return (rho_U, Y_U) for a TPS U on the given environment."""
     rho0 = np.outer(psi0, psi0.conj())
     Y0 = (L @ rho0.reshape(-1, order="F")).reshape(rho0.shape, order="F")
     rho_U = U.conj().T @ rho0 @ U
@@ -146,10 +92,10 @@ def apply_tps(psi0: np.ndarray, L: np.ndarray, U: np.ndarray):
     return rho_U, Y_U
 
 
-def run_environment(env_name: str, L: np.ndarray, n_trials: int = N_TRIALS_PER_ENV):
-    """Run optimization for one environment. Saves U* for every trial."""
-    print(f"\n=== Environment: {env_name} ===")
-    h_total, bonds = rem4.xy_chain_hamiltonian(N, COUPLINGS, H_FIELD)
+def run_convergence_test(env_name: str, L: np.ndarray):
+    """Run 20 trials × 300 steps for one environment."""
+    print(f"\n=== Convergence Test: {env_name} (20 trials × {STEPS} steps) ===")
+    h_total, bonds = rem4.xy_chain_hamiltonian(N, [1.5, 0.6], 0.2)
     _, psi0 = rem4.ground_state(h_total)
 
     H_basis = qgeom.horizontal_basis(D_A, D_B)
@@ -157,15 +103,12 @@ def run_environment(env_name: str, L: np.ndarray, n_trials: int = N_TRIALS_PER_E
 
     results = []
     t0 = time.time()
-    for trial in range(n_trials):
+    for trial in range(N_TRIALS):
         theta = rng.standard_normal(H_basis.shape[2]) * 1.0
         U = sla.expm(np.einsum("ijk,k->ij", H_basis, theta))
         rho_U, Y_U = apply_tps(psi0, L, U)
-
-        # Evaluate objective
         obj = canonical_open_objective(rho_U, Y_U, N_A)
 
-        # Short optimization (Adam, 50 steps)
         theta_opt = theta.copy()
         m = np.zeros_like(theta_opt)
         v = np.zeros_like(theta_opt)
@@ -173,8 +116,8 @@ def run_environment(env_name: str, L: np.ndarray, n_trials: int = N_TRIALS_PER_E
         best_phi = obj["Phi"]
         best_u = U
         best_obj = obj
-        for step in range(50):
-            # Gradient via finite differences
+
+        for step in range(STEPS):
             grad = np.zeros_like(theta_opt)
             for k in range(len(theta_opt)):
                 theta_p = theta_opt.copy()
@@ -189,7 +132,6 @@ def run_environment(env_name: str, L: np.ndarray, n_trials: int = N_TRIALS_PER_E
                 obj_m = canonical_open_objective(rho_m, Y_m, N_A)
                 grad[k] = (obj_p["Phi"] - obj_m["Phi"]) / (2 * 1e-5)
 
-            # Adam update
             m = beta1 * m + (1 - beta1) * grad
             v = beta2 * v + (1 - beta2) * grad ** 2
             m_hat = m / (1 - beta1 ** (step + 1))
@@ -209,7 +151,7 @@ def run_environment(env_name: str, L: np.ndarray, n_trials: int = N_TRIALS_PER_E
             seed=SEED0 + trial,
             initial_phi=obj["Phi"],
             best_phi=best_phi,
-            best_u_real=best_u.real.tolist(),  # U* saved (real/imag split for JSON)
+            best_u_real=best_u.real.tolist(),
             best_u_imag=best_u.imag.tolist(),
             best_I=best_obj["I"],
             best_gamma=best_obj["gamma"],
@@ -217,56 +159,59 @@ def run_environment(env_name: str, L: np.ndarray, n_trials: int = N_TRIALS_PER_E
             converged=best_phi > obj["Phi"],
         ))
 
-        if (trial + 1) % 20 == 0:
+        if (trial + 1) % 5 == 0:
             elapsed = time.time() - t0
-            print(f"  trial {trial+1}/{n_trials} ({elapsed:.1f}s)")
+            print(f"  trial {trial+1}/{N_TRIALS} ({elapsed:.1f}s)")
 
     return results
+
+
+def compute_within_distance(trials: list) -> dict:
+    """Compute within-environment TPS distance statistics."""
+    from b2_1_cross_eval import tps_distance
+    n = len(trials)
+    distances = []
+    for i in range(n):
+        for j in range(i + 1, n):
+            u_i = np.array(trials[i]["best_u_real"]) + 1j * np.array(trials[i]["best_u_imag"])
+            u_j = np.array(trials[j]["best_u_real"]) + 1j * np.array(trials[j]["best_u_imag"])
+            d = tps_distance(u_i, u_j)
+            distances.append(d)
+
+    distances = np.array(distances)
+    return dict(
+        mean=float(np.mean(distances)),
+        median=float(np.median(distances)),
+        std=float(np.std(distances)),
+        max=float(np.max(distances)),
+        min=float(np.min(distances)),
+        frac_lt_01=float(np.mean(distances < 0.1)),
+    )
 
 
 def main():
     OUTDIR.mkdir(exist_ok=True)
 
-    h_total, bonds = rem4.xy_chain_hamiltonian(N, COUPLINGS, H_FIELD)
-    _, psi0 = rem4.ground_state(h_total)
+    h_total, _ = rem4.xy_chain_hamiltonian(N, [1.5, 0.6], 0.2)
 
-    # Contiguous baselines
-    I = np.eye(DIM, dtype=complex)
-    rho0 = np.outer(psi0, psi0.conj())
-    I_cut2 = rem4.mutual_information_for_cut(psi0, N, N_A)
-    contiguous_best = I_cut2  # Approximate; actual depends on environment
-
-    # 5 environments
     envs = {
-        "uniform_dephasing": liouvillian_dephasing(h_total, [1.0, 1.0, 1.0]),
         "A1_deph_0512": liouvillian_dephasing(h_total, [0.5, 1.0, 2.0]),
         "A2_deph_2105": liouvillian_dephasing(h_total, [2.0, 1.0, 0.5]),
-        "amp_damping": liouvillian_amp_damping(h_total, [1.0, 1.0, 1.0]),
-        "mixed": liouvillian_mixed(h_total, [0.5, 0.5, 0.5], [0.5, 0.5, 0.5]),
     }
 
-    all_results = {}
+    results = {}
     for env_name, L in envs.items():
-        results = run_environment(env_name, L, n_trials=100)  # Full statistics
-        all_results[env_name] = results
+        trials = run_convergence_test(env_name, L)
+        stats = compute_within_distance(trials)
+        results[env_name] = dict(trials=trials, within_stats=stats)
 
-        # Statistics
-        phis = np.array([r["best_phi"] for r in results if np.isfinite(r["best_phi"])])
-        if len(phis) > 0:
-            hist, edges = np.histogram(phis, bins=np.arange(np.floor(phis.min() * 20) / 20,
-                                                            np.ceil(phis.max() * 20) / 20 + 0.05,
-                                                            0.05))
-            distinct_maxima = int(np.sum(hist > 0))
-            print(f"\n{env_name}:")
-            print(f"  best={phis.max():.4f}  median={np.median(phis):.4f}  "
-                  f"mean={phis.mean():.4f}  std={phis.std():.4f}")
-            print(f"  distinct maxima: {distinct_maxima}")
-        else:
-            print(f"\n{env_name}: no finite results")
+        print(f"\n{env_name}:")
+        print(f"  within d_F: mean={stats['mean']:.4f}  median={stats['median']:.4f}  "
+              f"std={stats['std']:.4f}  frac<0.1={stats['frac_lt_01']:.3f}")
+        print(f"  best Φ: {max(t['best_phi'] for t in trials):.4f}")
 
-    # Save results
-    out_path = OUTDIR / "b2_canonical_open.json"
-    out_path.write_text(json.dumps(all_results, indent=2, ensure_ascii=False), encoding="utf-8")
+    out_path = OUTDIR / "b2_convergence_test.json"
+    out_path.write_text(json.dumps(results, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"\nWrote {out_path}")
 
 
