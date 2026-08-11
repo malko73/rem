@@ -1,0 +1,67 @@
+name: latex-build
+
+# Reproducible LaTeX build gate for the REM publication package.
+# Fails on: fatal errors, undefined references/citations, missing files,
+# missing glyphs (xelatex "Missing character").
+# PDFs are uploaded as artifacts for manual (Overleaf-style) visual review.
+
+on:
+  push:
+    paths:
+      - 'papers/**'
+      - '.github/workflows/latex.yml'
+  pull_request:
+    paths:
+      - 'papers/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install TeX Live
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            texlive-latex-recommended texlive-latex-extra \
+            texlive-fonts-recommended texlive-xetex \
+            latexmk
+
+      - name: Build REM_lambda v5 (pdflatex)
+        run: |
+          latexmk -pdf -interaction=nonstopmode papers/REM_lambda_v5_source.tex
+
+      - name: Build REM Spec v2.0 (pdflatex, utf8 inputenc)
+        run: |
+          latexmk -pdf -interaction=nonstopmode papers/REM_spec_v2_0.tex
+
+      - name: Gate — logs must be clean
+        run: |
+          set -e
+          for log in papers/REM_lambda_v5_source.log papers/REM_spec_v2_0.log; do
+            echo "=== $log ==="
+            if grep -qE "^! |Fatal error|Emergency stop|LaTeX Error|Undefined control sequence" "$log"; then
+              echo "FATAL in $log:"; grep -E "^! |Fatal error|Emergency stop|LaTeX Error|Undefined control sequence" "$log" | head -20; exit 1
+            fi
+            if grep -q "undefined" "$log"; then
+              echo "UNDEFINED REF/CITATION in $log:"; grep "undefined" "$log" | head -20; exit 1
+            fi
+            if grep -qE "File .* not found" "$log"; then
+              echo "MISSING FILE in $log:"; grep -E "File .* not found" "$log" | head -20; exit 1
+            fi
+            if grep -q "Missing character" "$log"; then
+              echo "MISSING GLYPH in $log:"; grep "Missing character" "$log" | head -20; exit 1
+            fi
+            echo "OK"
+          done
+
+      - name: Upload PDFs
+        uses: actions/upload-artifact@v4
+        with:
+          name: rem-papers
+          path: |
+            papers/REM_lambda_v5_source.pdf
+            papers/REM_spec_v2_0.pdf
+          if-no-files-found: error

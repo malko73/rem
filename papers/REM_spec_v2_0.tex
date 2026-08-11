@@ -61,8 +61,9 @@
 \subsection{Core Specification v2.0 (Frozen 2026-08-11)}\label{core-specification-v2.0}
 
 This version supersedes v1.1. Changes: open-system general form
-Φ(F; λ, ρ, L, τ) = I\_ρ(F) − λ C\_dyn(F; ρ, L, τ) with [λ] = T;
-C\_H^closed downgraded to a closed-system structural surrogate;
+$\Phi(F;\lambda,\rho,\mathcal L,\tau) = I_\rho(F) - \lambda C_{\mathrm{dyn}}(F;\rho,\mathcal L,\tau)$
+with $[\lambda] = T$;
+$C_H^{\mathrm{closed}}$ downgraded to a closed-system structural surrogate;
 Monotonic Tradeoff Theorem extended to signed dynamical functionals.
 
 \section{0. Core Statement}\label{core-statement}
@@ -90,11 +91,15 @@ articulation}\label{layer-1-relational-articulation}
 
 Differentiation introduces an explicit tensor structure:
 
-D : H → H\_S ⊗ H\_O
+\[
+\mathcal D : \mathcal H \to \mathcal H_S \otimes \mathcal H_O
+\]
 
 A quantum state admits Schmidt representation:
 
-\textbar Ψ⟩ → Σ c\_i \textbar s\_i⟩ ⊗ \textbar o\_i⟩
+\[
+\mathcal D(|\Psi\rangle) \to \sum_i c_i |s_i\rangle \otimes |o_i\rangle
+\]
 
 Relational structure becomes explicit.
 
@@ -103,12 +108,15 @@ stabilization}\label{layer-2-phenomenal-stabilization}
 
 Environmental decoherence stabilizes articulated correlations:
 
-E(ρ) = Σ p\_i \textbar s\_i⟩⟨s\_i\textbar{} ⊗
-\textbar e\_i⟩⟨e\_i\textbar{}
+\[
+\mathcal E(\rho) = \sum_i p_i |s_i\rangle\langle s_i| \otimes |e_i\rangle\langle e_i|
+\]
 
 Ordering relation:
 
-D → E
+\[
+\mathcal D \to \mathcal E
+\]
 
 \section{2. Differentiation map}\label{differentiation-map}
 
@@ -143,9 +151,11 @@ General form (open-system REM, 2026-08-11):
 
 I\_ρ is the mutual information of the (possibly mixed) state ρ across F.
 
-Closed-system approximation (REM_lambda v4 and earlier):
+Closed-system approximation (REM\_lambda v4 and earlier):
 
-Φ\_closed(F) = I(F) − λ C\_H^closed(F)
+\[
+\Phi_{\mathrm{closed}}(F) = I(F) - \lambda C_H^{\mathrm{closed}}(F)
+\]
 
 Higher-order generalization:
 
@@ -179,38 +189,50 @@ only informally).
 
 First operational realization (2026-08-11, Phase C):
 
-C\_Γ^(0)(F; ρ, L) = Γ\_F^exact(0) = − Re⟨Q\_F ρ, Q\_F L(ρ)⟩\_HS / |Q\_F ρ|\_2²
+\[
+C_\Gamma^{(0)}(F;\rho,\mathcal L)
+= \Gamma_F^{\mathrm{exact}}(0)
+= -\frac{\mathrm{Re}\langle Q_F\rho,\,Q_F\mathcal L(\rho)\rangle_{\mathrm{HS}}}{|Q_F\rho|_2^2}
+\]
 
-with Q\_F = I − D\_F (D\_F: dephasing projection onto the initial Schmidt
-basis of F), L the Lindblad Liouvillian of the fixed environment, and
-⟨A,B⟩\_HS = Tr(A†B). This is the initial structural decoherence rate.
+with $Q_F = I - D_F$ ($D_F$: dephasing projection onto the initial Schmidt
+basis of $F$), $\mathcal L$ the Lindblad Liouvillian of the fixed
+environment, and $\langle A,B\rangle_{\mathrm{HS}} = \mathrm{Tr}(A^\dagger B)$.
+This is the initial structural decoherence rate.
 For pure states it is independent of the Schmidt null-subspace completion.
-A finite-time variant C\_dyn^(τ) = −(1/τ) log(C\_F(τ)/C\_F(0)) is the
-natural extension when the timescale τ matters.
+A finite-time variant $C_{\mathrm{dyn}}^{(\tau)} = -(1/\tau)\log(C_F(\tau)/C_F(0))$
+is the natural extension when the timescale $\tau$ matters.
 
-SIGN: C\_Γ^(0) is a SIGNED rate. Random-state audit (2026-08-11, 400
-configs) found negative values (1.25%, min ≈ −1.6) — initial coherence
+SIGN: $C_\Gamma^{(0)}$ is a SIGNED rate. Random-state audit (2026-08-11, 400
+configs) found negative values (1.25\%, min $\approx -1.6$) — initial coherence
 increase is possible; the quantity is a signed structural decoherence
-rate, not a non-negative cost, and must not be forced through max(0,·).
+rate, not a non-negative cost, and must not be forced through $\max(0,\cdot)$.
 
-Closed-system surrogate (REM_lambda v4 convention):
+Closed-system surrogate (REM\_lambda v4 convention):
 
-C\_H^closed(F) = Tr(ρ H\_∂F²)
+\[
+C_H^{\mathrm{closed}}(F) = \mathrm{Tr}(\rho H_{\partial F}^2)
+\]
 
-H\_∂F represents interaction terms spanning the factorization
-boundary. C\_H^closed is the boundary-energy second moment, not the
-variance: C\_H^closed = ⟨H\_∂F²⟩ ≠ Var(H\_∂F) = ⟨H\_∂F²⟩ − ⟨H\_∂F⟩².
+$H_{\partial F}$ represents interaction terms spanning the factorization
+boundary. $C_H^{\mathrm{closed}}$ is the boundary-energy second moment, not the
+variance: $C_H^{\mathrm{closed}} = \langle H_{\partial F}^2\rangle \neq
+\mathrm{Var}(H_{\partial F}) = \langle H_{\partial F}^2\rangle -
+\langle H_{\partial F}\rangle^2$.
 It is a closed-system structural surrogate, not an open-system stability
-cost (C0–C2, 2026-08-11).
+cost (C0--C2, 2026-08-11).
 
-Dimensions (canonical, frozen 2026-08-11): [C\_dyn] = T⁻¹ and [λ] = T,
-so λ C\_dyn is dimensionless. λ is the characteristic timescale
-comparing informational articulation and dynamical stability. The
-finite-time variant C\_dyn^(τ) also has [C\_dyn^(τ)] = T⁻¹, so the same
-dimensionful λ applies. The normalized representation
-C̃\_dyn = τ₀ C\_dyn, λ̃ = λ/τ₀ (Φ = I − λ̃ C̃\_dyn) is mathematically
+Dimensions (canonical, frozen 2026-08-11): $[C_{\mathrm{dyn}}] = T^{-1}$
+and $[\lambda] = T$, so $\lambda C_{\mathrm{dyn}}$ is dimensionless.
+$\lambda$ is the characteristic timescale comparing informational
+articulation and dynamical stability. The finite-time variant
+$C_{\mathrm{dyn}}^{(\tau)}$ also has $[C_{\mathrm{dyn}}^{(\tau)}] = T^{-1}$,
+so the same dimensionful $\lambda$ applies. The normalized representation
+$\tilde C_{\mathrm{dyn}} = \tau_0 C_{\mathrm{dyn}}$,
+$\tilde\lambda = \lambda/\tau_0$ (with
+$\Phi = I - \tilde\lambda \tilde C_{\mathrm{dyn}}$) is mathematically
 equivalent and kept only as an optional representation; the canonical
-form introduces no new reference time τ₀.
+form introduces no new reference time $\tau_0$.
 
 The earlier linear ansatz Φ\_H = −Tr(ρ H\_boundary) is superseded.
 
@@ -253,39 +275,52 @@ REM predicts existence of crossover regimes, not universal λ* values.
 
 \section{8a. Monotonic Tradeoff Theorem}\label{monotonic-tradeoff-theorem}
 
-Let Φ\_λ(F) = S(F) − λ C(F) with λ ≥ 0, and let F\*(λ) denote a global
-maximizer of Φ\_λ.
+Let $\Phi_\lambda(F) = S(F) - \lambda C(F)$ with $\lambda \geq 0$, and let
+$F^*(\lambda)$ denote a global maximizer of $\Phi_\lambda$.
 
-Theorem (Monotonic Tradeoff). If λ₂ > λ₁ ≥ 0, then
+Theorem (Monotonic Tradeoff). If $\lambda_2 > \lambda_1 \geq 0$, then
 
-C(F\*(λ₂)) ≤ C(F\*(λ₁)),  and  S(F\*(λ₂)) ≤ S(F\*(λ₁)).
+\[
+C(F^*(\lambda_2)) \leq C(F^*(\lambda_1)), \qquad
+S(F^*(\lambda_2)) \leq S(F^*(\lambda_1)).
+\]
 
-Proof. Let F₁ = F\*(λ₁) and F₂ = F\*(λ₂). Global optimality gives
+Proof. Let $F_1 = F^*(\lambda_1)$ and $F_2 = F^*(\lambda_2)$. Global
+optimality gives
 
-S₁ − λ₁C₁ ≥ S₂ − λ₁C₂
-S₂ − λ₂C₂ ≥ S₁ − λ₂C₁
+\[
+S_1 - \lambda_1 C_1 \geq S_2 - \lambda_1 C_2, \qquad
+S_2 - \lambda_2 C_2 \geq S_1 - \lambda_2 C_1.
+\]
 
 Adding the two inequalities yields
 
-(λ₂ − λ₁)(C₁ − C₂) ≥ 0
+\[
+(\lambda_2 - \lambda_1)(C_1 - C_2) \geq 0
+\]
 
-so C₂ ≤ C₁. Substituting into the first inequality,
+so $C_2 \leq C_1$. Substituting into the first inequality,
 
-S₁ − S₂ ≥ λ₁(C₁ − C₂) ≥ 0
+\[
+S_1 - S_2 \geq \lambda_1(C_1 - C_2) \geq 0
+\]
 
-so S₂ ≤ S₁. □
+so $S_2 \leq S_1$. $\square$
 
-The theorem holds for any non-negative cost functional C of the
-factorization — in particular both the second moment C\_H = ⟨H\_∂²⟩ and
-the variance Var(H\_∂) — and requires only that F\*(λ) is a global
-maximizer.
+The theorem holds for any non-negative cost functional $C$ of the
+factorization --- in particular both the second moment
+$C_H = \langle H_{\partial}^2\rangle$ and the variance
+$\mathrm{Var}(H_{\partial})$ --- and requires only that $F^*(\lambda)$
+is a global maximizer.
 
 In the open-system generalization the theorem applies unchanged for a
-FIXED environment L, state ρ, and timescale τ: C\_dyn(F; ρ, L, τ) is a
-well-defined functional of F for each fixed (ρ, L, τ), so the
-monotonicity C(F\*(λ₂)) ≤ C(F\*(λ₁)) and S(F\*(λ₂)) ≤ S(F\*(λ₁)) holds
-per environment (the proof requires only λ ≥ 0; the cost C may be
-signed, as in the C\_Γ^(0) realization).
+FIXED environment $\mathcal L$, state $\rho$, and timescale $\tau$:
+$C_{\mathrm{dyn}}(F;\rho,\mathcal L,\tau)$ is a well-defined functional
+of $F$ for each fixed $(\rho,\mathcal L,\tau)$, so the monotonicity
+$C(F^*(\lambda_2)) \leq C(F^*(\lambda_1))$ and
+$S(F^*(\lambda_2)) \leq S(F^*(\lambda_1))$ holds per environment (the
+proof requires only $\lambda \geq 0$; the cost $C$ may be signed, as in
+the $C_\Gamma^{(0)}$ realization).
 
 \section{9. Role of toy models}\label{role-of-toy-models}
 
