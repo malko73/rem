@@ -32,11 +32,11 @@ jobs:
 
       - name: Build REM_lambda v5 (pdflatex)
         run: |
-          latexmk -pdf -interaction=nonstopmode papers/REM_lambda_v5_source.tex
+          latexmk -pdf -outdir=papers -interaction=nonstopmode papers/REM_lambda_v5_source.tex
 
       - name: Build REM Spec v2.0 (pdflatex, utf8 inputenc)
         run: |
-          latexmk -pdf -interaction=nonstopmode papers/REM_spec_v2_0.tex
+          latexmk -pdf -outdir=papers -interaction=nonstopmode papers/REM_spec_v2_0.tex
 
       - name: Gate — logs must be clean
         run: |
