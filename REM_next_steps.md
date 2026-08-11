@@ -331,6 +331,41 @@ Spec v2.0 の C_dyn^(0) と C_dyn^(τ) を「同じものの近似」と考え�
 - **J_dyn^(0) = −Re⟨Q_Fρ, Q_F L(ρ)⟩**（分母なし）
 - **−[C_F²(τ) − C_F²(0)]/(2τ)**（分母なし有限時間）
 
+### D2.2-A（✅ 2026-08-12 実施・commit 24db549）: Unnormalized instantaneous functional — **G1–G6 PASS / G7 PENDING**
+
+**方針（マスター決定 2026-08-12）**: D2.2 は A（unnormalized instantaneous）に限定して実行。Spec v2.2 の執筆・D3/D4 は凍結。
+
+**変更点は dynamical term のみ**:
+```
+J_dyn^(0)(F) = −Re⟨Q_Fρ, Q_F L(ρ)⟩   （分母 |Q_Fρ|² なし）
+Φ = I − λ·J_dyn^(0)
+```
+Hamiltonian / state / optimizer / initialization / restart数 / TPS parameterization / λ / seed / stopping criteria は **D2 と完全に同一**（asymmetric_XY, dephasing γ=(0.5,1,2), λ=0.2, Adam 200 steps lr=0.01, SEED0=20260813, horizontal_basis(4,2), n_a=2, 6 seeds；Haar は D2.1 比較用に 30 seeds 追加）。
+
+| State | D2 Φ (正規化) | D2.2-A Φ (unnormalized) | D2.2-A std |
+|---|---|---|---|
+| ground | 1.7993 | **1.8995** | 0.0007 |
+| haar | **49.10 ⚠️** | **1.8594** | 0.0090 |
+| mixed | 1.8485 | **1.9845** | 0.0051 |
+| thermal | 1.8499 | **1.9465** | 0.0058 |
+
+Haar 30 seeds: best **1.8595** / median 1.8582 / std **0.0077**（D2.1: 25.71 / 1.81 / 5.96）→ **巨大 outlier 消失**。
+
+**特異性除去の証拠**:
+- min C_F²（全 trial）= **0.0956**（D2.1: 4.1e-4）— optimizer が特異領域に近づかない（Haar 30 seeds 全て C_F² ≈ 0.49 に収束 = product 方向への attraction なし）
+- max|γ_ref|（最適点での正規化診断量）= **1.66**（D2.1: 245）
+- Schmidt p_max = **0.51–0.58**（D2.1: 0.9997）— product collapse なし
+- G4 連続性: ε=1e-2 摂動で max|dΦ| = **7.7e-5**、全方向有限
+- singularity sweep（best Haar 解から C_F²→0 方向へ ε=0.5 まで）: C_F² ≥ 0.46、Φ ≤ 1.86、全有限
+
+**Gate 判定**: G1（singularity-free）✓ / G2（Haar outlier 消失）✓ / G3（seed 安定）✓ / G4（摂動連続）✓ / G5（非 product collapse）✓ / G6（4状態で再現可能）✓ / **G7（finite-time との整合）= PENDING（D2.2-B 実行後に判定）**。
+
+**判定**: **singularity-free ∧ non-trivial**。D2.1 は「normalized local decay rate cannot serve as a global variational functional over unrestricted tensor factorizations」という明確な反証結果として確定。J_dyn^(0) が canonical dynamical functional の第一候補に。
+
+**付随修正（commit fb08a3f）**: `gamma_exact` の factor of 2（537d854 で追加）を C0 事前登録規約へ revert。−d/dt log C² と −d/dt log C の混同で、マスターの D2.2 式・C0 docstring・数値微分テストの三方に矛盾していた。suite 74 passed + 1 xfailed に復旧。
+
+**次の一手**: マスター承認後に **D2.2-B**（J_dyn^(τ) = −[C_F²(τ)−C_F²(0)]/(2τ)、同一条件）→ G7 判定。instantaneous と finite-time が同じ TPS を選ぶか確認できれば Spec v2.2 の説得力が上がる。Spec v2.2 / D3 / D4 は凍結継続。
+
 **Phase D 完了条件**: Gate 4（λから未知条件でF\*予測）＋ Gate 5（別ハミルトニアン・混合状態でも同一原理）。
 
 ---
