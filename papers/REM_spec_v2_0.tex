@@ -19,6 +19,24 @@
 \ifPDFTeX\else
   % xetex/luatex font selection
 \fi
+% Explicit Unicode mapping for the pandoc-generated body under pdflatex
+% (utf8 inputenc does not define Greek / math symbols by default).
+\ifPDFTeX
+\usepackage{newunicodechar}
+\newunicodechar{Λ}{\ensuremath{\Lambda}}
+\newunicodechar{Σ}{\ensuremath{\Sigma}}
+\newunicodechar{Φ}{\ensuremath{\Phi}}
+\newunicodechar{β}{\ensuremath{\beta}}
+\newunicodechar{λ}{\ensuremath{\lambda}}
+\newunicodechar{μ}{\ensuremath{\mu}}
+\newunicodechar{ρ}{\ensuremath{\rho}}
+\newunicodechar{τ}{\ensuremath{\tau}}
+\newunicodechar{—}{---}
+\newunicodechar{−}{\textminus}
+\newunicodechar{≅}{\ensuremath{\cong}}
+\newunicodechar{≈}{\ensuremath{\approx}}
+\newunicodechar{⊗}{\ensuremath{\otimes}}
+\fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \IfFileExists{microtype.sty}{% use microtype if available
