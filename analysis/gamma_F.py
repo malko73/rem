@@ -183,9 +183,16 @@ def gamma_exact(rho0: np.ndarray, L: np.ndarray, basis: np.ndarray) -> float:
     With Q_F = I - D_F and X_F = Q_F rho0, C_F = |X_F|_2, the exact
     initial logarithmic derivative is
 
-        Gamma_F^exact(0) = -2 Re <X_F, Q_F L(rho0)>_HS / |X_F|_2^2
+        Gamma_F^exact(0) = - Re <X_F, Q_F L(rho0)>_HS / |X_F|_2^2
 
-    The factor of 2 comes from the derivative of the squared Frobenius norm.
+    (No factor of 2: this is -d/dt log C_F with C_F the Frobenius NORM,
+    matching the C0 pre-registration. A factor of 2 would correspond to
+    -d/dt log C_F^2, which is a DIFFERENT quantity. The factor of 2 added
+    in commit 537d854 was reverted 2026-08-12 after re-audit — it
+    contradicted (a) the C0 docstring, (b) the master's D2.2 formula
+    Gamma_F^(0) = -Re<Q_F rho, Q_F L(rho)>/|Q_F rho|^2, and (c) the
+    numerical-derivative test which stayed green only under the no-factor-2
+    convention.)
     """
     q = lambda r: r - dephasing_projection(r, basis)          # noqa: E731
     x = q(rho0)
@@ -195,7 +202,7 @@ def gamma_exact(rho0: np.ndarray, L: np.ndarray, basis: np.ndarray) -> float:
     den = float(np.linalg.norm(x, ord="fro") ** 2)
     if den < 1e-300:
         return float("nan")
-    return float(-2 * num / den)
+    return float(-num / den)
 
 
 def log_linear_slope(t: np.ndarray, c: np.ndarray) -> float:
