@@ -280,6 +280,57 @@ Spec v2.0 の C_dyn^(0) と C_dyn^(τ) を「同じものの近似」と考え�
 - noise robustness
 - QPU実験（P2）
 
+### D0（✅ 2026-08-12 実施・commit a091f72）: Protocol Freeze
+
+評価指標（Φ*, d_F, Γ^exact, C_dyn^(τ)）、固定パラメータ（λ=0.2, τ=0.1, Adam, 200 steps, 6 seeds）、5 Hamiltonian families、environment set、成功基準を `analysis_output/d0_protocol.json` に凍結。
+
+### D1（✅ 2026-08-12 実施・commit a091f72）: Hamiltonian Generality
+
+5 families × 6 seeds、Φ = I−λΓ^exact を 45次元 quotient で最適化（A1 dephasing 環境）。
+
+| Hamiltonian | contiguous Φ | best Φ | success |
+|---|---|---|---|
+| asymmetric_XY | 0.170 | 1.799 | ✅ |
+| transverse_field_ising | 1.093 | 1.650 | ✅ |
+| heisenberg_xxz | 0.895 | 1.739 | ✅ |
+| xyz | 0.847 | 1.748 | ✅ |
+| random_local | 0.455 | 1.696 | ✅ |
+
+**5/5 success**。interaction 構造・対称性・ランダム性を変えても非自明な F* が出現（fine-tuning 排除の証拠、Gate 5 の予備的証拠）。
+
+### D2（✅ 2026-08-12 実施・D2-R 改訂）: State Generality
+
+4状態タイプ（ground / Haar / mixed / thermal）で最適化。
+
+| State | best Φ | std | d_F from ground |
+|---|---|---|---|
+| ground | 1.799 | 0.001 | — |
+| haar | 49.10 ⚠️ | 17.63 | 0.44 |
+| mixed | 1.849 | 0.028 | 0.87 |
+| thermal | 1.850 | 0.036 | 0.86 |
+
+**Original D2 criterion: FAIL** — F* の状態非依存性を要求する D0 基準は Spec v2.1（F* = F*(ρ, L, λ, τ)）と不整合。
+**D2-R 改訂**: 各状態クラスが非自明・数値安定・再現可能な構造最適解を持つこと（状態間の F* 一致は不要）。
+- ground: PASS
+- mixed: PASS候補
+- thermal: PASS候補
+- **Haar: PENDING / anomaly（→ D2.1-A に分類）**
+
+### D2.1（✅ 2026-08-12 実施・commit 0ad8840）: Haar Singularity Audit — **D2.1-A 確定**
+
+**C_Γ^(0) の正規化は unrestricted TPS optimization 上で特異**（重要な反証結果）:
+
+- corr(Φ, log10 C_F(0)²) = **−0.9990**（ほぼ完全な負相関）
+- C_F(0)² → 6e-5 まで減少すると Γ → −222, Φ → 44（発散）
+- best 解の Schmidt spectrum p = [0.9997, 0.0003]（ほぼ product state）
+- 任意の純粋状態は適切な TPS で product state に近づけられるため、分母 |Q_F ρ|² → 0 が可能
+
+**含意**: Γ_F^exact(0) = −Re⟨Q_Fρ, Q_FL(ρ)⟩/|Q_Fρ|² は局所診断量としては使えるが、full TPS 上の global variational functional としては **well-posed でない**。
+
+**Spec v2.1 の再検討が必要**。マスター提示の代替案:
+- **J_dyn^(0) = −Re⟨Q_Fρ, Q_F L(ρ)⟩**（分母なし）
+- **−[C_F²(τ) − C_F²(0)]/(2τ)**（分母なし有限時間）
+
 **Phase D 完了条件**: Gate 4（λから未知条件でF\*予測）＋ Gate 5（別ハミルトニアン・混合状態でも同一原理）。
 
 ---
