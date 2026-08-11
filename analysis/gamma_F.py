@@ -108,7 +108,14 @@ def liouvillian_env(h_total: np.ndarray, gamma_vec, kappa_vec, n: int = 3) -> np
     """
     dim = 2**n
     I = np.eye(dim, dtype=complex)
-    L = -1j * (np.kron(h_total, I) - np.kron(I, h_total.conj()))
+    # NOTE (2026-08-11, B2a): with vec_F (column-major), vec_F(A ρ B) =
+    # (B^T ⊗ A) vec_F(ρ), so the commutator term must be
+    #   -i vec_F(Hρ - ρH) = -i [ (I ⊗ H) - (H^T ⊗ I) ] vec_F(ρ)
+    #   = -i [ kron(I, H) - kron(H.conj(), I) ]   (H Hermitian)
+    # The earlier implementation had the kron arguments reversed; it was
+    # harmless for ground states ([H, ρ0] = 0) but wrong for general states
+    # (found by the B2a frame-consistency test).
+    L = -1j * (np.kron(I, h_total) - np.kron(h_total.conj(), I))
     for site in range(n):
         g = gamma_vec[site]
         k = kappa_vec[site]
