@@ -21,6 +21,72 @@ from quotient_geometry import horizontal_basis, vertical_basis, project_horizont
 N_RNG = np.random.default_rng(seed=20260811)
 
 
+def quotient_optimizer_sgd(
+    psi: np.ndarray,
+    h_total: np.ndarray,
+    bond_terms: dict,
+    *,
+    n: int = 3,
+    n_a: int = 2,
+    lambda_value: float = 0.2,
+    steps: int = 200,
+    lr: float = 0.01,
+    verbose: bool = True,
+) -> dict:
+    """
+    Plain gradient-ascent (SGD) on Φ over the 45-dim horizontal quotient.
+
+    Returns
+    -------
+    dict with keys: best_phi, best_u, theta, history, h_basis,
+    unitarity_errors (per step).
+    """
+    from rem4_numerical import evaluate_factorization, _finite_diff_grad
+
+    d_a, d_b = 2 ** n_a, 2 ** (n - n_a)
+    h_basis = horizontal_basis(d_a, d_b)
+    n_params = h_basis.shape[2]
+
+    theta = N_RNG.standard_normal(n_params) * 0.1
+
+    best_phi = -1e9
+    best_u = None
+    history = []
+    unitarity_errors = []
+
+    for step in range(steps):
+        u = sla.expm(np.einsum("ijk,k->ij", h_basis, theta))
+        phi, mi, c_h = evaluate_factorization(
+            psi, h_total, bond_terms, u, n=n, n_a=n_a, lambda_value=lambda_value
+        )
+        grad = _finite_diff_grad(
+            theta, psi, h_total, bond_terms, h_basis,
+            n=n, n_a=n_a, lambda_value=lambda_value,
+        )
+        theta = theta + lr * grad
+
+        history.append((phi, mi, c_h))
+        unitarity_errors.append(
+            float(np.linalg.norm(u.conj().T @ u - np.eye(2 ** n, dtype=complex), ord=2))
+        )
+
+        if phi > best_phi:
+            best_phi = phi
+            best_u = u
+
+        if verbose and step % 50 == 0:
+            print(f"  [{step:3d}] Φ={phi:.6f}  MI={mi:.6f}  C_H={c_h:.6f}")
+
+    return dict(
+        best_phi=best_phi,
+        best_u=best_u,
+        theta=theta,
+        history=np.array(history),
+        h_basis=h_basis,
+        unitarity_errors=np.array(unitarity_errors),
+    )
+
+
 def quotient_optimizer_adam(
     psi: np.ndarray,
     h_total: np.ndarray,

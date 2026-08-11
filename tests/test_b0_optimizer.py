@@ -58,3 +58,25 @@ def test_optimizer_improves_phi(system):
     assert r["best_phi"] > phi_id + 1e-6, (
         f"optimizer did not improve: Φ_opt={r['best_phi']} ≤ Φ_id={phi_id}"
     )
+
+
+def test_b1_regression_smoke(system):
+    """B1 smoke: 5 seeds x SGD/Adam all beat contiguous best on the XY benchmark."""
+    psi, h_total, bond_terms = system
+    from quotient_optimizer import quotient_optimizer_sgd
+
+    I = np.eye(DIM, dtype=complex)
+    phi_id, _, _ = evaluate_factorization(
+        psi, h_total, bond_terms, I, n=N, n_a=N_A, lambda_value=LAMBDA
+    )
+
+    for fn in (quotient_optimizer_sgd, quotient_optimizer_adam):
+        for seed in range(20260811, 20260811 + 5):
+            r = fn(
+                psi, h_total, bond_terms, n=N, n_a=N_A, lambda_value=LAMBDA,
+                steps=30, lr=0.01, verbose=False,
+            )
+            assert r["best_phi"] > phi_id + 1e-6, (
+                f"{fn.__name__} seed {seed}: Φ={r['best_phi']} ≤ contiguous {phi_id}"
+            )
+            assert r["unitarity_errors"].max() < 1e-10
