@@ -1,0 +1,41 @@
+{
+  "τ_Γ": {
+    "lambda_predicted": 0.83559161182379,
+    "lambda_nearest": 0.5,
+    "test_results": [
+      {
+        "environment": "A2_deph_2105",
+        "phi_observed": 1.6901396366261419,
+        "phi_predicted": 1.2266878379963466,
+        "delta_phi": 0.46345179862979524,
+        "d_F": 0.20088597570841998
+      }
+    ]
+  },
+  "τ_L": {
+    "lambda_predicted": 0.309523809523809,
+    "lambda_nearest": 0.3,
+    "test_results": [
+      {
+        "environment": "A2_deph_2105",
+        "phi_observed": 1.6901396366261419,
+        "phi_predicted": 1.5359032461949753,
+        "delta_phi": 0.15423639043116655,
+        "d_F": 0.20124859422920857
+      }
+    ]
+  },
+  "τ_γ": {
+    "lambda_predicted": 0.9285714285714286,
+    "lambda_nearest": 0.5,
+    "test_results": [
+      {
+        "environment": "A2_deph_2105",
+        "phi_observed": 1.6901396366261419,
+        "phi_predicted": 1.2266878379963466,
+        "delta_phi": 0.46345179862979524,
+        "d_F": 0.20088597570841998
+      }
+    ]
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "uniform_dephasing": {
+    "tau_Gamma": 0.7894858739762486,
+    "tau_L": 0.3333333333333328,
+    "tau_gamma": 1.0,
+    "tau_kappa": NaN,
+    "Gamma_ref": 1.2666471091667495,
+    "liouvillian_gap": 3.000000000000005,
+    "gamma_vec": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "kappa_vec": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "A1_deph_0512": {
+    "tau_Gamma": 0.8816973496713314,
+    "tau_L": 0.28571428571428514,
+    "tau_gamma": 0.8571428571428571,
+    "tau_kappa": NaN,
+    "Gamma_ref": 1.1341760303269235,
+    "liouvillian_gap": 3.5000000000000067,
+    "gamma_vec": [
+      0.5,
+      1.0,
+      2.0
+    ],
+    "kappa_vec": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "A2_deph_2105": {
+    "tau_Gamma": 0.5718989689944536,
+    "tau_L": 0.2857142857142854,
+    "tau_gamma": 0.8571428571428571,
+    "tau_kappa": NaN,
+    "Gamma_ref": 1.7485605923687166,
+    "liouvillian_gap": 3.5000000000000036,
+    "gamma_vec": [
+      2.0,
+      1.0,
+      0.5
+    ],
+    "kappa_vec": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "amp_damping": {
+    "tau_Gamma": 0.4399027474595621,
+    "tau_L": 0.3333333333333333,
+    "tau_gamma": NaN,
+    "tau_kappa": 1.0,
+    "Gamma_ref": 2.273229721284986,
+    "liouvillian_gap": 3.0,
+    "gamma_vec": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "kappa_vec": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "mixed": {
+    "tau_Gamma": 0.564991409530137,
+    "tau_L": 0.4444444444444444,
+    "tau_gamma": 2.0,
+    "tau_kappa": 2.0,
+    "Gamma_ref": 1.7699384152258677,
+    "liouvillian_gap": 2.25,
+    "gamma_vec": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "kappa_vec": [
+      0.5,
+      0.5,
+      0.5
+    ]
+  }
+}

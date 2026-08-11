@@ -183,7 +183,9 @@ def gamma_exact(rho0: np.ndarray, L: np.ndarray, basis: np.ndarray) -> float:
     With Q_F = I - D_F and X_F = Q_F rho0, C_F = |X_F|_2, the exact
     initial logarithmic derivative is
 
-        Gamma_F^exact(0) = - Re <X_F, Q_F L(rho0)>_HS / |X_F|_2^2
+        Gamma_F^exact(0) = -2 Re <X_F, Q_F L(rho0)>_HS / |X_F|_2^2
+
+    The factor of 2 comes from the derivative of the squared Frobenius norm.
     """
     q = lambda r: r - dephasing_projection(r, basis)          # noqa: E731
     x = q(rho0)
@@ -193,7 +195,7 @@ def gamma_exact(rho0: np.ndarray, L: np.ndarray, basis: np.ndarray) -> float:
     den = float(np.linalg.norm(x, ord="fro") ** 2)
     if den < 1e-300:
         return float("nan")
-    return float(-num / den)
+    return float(-2 * num / den)
 
 
 def log_linear_slope(t: np.ndarray, c: np.ndarray) -> float:

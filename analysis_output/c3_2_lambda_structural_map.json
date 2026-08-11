@@ -1,0 +1,205 @@
+{
+  "summary": {
+    "uniform_dephasing": [
+      {
+        "tau_name": "τ_Γ",
+        "tau": 0.7894858739762486,
+        "c": 0.5,
+        "lambda_candidate": 0.3947429369881243,
+        "region": "common (λ∈[0.1,0.5])"
+      },
+      {
+        "tau_name": "τ_Γ",
+        "tau": 0.7894858739762486,
+        "c": 1.0,
+        "lambda_candidate": 0.7894858739762486,
+        "region": "common (λ∈[0.1,0.5])"
+      },
+      {
+        "tau_name": "τ_Γ",
+        "tau": 0.7894858739762486,
+        "c": 2.0,
+        "lambda_candidate": 1.5789717479524972,
+        "region": "common (λ∈[0.1,0.5])"
+      },
+      {
+        "tau_name": "τ_L",
+        "tau": 0.3333333333333328,
+        "c": 0.5,
+        "lambda_candidate": 0.1666666666666664,
+        "region": "common (λ∈[0.1,0.5])"
+      },
+      {
+        "tau_name": "τ_L",
+        "tau": 0.3333333333333328,
+        "c": 1.0,
+        "lambda_candidate": 0.3333333333333328,
+        "region": "common (λ∈[0.1,0.5])"
+      },
+      {
+        "tau_name": "τ_L",
+        "tau": 0.3333333333333328,
+        "c": 2.0,
+        "lambda_candidate": 0.6666666666666656,
+        "region": "common (λ∈[0.1,0.5])"
+      },
+      {
+        "tau_name": "τ_γ",
+        "tau": 1.0,
+        "c": 0.5,
+        "lambda_candidate": 0.5,
+        "region": "common (λ∈[0.1,0.5])"
+      },
+      {
+        "tau_name": "τ_γ",
+        "tau": 1.0,
+        "c": 1.0,
+        "lambda_candidate": 1.0,
+        "region": "common (λ∈[0.1,0.5])"
+      },
+      {
+        "tau_name": "τ_γ",
+        "tau": 1.0,
+        "c": 2.0,
+        "lambda_candidate": 2.0,
+        "region": "common (λ∈[0.1,0.5])"
+      }
+    ],
+    "A1_deph_0512": [
+      {
+        "tau_name": "τ_Γ",
+        "tau": 0.8816973496713314,
+        "c": 0.5,
+        "lambda_candidate": 0.4408486748356657,
+        "region": "common (λ∈[0.1,0.5])"
+      },
+      {
+        "tau_name": "τ_Γ",
+        "tau": 0.8816973496713314,
+        "c": 1.0,
+        "lambda_candidate": 0.8816973496713314,
+        "region": "common (λ∈[0.1,0.5])"
+      },
+      {
+        "tau_name": "τ_Γ",
+        "tau": 0.8816973496713314,
+        "c": 2.0,
+        "lambda_candidate": 1.7633946993426628,
+        "region": "common (λ∈[0.1,0.5])"
+      },
+      {
+        "tau_name": "τ_L",
+        "tau": 0.28571428571428514,
+        "c": 0.5,
+        "lambda_candidate": 0.14285714285714257,
+        "region": "common (λ∈[0.1,0.5])"
+      },
+      {
+        "tau_name": "τ_L",
+        "tau": 0.28571428571428514,
+        "c": 1.0,
+        "lambda_candidate": 0.28571428571428514,
+        "region": "common (λ∈[0.1,0.5])"
+      },
+      {
+        "tau_name": "τ_L",
+        "tau": 0.28571428571428514,
+        "c": 2.0,
+        "lambda_candidate": 0.5714285714285703,
+        "region": "common (λ∈[0.1,0.5])"
+      },
+      {
+        "tau_name": "τ_γ",
+        "tau": 0.8571428571428571,
+        "c": 0.5,
+        "lambda_candidate": 0.42857142857142855,
+        "region": "common (λ∈[0.1,0.5])"
+      },
+      {
+        "tau_name": "τ_γ",
+        "tau": 0.8571428571428571,
+        "c": 1.0,
+        "lambda_candidate": 0.8571428571428571,
+        "region": "common (λ∈[0.1,0.5])"
+      },
+      {
+        "tau_name": "τ_γ",
+        "tau": 0.8571428571428571,
+        "c": 2.0,
+        "lambda_candidate": 1.7142857142857142,
+        "region": "common (λ∈[0.1,0.5])"
+      }
+    ],
+    "A2_deph_2105": [
+      {
+        "tau_name": "τ_Γ",
+        "tau": 0.5718989689944536,
+        "c": 0.5,
+        "lambda_candidate": 0.2859494844972268,
+        "region": "common (λ∈[0.1,0.5])"
+      },
+      {
+        "tau_name": "τ_Γ",
+        "tau": 0.5718989689944536,
+        "c": 1.0,
+        "lambda_candidate": 0.5718989689944536,
+        "region": "common (λ∈[0.1,0.5])"
+      },
+      {
+        "tau_name": "τ_Γ",
+        "tau": 0.5718989689944536,
+        "c": 2.0,
+        "lambda_candidate": 1.1437979379889072,
+        "region": "common (λ∈[0.1,0.5])"
+      },
+      {
+        "tau_name": "τ_L",
+        "tau": 0.2857142857142854,
+        "c": 0.5,
+        "lambda_candidate": 0.1428571428571427,
+        "region": "common (λ∈[0.1,0.5])"
+      },
+      {
+        "tau_name": "τ_L",
+        "tau": 0.2857142857142854,
+        "c": 1.0,
+        "lambda_candidate": 0.2857142857142854,
+        "region": "common (λ∈[0.1,0.5])"
+      },
+      {
+        "tau_name": "τ_L",
+        "tau": 0.2857142857142854,
+        "c": 2.0,
+        "lambda_candidate": 0.5714285714285708,
+        "region": "common (λ∈[0.1,0.5])"
+      },
+      {
+        "tau_name": "τ_γ",
+        "tau": 0.8571428571428571,
+        "c": 0.5,
+        "lambda_candidate": 0.42857142857142855,
+        "region": "common (λ∈[0.1,0.5])"
+      },
+      {
+        "tau_name": "τ_γ",
+        "tau": 0.8571428571428571,
+        "c": 1.0,
+        "lambda_candidate": 0.8571428571428571,
+        "region": "common (λ∈[0.1,0.5])"
+      },
+      {
+        "tau_name": "τ_γ",
+        "tau": 0.8571428571428571,
+        "c": 2.0,
+        "lambda_candidate": 1.7142857142857142,
+        "region": "common (λ∈[0.1,0.5])"
+      }
+    ]
+  },
+  "verdicts": {
+    "τ_Γ": "identifiable/common",
+    "τ_L": "identifiable/common",
+    "τ_γ": "identifiable/common",
+    "τ_κ": "identifiable/common"
+  }
+}
