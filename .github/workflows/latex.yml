@@ -26,7 +26,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
             texlive-latex-recommended texlive-latex-extra \
-            texlive-fonts-recommended texlive-xetex \
+            texlive-fonts-recommended \
+            lmodern \
             latexmk
 
       - name: Build REM_lambda v5 (pdflatex)
