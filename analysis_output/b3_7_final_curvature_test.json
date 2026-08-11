@@ -1,0 +1,57 @@
+{
+  "environment": "A1_deph_0512",
+  "phi_star": 1.7995837735896814,
+  "lambda_max_b36": 2.704111166561239,
+  "lambda_max_recomputed": 2.7041111665612365,
+  "v_plus_norm": 0.9999999999999998,
+  "K_vplus_norm": 0.9999999999999998,
+  "measurements": [
+    {
+      "epsilon": 0.03,
+      "phi_plus": 1.7995603965025306,
+      "phi_minus": 1.7995612861843682,
+      "delta_phi_plus": -2.3377087150722176e-05,
+      "delta_phi_minus": -2.248740531318738e-05,
+      "d2_curvature": -0.05096054718212173,
+      "prediction": 0.0012168500249525563
+    },
+    {
+      "epsilon": 0.01,
+      "phi_plus": 1.7995809946171968,
+      "phi_minus": 1.7995814357127837,
+      "delta_phi_plus": -2.778972484573927e-06,
+      "delta_phi_minus": -2.3378768976289876e-06,
+      "d2_curvature": -0.05116849382202915,
+      "prediction": 0.00013520555832806182
+    },
+    {
+      "epsilon": 0.003,
+      "phi_plus": 1.7995834757535567,
+      "phi_minus": 1.7995835841591932,
+      "delta_phi_plus": -2.978361246519512e-07,
+      "delta_phi_minus": -1.8943048818442776e-07,
+      "d2_curvature": -0.05414073475959766,
+      "prediction": 1.2168500249525564e-05
+    },
+    {
+      "epsilon": 0.001,
+      "phi_plus": 1.7995837403078219,
+      "phi_minus": 1.7995837172437488,
+      "delta_phi_plus": -3.328185949058593e-08,
+      "delta_phi_minus": -5.6345932586410186e-08,
+      "d2_curvature": -0.08962779207699612,
+      "prediction": 1.3520555832806183e-06
+    },
+    {
+      "epsilon": 0.0003,
+      "phi_plus": 1.7995837802788033,
+      "phi_minus": 1.7995837476814804,
+      "delta_phi_plus": 6.689121923031394e-09,
+      "delta_phi_minus": -2.590820091796786e-08,
+      "d2_curvature": -0.21354532216596078,
+      "prediction": 1.216850024952556e-07
+    }
+  ],
+  "d2_mean_small_eps": -0.15158655712147845,
+  "verdict": "CASE B: Hessian reconstruction error (need alternative method)"
+}
