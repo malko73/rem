@@ -394,9 +394,41 @@ Spec v2.0 の C_dyn^(0) と C_dyn^(τ) を「同じものの近似」と考え�
 - **mixed: クロスオーバーなし**（d_F=0.12、ΔΦ≈0）
 - **thermal: クロスオーバーあり、τ_c ∈ (0.3, 1.0)**（ΔΦ: −0.011 → +0.001、d_F(F_A,F_B)=0.879）
 
-→ **クロスオーバーの有無・位置は状態依存**（Haar τ_c=0.018 ≪ thermal τ_c≈0.3-1.0、ground/mixed は 1.0 まで無し）。relational structure は dynamical observation scale に系統的に依存する（Haar・thermal で実証）。
+→ **クロスオーバーの有無・位置は状態依存**（Haar τ_c=0.018 ≪ thermal τ_c≈0.3-1.0、ground/mixed は 1.0 まで無し）。**relational structure CAN depend systematically on the dynamical observation scale, with the presence and location of crossovers being state-dependent**（ground/mixed では τ≤1 に crossover がないため「常に依存する」とは言わない）。
 
-**Gate 判定（全て PASS）**: D3-1（τ_c=0.018 特定）✓ / D3-2（ΔΦ 符号反転）✓ / D3-3（seed 非依存 — ΔΦ は固定代表で objective レベル、optimizer は勝ち盆地の値に追随）✓ / D3-4（singularity/product collapse 再発なし）✓ / D3-5（連続性分類: 実現は first-order-like、objective は連続）✓ / D3-6（τ_c/τ_L 評価: 0.012、O(1) 不支持）✓ / D3-7（Haar 以外の確認: thermal にあり、ground/mixed なし）✓
+**Gate 判定（全て PASS）**: D3-1（τ_c=0.018 特定）✓ / D3-2（ΔΦ 符号反転）✓ / D3-3（seed 非依存 — ΔΦ は固定代表で objective レベル、optimizer は勝ち盆地の値に追随）✓ / D3-4（singularity/product collapse 再発なし）✓ / D3-5（連続性分類: 実現は first-order-like、objective は連続）✓ / **D3-6（timescale relation evaluated; (O(1)) hypothesis rejected）**✓ / D3-7（Haar 以外の確認: thermal にあり、ground/mixed なし）✓
+
+### D4（✅ 2026-08-12 実施・commit 78eb500）: N-scaling / finite-size persistence — **クロスオーバーは N=4,5 でも存続、τ_c はフラット / 全ゲート PASS**
+
+**問い**: D3 の structural crossover は Hilbert-space size を増やしても存続するか（N=3,4,5。**「scaling law」「熱力学極限」とは言わず、finite-size persistence / finite-size trend のみ確立**）。
+
+**D4-A: canonical well-posedness（J_dyn^(0) のみ）のサイズ依存**
+
+| N | cut | quotient | state | best Φ | std | Ĩ | min C_F² | p_max |
+|---|---|---|---|---|---|---|---|---|
+| 3 | 2\|1 | 45 (full) | ground | 1.8995 | 0.0007 | 1.000 | 0.500 | 0.51 |
+| 3 | 2\|1 | 45 (full) | haar | 1.8594 | 0.0090 | 0.982 | 0.487 | 0.58 |
+| 4 | 2\|2 | 225 (full) | ground | 3.6923 | 0.0008 | 0.999 | 0.749 | 0.27 |
+| 4 | 2\|2 | 225 (full) | haar | 3.7041 | 0.0008 | 0.997 | 0.748 | 0.28 |
+| 5 | 2\|3 | 200/945 (subspace) | ground | 3.6713 | 0.0006 | 1.000 | 0.750 | 0.26 |
+| 5 | 2\|3 | 200/945 (subspace) | haar | 3.6346 | 0.0022 | 0.998 | 0.749 | 0.28 |
+
+全 N で finite optimum・seed 安定・success 1.00・**分母なし well-posedness 維持**（min C_F² 0.49–0.75、p_max 0.26–0.58）。Ĩ ≈ 0.98–1.00（情報的 articulation はほぼ最大値）。**N=5 は 200次元ランダム水平部分空間**（945次元の21%、確立 n_params ヒューリスティックに従う lower bound、文書化）。
+
+**D4-B: crossover persistence（Haar primary、ΔΦ 固定代表・objective crossing で τ_c 定義）**
+
+| N | cut | d_F(F_A,F_B) | **τ_c(N)** |
+|---|---|---|---|
+| 3 | 2\|1 (full 45) | 0.886 | **0.0180** |
+| 4 | 2\|2 (full 225) | 0.968 | **0.0206** |
+| 4 | 1\|3 (full 189) | 0.994 | **0.0224** |
+| 5 | 2\|3 (subspace 200) | 0.992 | **0.0173** |
+
+**クロスオーバーは N=4/5 でも存在**（competing basins d_F 0.97–0.99、ΔΦ 符号反転を τ∈[1e-3,1.0] の探索範囲で確定）。**τ_c(N) トレンド: FLAT（spread 0.178）** — finite-size persistence。**N=4 の balanced(2|2) vs asymmetric(1|3) 対照: τ_c ほぼ同一（0.021 vs 0.022）→ bipartition shape の影響は小**。これにより N=5（非対称 2|3）の結果は shape artifact ではないと解釈可能。
+
+**D4-C: 規格化指標**（raw 値は保存、canonical は再規格化しない）: Ĩ = I/(2·log₂ d_min)、J̃ = J_dyn^(0)/γ_mean。**Gate 判定（全て PASS）**: D4-1（全 N finite）✓ / D4-2（seed 安定）✓ / D4-3（singularity/product collapse 非再発）✓ / D4-4（I,J,Φ 非自明）✓ / D4-5（**crossover existence を十分な探索範囲で確定**: N=4/5 であり、無ければ反証的結果として記録する設計）✓ / D4-6（τ_c(N) を objective crossing から同定）✓ / D4-7（finite-size trend 分類: flat）✓ / D4-8（optimizer artifact と physical basin competition を分離 — ΔΦ 固定代表・seed 非依存、d_F 0.97–0.99）✓
+
+**解釈**: **D3 の発見は 3-qubit toy model の偶然ではない。** competing TPS basins と finite-τ objective crossing は N=4,5 でも出現し、τ_c ≈ 0.018–0.022 でほぼサイズ非依存。**注記**: N=5 は subspace-restricted（lower bound）、N=3-5 の範囲での finite-size persistence であり scaling law ではない。付随修正: `tps_distance` を (d_a,d_b) 対応に一般化（後方互換）。
 
 ### D2.1（✅ 2026-08-12 実施・commit 0ad8840）: Haar Singularity Audit — **D2.1-A 確定**
 
