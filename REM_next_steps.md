@@ -284,7 +284,9 @@ Spec v2.0 の C_dyn^(0) と C_dyn^(τ) を「同じものの近似」と考え�
 
 評価指標（Φ*, d_F, Γ^exact, C_dyn^(τ)）、固定パラメータ（λ=0.2, τ=0.1, Adam, 200 steps, 6 seeds）、5 Hamiltonian families、environment set、成功基準を `analysis_output/d0_protocol.json` に凍結。
 
-### D1（✅ 2026-08-12 実施・commit a091f72）: Hamiltonian Generality
+### D1（✅ 2026-08-12 実施・commit a091f72）: Hamiltonian Generality — **pre-v2.2 preliminary evidence（superseded normalized functional 使用）**
+
+> **Status（2026-08-12, Spec v2.2 凍結後）**: 旧 D1 は削除せず履歴として残す。**pre-v2.2 preliminary evidence using the superseded normalized dynamical functional**（Φ = I−λΓ^exact）。D1-R が通った時点で「Hamiltonian generality under the Spec v2.2 canonical functional」へ昇格。
 
 5 families × 6 seeds、Φ = I−λΓ^exact を 45次元 quotient で最適化（A1 dephasing 環境）。
 
@@ -296,7 +298,29 @@ Spec v2.0 の C_dyn^(0) と C_dyn^(τ) を「同じものの近似」と考え�
 | xyz | 0.847 | 1.748 | ✅ |
 | random_local | 0.455 | 1.696 | ✅ |
 
-**5/5 success**。interaction 構造・対称性・ランダム性を変えても非自明な F* が出現（fine-tuning 排除の証拠、Gate 5 の予備的証拠）。
+**5/5 success**。interaction 構造・対称性・ランダム性を変えても非自明な F* が出現（fine-tuning 排除の予備的証拠）。
+
+### D1-R（✅ 2026-08-12 実施・commit 871a104）: Hamiltonian Generality revalidation — **Spec v2.2 canonical で全ゲート PASS**
+
+**canonical functional のみ使用**: J_dyn^(0) = −Re⟨Q_Fρ, Q_FL(ρ)⟩、Φ = I − λ·J_dyn^(0)。凍結プロトコルは旧 D1 と同一（**SEED0=20260812 も旧 D1 のまま**）で、dynamical term のみ変更。
+
+| Hamiltonian | contiguous Φ | best Φ (D1-R) | 旧 D1 | std |
+|---|---|---|---|---|
+| asymmetric_XY | 0.653 | **1.8994** | 1.7993 | 0.0007 |
+| transverse_field_ising | 1.331 | **1.8246** | 1.6498 | 0.0010 |
+| heisenberg_xxz | 1.281 | **1.8695** | 1.7389 | 0.0002 |
+| xyz | 1.242 | **1.8740** | 1.7481 | 0.0006 |
+| random_local | 0.807 | **1.8481** | 1.6962 | 0.0007 |
+
+**Gate 判定（全て PASS）**:
+- **R1** 5/5 finite optimum ✓
+- **R2** seed 安定（std ≤ 0.0010）✓
+- **R3** product collapse なし（p_max 0.508–0.513）✓
+- **R4** J_dyn / I / Φ 非自明（best >> contiguous、|J_dyn| > 0.1）✓
+- **R5 F* が Hamiltonian に応答** ✓ — cross-eval 対角優位、**mean gap = 0.113**（asym 0.068 / ising 0.092 / heisenberg 0.106 / xyz 0.025 / random 0.274）、分類 = **response**（concentration ではない）。d_F 行列: asym↔random 0.412、ising↔xyz 0.559 が近く、他は 0.87–0.88（構造的類似 family が近い = 物理的に意味のある応答）
+- **R6** D2.1 型 singularity 再発なし（min C_F² = 0.500、max|γ_ref| = 1.78、max|Φ| = 1.899）✓
+
+**解釈**: canonical 変更後も全 family で一般性主張が生き残り、かつ**全 family が改善**（Φ 1.65–1.80 → 1.82–1.90）。seed 間マルチモダリティ（within-family d_F ≈ 0.875、全 family 共通）を cross-eval gap（値ベース）で正しく扱い、構造選択の Hamiltonian 応答を確認。**「Hamiltonian generality under the Spec v2.2 canonical functional」へ昇格。**
 
 ### D2（✅ 2026-08-12 実施・D2-R 改訂）: State Generality
 
