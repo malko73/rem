@@ -137,14 +137,15 @@
     "D4-7": {
       "pass_": true,
       "trend": "flat / size-independent within N=3-5 (finite-size persistence)",
-      "spread": 0.17826189680407561,
+      "spread": 0.18207025176001163,
       "tau_c_list": {
         "N3": 0.018024106534587126,
         "N4_22": 0.02063925190174121,
         "N4_13": 0.022433034454893492,
-        "N5_23": 0.017313095610175872
+        "N5_23_subspace": 0.017313095610175872,
+        "N5_23_full": 0.02168676030561805
       },
-      "note": "finite-size trend for N=3,4,5 only — NOT a scaling law / thermodynamic limit; N=5 is subspace-restricted (200/945); N=4 balanced vs asymmetric controls for bipartition shape"
+      "note": "finite-size trend for N=3,4,5 only — NOT a scaling law / thermodynamic limit; N=5 subspace-restricted (200/945) with full-quotient closure when available; N=4 balanced vs asymmetric controls for bipartition shape"
     },
     "D4-8": {
       "pass_": true,

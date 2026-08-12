@@ -428,7 +428,23 @@ Spec v2.0 の C_dyn^(0) と C_dyn^(τ) を「同じものの近似」と考え�
 
 **D4-C: 規格化指標**（raw 値は保存、canonical は再規格化しない）: Ĩ = I/(2·log₂ d_min)、J̃ = J_dyn^(0)/γ_mean。**Gate 判定（全て PASS）**: D4-1（全 N finite）✓ / D4-2（seed 安定）✓ / D4-3（singularity/product collapse 非再発）✓ / D4-4（I,J,Φ 非自明）✓ / D4-5（**crossover existence を十分な探索範囲で確定**: N=4/5 であり、無ければ反証的結果として記録する設計）✓ / D4-6（τ_c(N) を objective crossing から同定）✓ / D4-7（finite-size trend 分類: flat）✓ / D4-8（optimizer artifact と physical basin competition を分離 — ΔΦ 固定代表・seed 非依存、d_F 0.97–0.99）✓
 
-**解釈**: **D3 の発見は 3-qubit toy model の偶然ではない。** competing TPS basins と finite-τ objective crossing は N=4,5 でも出現し、τ_c ≈ 0.018–0.022 でほぼサイズ非依存。**注記**: N=5 は subspace-restricted（lower bound）、N=3-5 の範囲での finite-size persistence であり scaling law ではない。付随修正: `tps_distance` を (d_a,d_b) 対応に一般化（後方互換）。
+**解釈**: **D3 の発見は 3-qubit toy model の偶然ではない。** competing TPS basins と finite-τ objective crossing は N=4,5 でも出現し、τ_c ≈ 0.018–0.022 でほぼサイズ非依存。**N=5 full quotient クロージャ（✅ 2026-08-12）**: 945次元 full で τ_c(5, full) = **0.0217**（subspace の 0.0173 は restricted-domain underestimate。full 値はフラットバンド内）。d_F(F_A,F_B) は full で 0.319（subspace 0.992 と対照的だが ΔΦ 交差とタイムスケールは同一）→ **「full TPS optimization at N=5 confirms persistence」が主張可能**。N=3-5 の範囲での finite-size persistence であり scaling law ではない。付随修正: `tps_distance` を (d_a,d_b) 対応に一般化（後方互換）。
+
+### Phase D Freeze / 論文化準備（✅ 2026-08-12）
+
+**数値検証フェーズはクローズ**。Spec v2.2 は凍結のまま変更しない。成果物の分離:
+- **`analysis/PHASE_D_FINAL_REPORT.md`** — D0–D4 統合検証報告書（反証→well-posedness→応答→クロスオーバー→persistence の物語、4 Claims、Liouvillian 負の結果、limitations）
+- **`REM_spec_v2_2_validation_addendum.md`** — Spec v2.2 Validation Addendum（Spec は「定義」、Addendum は「検証」を分離。Theory specification ≠ post-hoc numerical evidence）
+
+**論文の主要主張（4 Claims）**:
+1. normalized rate Γ_F は unrestricted TPS 上で singular（D2.1 反証）
+2. J_dyn^(0) は well-posed（D2.2-A/B）
+3. F* = F*(ρ,L,λ) は Hamiltonian と state に応答（D1-R/D2-R cross-eval）
+4. finite-time structural crossover が存在し τ_c ≈ 0.017–0.022 が N=3–5 で持続（D3/D4）
+
+**Liouvillian gap 負の結果は残す**: τ_c·Δ_L = 0.0119（O(1) 不支持）→ crossover scale は global Liouvillian relaxation time では決まらない。
+
+**次フェーズ Phase E — Mechanism**: τ_c ≈ −ΔΦ₀/ΔΦ₁ の解析的近似を N=3,4,5 の τ_c（0.0180/0.0206/0.0224/0.0217 full）で検証 → structural crossover timescale の理論的導出へ。**順序**: ~~N=5 full quotient~~（✅ 完了 0.0217）→ 論文化・Zenodo 更新 → Phase E。
 
 ### D2.1（✅ 2026-08-12 実施・commit 0ad8840）: Haar Singularity Audit — **D2.1-A 確定**
 

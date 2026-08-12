@@ -116,6 +116,15 @@ def main():
         dphi[(N, cut)] = r["DeltaPhi"]
         dAB[(N, cut)] = r["d_F_FA_FB"]
 
+    # N=5 full-quotient closure (if present)
+    full5 = OUTDIR / "d4_b_n5_cut23_haar_full.json"
+    full5_data = None
+    if full5.exists():
+        r = load(full5)
+        full5_data = dict(tau_c=r.get("tau_c"), d_F_FA_FB=r.get("d_F_FA_FB"),
+                          F_A_best=(r.get("F_A") or r.get("A") or {}).get("best_Phi"),
+                          F_B_best=(r.get("F_B") or r.get("B") or {}).get("best_Phi"))
+
     # N=3 DeltaPhi reference from D3
     d3 = load(OUTDIR / "d3_timescale.json")
     dphi[(3, "21")] = d3["DeltaPhi"]
@@ -191,17 +200,22 @@ def main():
     )
 
     # D4-7: finite-size trend classification
-    vals = [tau_c[3], tau_c[(4, "22")], tau_c[(5, "23")]]
+    tc5 = full5_data["tau_c"] if full5_data is not None else tau_c[(5, "23")]
+    vals = [tau_c[3], tau_c[(4, "22")], tc5]
     spread = (max(vals) - min(vals)) / np.mean(vals)
     trend = ("flat / size-independent within N=3-5 (finite-size persistence)" if spread < 0.3
              else "monotone" if vals[-1] > vals[0] else "non-monotone")
+    tau_c_list = {"N3": tau_c[3], "N4_22": tau_c[(4, "22")],
+                  "N4_13": tau_c[(4, "13")], "N5_23_subspace": tau_c[(5, "23")]}
+    if full5_data is not None:
+        tau_c_list["N5_23_full"] = full5_data["tau_c"]
     gates["D4-7"] = dict(
         pass_=True, trend=trend, spread=spread,
-        tau_c_list={"N3": tau_c[3], "N4_22": tau_c[(4, "22")],
-                    "N4_13": tau_c[(4, "13")], "N5_23": tau_c[(5, "23")]},
+        tau_c_list=tau_c_list,
         note=("finite-size trend for N=3,4,5 only — NOT a scaling law / "
-              "thermodynamic limit; N=5 is subspace-restricted (200/945); "
-              "N=4 balanced vs asymmetric controls for bipartition shape"),
+              "thermodynamic limit; N=5 subspace-restricted (200/945) with "
+              "full-quotient closure when available; N=4 balanced vs "
+              "asymmetric controls for bipartition shape"),
     )
 
     # D4-8: optimizer artifact vs physical basin competition
@@ -233,6 +247,10 @@ def main():
     print("\n=== tau_c(N) trend ===")
     for k, v in gates["D4-7"]["tau_c_list"].items():
         print(f"  {k}: {v:.4f}")
+    if full5_data is not None:
+        print(f"  (N=5 full-quotient tau_c = {full5_data['tau_c']:.4f}, "
+              f"d_F = {full5_data['d_F_FA_FB']:.4f}, "
+              f"F_A {full5_data['F_A_best']:.4f} / F_B {full5_data['F_B_best']:.4f})")
     print(f"  trend: {trend} (spread {spread:.3f})")
 
     print("\n=== D4-A summary (best Phi) ===")
