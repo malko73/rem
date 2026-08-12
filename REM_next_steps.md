@@ -461,6 +461,17 @@ Spec v2.0 の C_dyn^(0) と C_dyn^(τ) を「同じものの近似」と考え�
 
 **成果**: **クロスオーバータイムスケールは導出量になった**（τ_c ≈ −ΔΦ₀/ΔΦ₁、単なる数値観測ではない）。論文 Claim 4 は「finite-time TPS crossover exists, persists with system size, and its characteristic scale is explained by competition between structural basins」に昇格。Phase D Report に §10 Addendum として反映済み。**次は論文ドラフト → Zenodo 更新**。
 
+### 論文 v0.1（✅ 2026-08-12 実施・commit aa799f0）: 本文完成
+
+**`papers/REM_paper_v0_1.md`**（+ pandoc 生成 `REM_paper_v0_1.tex`）。タイトル: **Well-Posed Structural Selection and Finite-Time Crossovers in Variational Tensor-Product Factorization**。マスター指定の10セクション順序で固定: Introduction / Formalism（Spec v2.2 canonical + finite-time extension）/ Claim 1（D2.1 反証）/ Claim 2（D2.2 well-posedness）/ Claim 3（D1-R・D2-R 応答）/ Claim 4a（D3 crossover）/ Claim 4b（D4 persistence）/ Claim 4c（Phase E mechanism）/ Discussion（Liouvillian gap 負の結果・limitations）/ Conclusion。
+
+- **公式値**: τ_c = 0.0180 / 0.0206 / 0.0224 / 0.0217。mechanism 主要証拠: 一次近似 5.1–10.9%、二次近似 0.0–0.5%
+- **0.0173（N=5 subspace）は本文の主要結果から除外**。Supplementary S1 と §9.3 limitations に制限探索の履歴としてのみ記載
+- tools/gen_paper.py（再現可能 .tex 生成、--check でドリフト検出）+ latex.yml に論文ビルドステップとドリフトゲート追加
+- 10セクション順序・公式値の機械検証済み。suite 74 passed + 1 xfailed
+
+**工程**: ~~v0.1本文~~ → **図表固定** → 数式・数値QC → 独立査読 → v1.0 → Zenodo。新しい実験は追加しない。
+
 ### D2.1（✅ 2026-08-12 実施・commit 0ad8840）: Haar Singularity Audit — **D2.1-A 確定**
 
 **C_Γ^(0) の正規化は unrestricted TPS optimization 上で特異**（重要な反証結果）:
