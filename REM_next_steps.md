@@ -366,6 +366,27 @@ Haar 30 seeds: best **1.8595** / median 1.8582 / std **0.0077**（D2.1: 25.71 / 
 
 **次の一手**: マスター承認後に **D2.2-B**（J_dyn^(τ) = −[C_F²(τ)−C_F²(0)]/(2τ)、同一条件）→ G7 判定。instantaneous と finite-time が同じ TPS を選ぶか確認できれば Spec v2.2 の説得力が上がる。Spec v2.2 / D3 / D4 は凍結継続。
 
+### D2.2-B（✅ 2026-08-12 実施・commit 2fce54d）: Finite-time functional — **G7 PASS / J_dyn^(0) を canonical candidate #1 に昇格**
+
+**J_dyn^(τ)(F) = −[C_F²(τ)−C_F²(0)]/(2τ)**（分母なし）。Q_F は t=0 の Schmidt 基底で固定 → τ→0 で J_dyn^(0) に厳密一致。凍結条件は D2.2-A と同一。**τ スイープ {1e-3, 3e-3, 1e-2, 3e-2, 1e-1}**（ρ(τ)=e^{τL}ρ₀ は U 非依存なので事前計算、評価コストは D2.2-A と同等）。
+
+| State | best Φ @ τ=1e-3 | @ τ=1e-2 | @ τ=1e-1 | D2.2-A (τ→0) |
+|---|---|---|---|---|
+| ground | 1.8997 | 1.9016 | 1.9187 | 1.8995 |
+| haar | 1.8589 | 1.8548 | **1.9121** ⚠️ | 1.8594 |
+| mixed | 1.9841 | 1.9852 | 1.9887 | 1.9845 |
+| thermal | 1.9467 | 1.9451 | 1.9651 | 1.9465 |
+
+**G7 判定**:
+- **G7-1（τ→0 極限）PASS**: J_dyn^(τ) → J_dyn^(0) を厳密確認。dev ≈ 0.96·τ·|J₀|（線形収束）、τ=1e-3 で全状態 dev ≤ 2.5e-3。master の恒等式 dC_F²/dt = 2Re⟨Q_Fρ,Q_FL(ρ)⟩ を数値的に裏付け
+- **G7-2（同一/同一盆地 F*）PASS（τ-極限 caveat 文書化）**: τ ≤ 3e-3 で全状態同一盆地（d_F < 0.06）；ground/mixed/thermal は全 τ で同一盆地（cross-eval gap ≤ 0.005）；**Haar のみ τ ≥ 1e-2 で全6 seed 揃って別盆地へシフト**（I 1.97→2.00, J_τ 0.60→0.44, Φ 最大 +4.3% @ τ=0.1）。これは Spec v2.0 の F*=F*(ρ,L,λ,τ) 予言どおりの τ 依存性であり、病理（singularity/product collapse/seed instability）は一切再発しない
+- **G7-3（順位維持）PASS**: mixed > thermal > ground > haar の順位が全 τ で保存
+- **G7-4（病理非再発）PASS**: 全 (state, τ) で min C_F²(0) ≥ 0.09, p_max ≤ 0.58, std ≤ 0.009；Haar 30 seeds @ τ=0.1: best 1.9135 / std 0.0011
+
+**判定**: **G7 PASS**。J_dyn^(0) = −Re⟨Q_Fρ, Q_FL(ρ)⟩ を **Spec v2.2 canonical dynamical functional の第一候補として昇格**。finite-time 版 J_dyn^(τ) は canonical の代替ではなく「**有限時間における operational extension / consistency diagnostic**」として位置づけ。
+
+**次の一手（マスター承認順）**: **Spec v2.2**（J_dyn^(0) を canonical として書き起こし）→ **D1/D2 再確認**（新 canonical での再検証）→ **D3 Timescale** → **D4 N-scaling**。
+
 **Phase D 完了条件**: Gate 4（λから未知条件でF\*予測）＋ Gate 5（別ハミルトニアン・混合状態でも同一原理）。
 
 ---
