@@ -485,6 +485,25 @@ Spec v2.0 の C_dyn^(0) と C_dyn^(τ) を「同じものの近似」と考え�
 
 **1件の記録修正（QC-A 由来）**: D2.1 の「Φ→44 / 6e-5 / −222」は保存されていない sweep 由来の値だったため、**保存済み 30-trial JSON の実値（Φ=25.7 / C_F²=6e-4 / Γ=−129 / p_max=0.9998）に本文・caption を統一**（text=caption=JSON 原則）。
 
+### 数式・数値QC 最終監査（✅ 2026-08-12 実施・commit 984eac9）: **QC 14/14 全 PASS → v0.1 review candidate 凍結**
+
+**`tools/qc_paper.py`**（再現可能な QC 監査スクリプト、マスターの QC-1..QC-8 実装）:
+
+| Gate | 内容 | 結果 |
+|---|---|---|
+| QC-1 | Spec と canonical 定義完全一致（HS 添字 `_HS` を abstract・§2.2 に追加統一） | ✅ |
+| QC-2 | factor-of-2 / 符号監査 — N=3 Haar rep で数値検証: dC²/dt = 2Re⟨Qρ,QLρ⟩（中心差分一致 1e-6）、J^(0) = −½dC²/dt、lim J^(τ)→J^(0)、旧 −d/dt log C² 痕跡なし | ✅ |
+| QC-3 | Phase E Taylor — τ_c^(2) は正の物理解・一次解へ連続接続（例 N3: roots [0.01802, 0.30322] → 0.01802）、ΔΦ₁ num vs ana 相対差 0.0054 | ✅ |
+| QC-4 | 本文・表・図caption・Supplementary・JSON 完全一致（22/22 数値） | ✅ |
+| QC-5 | dimensional analysis [J]=T⁻¹, [λ]=T | ✅ |
+| QC-6 | 旧 Γ_F の身分（local diagnostic only）を全文10箇所で統一確認 | ✅ |
+| QC-7 | unsupported/unsaved historical values = 0 — **0.9997→0.9998**（保存値）、**0.0173 は Supplementary S1 のみ**（§9.3 から除去） | ✅ |
+| QC-8 | Claims が証拠範囲内 — 「essentially size-independent」→「approximately flat over the tested finite-size range」、「first-order-like basin transition」→「sharp, first-order-like basin crossover in a finite-dimensional optimization problem」 | ✅ |
+
+**マスター指摘の Figure 1 caption 不一致を修正**: 実ファイルは `→4×10⁻⁴`（全体最小）だったため、QC-A 記録・図注釈と同じ **`6×10⁻⁴`（best-Φ trial）に統一**（4e-4 の最小残差の事実は本文に保持）。
+
+**凍結**: `git tag paper-v0.1-review-candidate`。**以後は著者側で細部を触らず独立査読へ回す段階**。
+
 ### D2.1（✅ 2026-08-12 実施・commit 0ad8840）: Haar Singularity Audit — **D2.1-A 確定**
 
 **C_Γ^(0) の正規化は unrestricted TPS optimization 上で特異**（重要な反証結果）:
