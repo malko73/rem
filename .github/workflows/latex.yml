@@ -38,10 +38,14 @@ jobs:
         run: |
           latexmk -pdf -outdir=papers -interaction=nonstopmode papers/REM_spec_v2_0.tex
 
+      - name: Build REM Spec v2.2 (pdflatex, utf8 inputenc)
+        run: |
+          latexmk -pdf -outdir=papers -interaction=nonstopmode papers/REM_spec_v2_2.tex
+
       - name: Gate — logs must be clean
         run: |
           set -e
-          for log in papers/REM_lambda_v5_source.log papers/REM_spec_v2_0.log; do
+          for log in papers/REM_lambda_v5_source.log papers/REM_spec_v2_0.log papers/REM_spec_v2_2.log; do
             echo "=== $log ==="
             if grep -qE "^! |Fatal error|Emergency stop|LaTeX Error|Undefined control sequence" "$log"; then
               echo "FATAL in $log:"; grep -E "^! |Fatal error|Emergency stop|LaTeX Error|Undefined control sequence" "$log" | head -20; exit 1
@@ -65,4 +69,5 @@ jobs:
           path: |
             papers/REM_lambda_v5_source.pdf
             papers/REM_spec_v2_0.pdf
+            papers/REM_spec_v2_2.pdf
           if-no-files-found: error
