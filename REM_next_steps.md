@@ -317,12 +317,14 @@ Spec v2.0 の C_dyn^(0) と C_dyn^(τ) を「同じものの近似」と考え�
 - **R2** seed 安定（std ≤ 0.0010）✓
 - **R3** product collapse なし（p_max 0.508–0.513）✓
 - **R4** J_dyn / I / Φ 非自明（best >> contiguous、|J_dyn| > 0.1）✓
-- **R5 F* が Hamiltonian に応答** ✓ — cross-eval 対角優位、**mean gap = 0.113**（asym 0.068 / ising 0.092 / heisenberg 0.106 / xyz 0.025 / random 0.274）、分類 = **response**（concentration ではない）。d_F 行列: asym↔random 0.412、ising↔xyz 0.559 が近く、他は 0.87–0.88（構造的類似 family が近い = 物理的に意味のある応答）
+- **R5 F* が Hamiltonian に応答** ✓ — cross-eval 対角優位、**mean gap = 0.113**（asym 0.068 / ising 0.092 / heisenberg 0.106 / xyz 0.025 / random 0.274）。**family-dependent response with varying separation strength**（XYZ の 0.025 は小さく、「全 family が強く分離」とは断定しない）。d_F 行列: asym↔random 0.412、ising↔xyz 0.559 が近く、他は 0.87–0.88（構造的類似 family が近い = 物理的に意味のある応答）
 - **R6** D2.1 型 singularity 再発なし（min C_F² = 0.500、max|γ_ref| = 1.78、max|Φ| = 1.899）✓
 
-**解釈**: canonical 変更後も全 family で一般性主張が生き残り、かつ**全 family が改善**（Φ 1.65–1.80 → 1.82–1.90）。seed 間マルチモダリティ（within-family d_F ≈ 0.875、全 family 共通）を cross-eval gap（値ベース）で正しく扱い、構造選択の Hamiltonian 応答を確認。**「Hamiltonian generality under the Spec v2.2 canonical functional」へ昇格。**
+**解釈（記録の正確化）**: **Spec v2.2 canonical objective の下で、全5 Hamiltonian family に安定した非自明 optimum が得られた。** 旧 D1（Φ_Γ）と D1-R（Φ_J）は目的関数自体が異なるため、絶対値を直接比較して「改善」とは評価しない。D1-R5 の cross-evaluation は、各 F*_j を異なる Hamiltonian の objective で再評価して対角優位が出たため、**F* = F*(ρ, L, λ) が単なる状態依存の共通解ではなく、dynamics/Hamiltonian に実際に応答している**ことを直接支持する。**「Hamiltonian generality under the Spec v2.2 canonical functional」へ昇格。**
 
-### D2（✅ 2026-08-12 実施・D2-R 改訂）: State Generality
+### D2（✅ 2026-08-12 実施・D2-R 改訂）: State Generality — **pre-v2.2 preliminary evidence（superseded normalized functional 使用）**
+
+> **Status（2026-08-12, Spec v2.2 凍結後）**: 旧 D2 は削除せず履歴として残す。**pre-v2.2 preliminary evidence using the superseded normalized dynamical functional**（Φ = I−λΓ^exact）。D2-R が通った時点で「state generality under the Spec v2.2 canonical functional」へ昇格。
 
 4状態タイプ（ground / Haar / mixed / thermal）で最適化。
 
@@ -339,6 +341,31 @@ Spec v2.0 の C_dyn^(0) と C_dyn^(τ) を「同じものの近似」と考え�
 - mixed: PASS候補
 - thermal: PASS候補
 - **Haar: PENDING / anomaly（→ D2.1-A に分類）**
+
+### D2-R（✅ 2026-08-12 実施・commit 64e5b03）: State Generality revalidation — **Spec v2.2 canonical で全ゲート PASS**
+
+**canonical functional のみ使用**: J_dyn^(0) = −Re⟨Q_Fρ, Q_FL(ρ)⟩、Φ = I − λ·J_dyn^(0)。凍結プロトコルは旧 D2 と同一（**SEED0=20260813 も旧 D2 のまま**）で、dynamical term のみ変更。D2.2-A は singularity well-posedness 監査であり、D2-R は frozen canonical の state generality 再認証（代用しない）。
+
+| State | contiguous Φ | best Φ (D2-R) | std |
+|---|---|---|---|
+| ground | 0.653 | **1.8995** | 0.0007 |
+| haar | 1.529 | **1.8594** | 0.0090 |
+| mixed | 0.683 | **1.9845** | 0.0051 |
+| thermal | 0.137 | **1.9465** | 0.0058 |
+
+（数値は D2.2-A と完全一致 — プロトコル・シード同一のクロスチェック合格）
+
+**Gate 判定（全て PASS）**:
+- **R1** 4/4 finite optimum ✓
+- **R2** seed 安定（std ≤ 0.0090）✓
+- **R3** product collapse なし（p_max 0.510–0.580）✓
+- **R4** J_dyn / I / Φ 非自明（best >> contiguous、|J_dyn| > 0.1）✓
+- **R5 F* が state に応答** ✓ — cross-eval 対角優位、**mean gap = 0.159**（ground 0.000 / haar 0.332 / mixed 0.058 / thermal 0.247）。**state-dependent response with varying separation strength**。d_F 行列: **ground↔mixed = 0.343（近い）**、haar↔thermal は 0.87–0.89（強く分離）。ground と Haar は d_F 0.880 / gap 0.332 で明確に異なる。mixed と thermal は Φ 値が近いが **d_F 0.868 で構造は異なる**。**全状態が同一 attractor ではない**
+- **R6** singularity 再発なし（min C_F² = 0.096、max|γ_ref| = 1.66、max|Φ| = 1.98）✓
+
+**解釈**: **Spec v2.2 canonical objective の下で、全4状態に安定した非自明 optimum が得られた。** 旧 D2（Φ_Γ）と D2-R（Φ_J）は目的関数が異なるため絶対値を直接比較しない（Haar の 49.10 → 1.8594 は singularity 除去であり、D2.1/D2.2-A で確立済み）。D2-R5 の cross-eval 対角優位は **F* = F*(ρ, L, λ) が状態に実際に応答する**ことを直接支持。**「State generality under the Spec v2.2 canonical functional」へ昇格。**
+
+**Spec v2.2 の3本柱が揃った**: well-posedness（D2.2-A/B）+ Hamiltonian generality（D1-R）+ **state generality（D2-R）**。→ **次は D3 Timescale**。
 
 ### D2.1（✅ 2026-08-12 実施・commit 0ad8840）: Haar Singularity Audit — **D2.1-A 確定**
 
