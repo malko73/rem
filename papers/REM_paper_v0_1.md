@@ -17,10 +17,11 @@ unrestricted quotient: the denominator $|Q_F\rho|^2$ can vanish, driving the
 objective to $+\infty$ along non-physical near-product directions. We replace
 it with the unnormalized functional $J_{\mathrm{dyn}}^{(0)} =
 -\operatorname{Re}\langle Q_F\rho, Q_FL(\rho)\rangle_{\mathrm{HS}}$ and
-demonstrate numerically that
+show numerically that
 singularity, product collapse, and seed instability disappear. The selected
 factorization responds systematically to both the Hamiltonian and the state
-(cross-evaluation matrix diagonal dominance). Extending the functional to a
+in the tested families and states (cross-evaluation matrix diagonal
+dominance). Extending the functional to a
 finite observation window $\tau$ reveals **competing structural basins**: the
 instantaneously optimal factorization and a distinct finite-time-optimal
 factorization cross at $\Delta\Phi(\tau_c) = 0$, with
@@ -33,9 +34,9 @@ within 0.0–0.5%. The crossover timescale is therefore set by the objective
 balance between competing structural basins, not by the global Liouvillian
 relaxation time ($\tau_c \Delta_L = 0.012$; the $O(1)$ hypothesis is
 rejected). The falsification-then-replacement arc is the central result:
-a canonical functional was shown to be ill-posed mid-course, and its
-replacement survived a battery of tests including a finite-size persistence
-check.
+a canonical functional was found to be singular mid-course, and its
+replacement remained stable across the validation checks reported here
+(including a finite-size persistence check).
 
 # 1. Introduction
 
@@ -124,12 +125,22 @@ $$J_{\mathrm{dyn}}^{(0)}(F;\rho,L) = -\operatorname{Re}\langle Q_F\rho,
 Q_F L(\rho)\rangle_{\mathrm{HS}},$$
 
 where $\langle A,B\rangle = \mathrm{Tr}(A^\dagger B)$ is the Hilbert–Schmidt
-inner product. By Cauchy–Schwarz,
+inner product. In practice $F$ is parameterized by a unitary $U$ on the
+quotient, and the inner product is evaluated in the rotated frame with
+$\rho_U = U^\dagger \rho U$ and $Y_U = U^\dagger L(\rho) U$:
+$J_{\mathrm{dyn}}^{(0)} = -\operatorname{Re}\langle Q_F\rho_U,
+Q_FY_U\rangle_{\mathrm{HS}}$ (Sec. 2.3 and Sec. 8 use this frame
+explicitly). By Cauchy–Schwarz,
 
-$$|J_{\mathrm{dyn}}^{(0)}| \le |Q_F\rho|\,|Q_FL(\rho)|,$$
+$$|J_{\mathrm{dyn}}^{(0)}| \le |Q_F\rho|\,|Q_FL(\rho)|.$$
 
-so $J_{\mathrm{dyn}}^{(0)} \to 0$ smoothly as $|Q_F\rho|^2 \to 0$; there is
-no denominator to blow up. The variational objective is
+Since $\dim\mathcal{H} < \infty$, $|Q_FL(\rho)|_{\mathrm{HS}}$ is bounded
+along any path, so $J_{\mathrm{dyn}}^{(0)} \to 0$ as $|Q_F\rho|^2 \to 0$;
+there is no denominator to blow up. Moreover the quotient
+$\mathcal{U}(d)/[\mathcal{U}(d_A)\times\mathcal{U}(d_B)]$ is compact and
+$\Phi$ is continuous in $U$, so a maximizer exists; the numerical results
+below address the absence of singular directions and of seed pathologies on
+that compact domain. The variational objective is
 
 $$\Phi(F;\lambda) = I_\rho(F) - \lambda J_{\mathrm{dyn}}^{(0)}(F),
 \qquad [J] = T^{-1},\ [\lambda] = T,$$
@@ -178,7 +189,7 @@ sends $\Gamma_F \to \pm\infty$ and $\Phi \to +\infty$ along non-physical
 near-product directions.*
 
 *Evidence (Haar states, full quotient, $N=3$).* The optimizer exploits the
-denominator directly:
+denominator directly in the tested setting:
 
 - correlation of the objective with the log residual:
   $\mathrm{corr}(\Phi, \log_{10} C_F^2(0)) = -0.999$;
@@ -191,9 +202,13 @@ denominator directly:
 - a singularity-direction sweep (approaching $|Q_F\rho|^2 \to 0$ directly)
   confirms the blow-up.
 
-Since every pure state can be approached by a product-state TPS, the
-denominator can vanish on any open neighborhood of the quotient. The
-normalized rate is therefore retained only in its proper role —
+The mechanism is general for pure states: $\mathcal{U}(d)$ acts
+transitively on pure states, so for every pure $\rho$ there exists a
+$U$ on the quotient such that the dominant eigenvector of
+$\rho_U = U^\dagger \rho U$ is (arbitrarily close to) a product state
+across the fixed cut; hence $|Q_F\rho|^2$ can be made arbitrarily small
+over the quotient, and $\Gamma_F$ diverges. The normalized rate is
+therefore retained only in its proper role —
 *fixed-$(F)$ local diagnostic only; not an unrestricted global TPS
 variational objective* (Spec v2.2 §7).
 
@@ -208,8 +223,21 @@ $\Phi \approx 1.86$ under $J_{\mathrm{dyn}}^{(0)}$.](figures/fig1_falsification)
 # 4. Claim 2 — the unnormalized functional is well-posed (D2.2)
 
 **Claim 2.** *Under $J_{\mathrm{dyn}}^{(0)}$, singularity, product collapse,
-and seed instability disappear; the optimization is well-posed on the
-unrestricted quotient.*
+and seed instability disappear; the optimization is non-singular on the
+unrestricted quotient (existence of a maximizer follows from the
+compactness of the quotient and the continuity of $\Phi$; the numerical
+evidence addresses the absence of singular directions and pathologies in
+the tested protocol).*
+
+The unnormalized functional also has a direct physical reading:
+$J_{\mathrm{dyn}}^{(0)} = -\tfrac12\,dC_F^2/dt\big|_0$ is the instantaneous
+rate of decay of the residual norm — the physical decay rate of the
+*unnormalized* residual. The normalization $|Q_F\rho|^2$ in $\Gamma_F$ is
+what converts this finite rate into a singular ratio as the residual
+vanishes; removing it retains the physical rate while eliminating the
+spurious divergence. The replacement is therefore not a numerical
+convenience but the natural unnormalized counterpart of the same decay
+process.
 
 *Evidence (D2.2-A; frozen D2 protocol, only the dynamical term changed).*
 
@@ -244,9 +272,9 @@ observed at larger $\tau$ is the subject of Claim 4a.
 
 # 5. Claim 3 — structural response (D1-R, D2-R)
 
-**Claim 3.** *The selected structure responds to both the Hamiltonian and
-the state: $F^* = F^*(\rho, L, \lambda)$, not a state-independent common
-solution.*
+**Claim 3.** *In the tested families and states, the selected structure
+responds to both the Hamiltonian and the state: $F^* = F^*(\rho, L,
+\lambda)$, not a state-independent common solution.*
 
 *Hamiltonian response (D1-R; 5 families, 6 seeds each).*
 
@@ -289,9 +317,12 @@ $0.247$). Geometrically
 $d_F(\mathrm{ground},\mathrm{mixed}) = 0.343$ (close), while
 $d_F(\mathrm{mixed},\mathrm{thermal}) = 0.868$ despite similar
 $\Phi$ values — closeness in objective does **not** imply the same
-structure. Precise wording: *state-dependent response is established
-overall, although ground and mixed contain nearly degenerate optima under
-the ground-state objective* — the separation strength varies by pair.
+structure; in particular the ground- and mixed-state optima are
+near-isometric on the quotient under the ground-state objective
+($\Phi = 1.900$ vs $1.899$). Precise wording: *state-dependent response is
+established overall, although ground and mixed contain nearly degenerate
+optima under the ground-state objective* — the separation strength varies
+by pair.
 
 # 6. Claim 4a — finite-time structural crossover (D3)
 
@@ -312,12 +343,22 @@ the dynamical observation scale.*
 | $\Delta\Phi$ | −0.021 | −0.011 | −0.003 | **0.000** | +0.003 | +0.009 | +0.016 | +0.039 | +0.079 |
 
 - $\Delta\Phi$ is smooth and monotone; **$\tau_c = 0.0180$** by linear
-  interpolation of the sign change (Fig. 2).
+  interpolation of the sign change (Fig. 2; full 19-point grid
+  $\tau \in [0.003, 0.1]$ in Supplementary Table S2 — the table shows
+  selected points). $\Delta\Phi$ is evaluated at fixed representatives and
+  is therefore deterministic; the optimizer seed spread is reported as the
+  per-$\tau$ std of $\Phi$ across the 6 seeds.
 - The optimizer follows sharply: at $\tau=0.018$ all 6 seeds sit at the
   $A$-value, at $\tau=0.02$ all 6 at the $B$-value (value-based
-  classification; the seed std collapses from $5\times10^{-3}$ to
+  classification: closeness of each seed's $\Phi$ to $\Phi_\tau(F_A)$ vs
+  $\Phi_\tau(F_B)$; the seed std collapses from $5\times10^{-3}$ to
   $9\times10^{-4}$).
-- $d_F(F_A, F_B) = 0.886$: the two basins are structurally distinct.
+- $d_F(F_A, F_B) = 0.886$: the two basins are structurally distinct. The
+  $B$-basin is value-degenerate: at $\tau \ge 0.03$ the seeds find
+  distinct local maxima ($d_F$ to $F_B$ up to $\sim 0.97$, Supplementary
+  Table S1) sharing the same $\Phi$ value — basin identity is defined by
+  the value-based classification and the fixed representatives, not by a
+  full landscape analysis.
 
 ![Figure 2: Finite-time structural crossover (Claim 4a, D3; Haar, $N=3$).
 $\Delta\Phi(\tau) = \Phi_\tau(F_B) - \Phi_\tau(F_A)$ at fixed
@@ -393,10 +434,15 @@ The N=4 balanced ($2|2$) vs asymmetric ($1|3$) control gives nearly identical
 $\tau_c$ ($0.021$ vs $0.022$): **bipartition shape has little effect at
 fixed size**, which validates the $N=5$ (asymmetric $2|3$) reading as a
 size effect rather than a shape artifact. The $N=5$ full-quotient closure
-confirms persistence under full TPS optimization; the interesting contrast
+confirms persistence under full TPS optimization (2 seeds × 100 steps;
+seed std $2\times10^{-4}$, marked in the table); the interesting contrast
 $d_F = 0.319$ (full) vs $0.992$ (200-dim random subspace, see
 Supplementary) shows the full quotient finds closer competing basins while
-the crossing and timescale are unchanged.
+the crossing and timescale are unchanged. The $N=5$ value is
+protocol-dependent at the level of a few $\times10^{-3}$ (the
+restricted-domain search gave a somewhat lower value; see S1); the
+persistence statement rests on the full-quotient value and is framed as a
+finite-$N$ observation.
 
 ![Figure 3: Finite-size persistence of the crossover (Claim 4b, D4).
 $\tau_c(N)$ for $N=3$ (cut $2|1$, full 45-dim), $N=4$ ($2|2$, full
@@ -407,7 +453,8 @@ finite-size range (dotted line: mean $\approx 0.021$) — finite-size
 persistence, not a thermodynamic scaling law.](figures/fig3_tau_c_trend)
 
 Scope: $N = 3\text{–}5$ establishes **finite-size persistence / finite-size
-trend** — not a scaling law and not a thermodynamic limit.
+trend** — a finite-$N$ observation over four systems, not a scaling law and
+not a thermodynamic limit.
 
 # 8. Claim 4c — crossover mechanism (Phase E)
 
@@ -420,11 +467,13 @@ $$\tau_c^{(1)} = -\frac{\Delta\Phi_0}{\Delta\Phi_1},$$
 \frac{d}{d\tau}\Delta\Phi(\tau)\big|_0$. It reproduces the measured
 $\tau_c$ within 5–11%, and the quadratic correction within 0.0–0.5%.*
 
-*Derivation.* Expanding $J_\tau(F) = J_0(F) + \tau J_1(F) + O(\tau^2)$,
-with $I_F$ independent of $\tau$, gives
+*Derivation.* Expanding $J_\tau(F) = J_0(F) + \tau J_1(F) + \tau^2 J_2(F) +
+O(\tau^3)$, with $I_F$ independent of $\tau$, gives
 $\Delta\Phi(\tau) = \Delta\Phi_0 + \tau\Delta\Phi_1 + \tau^2\Delta\Phi_2
 + \cdots$, hence the crossing $\Delta\Phi(\tau_c)=0$ implies the boxed
-formula to first order. The first-order coefficient is computed both
+formula to first order. Here $J_1$ is the first-order *coefficient* in the
+expansion (equivalently $dJ_\tau/d\tau|_0 = J_1$); we use the coefficient
+convention throughout. The first-order coefficient is computed both
 numerically (small-$\tau$ slope) and analytically. With the fixed Schmidt
 basis $Q_F$,
 $C^2(\tau) = |Q_F U^\dagger e^{\tau L}\rho\, U|^2$ and
@@ -463,6 +512,28 @@ correction improves systematically: mean relative error drops from 7.96%
 decisively outperforms the Liouvillian gap timescale (83–136× off; see
 Sec. 9).
 
+*Uncertainty and sensitivity (Supplement).* The coefficients of the
+expansion and their least-squares uncertainties, the representative
+sensitivity, and the $\tau$-grid resolution are reported per system in
+Supplementary Table S1 (full data in the repository
+`analysis_output/e1_sensitivity.json`). In brief: the quadratic
+coefficients are $\Delta\Phi_2 = -4.75, -2.27, -5.43, -5.58$ (all
+negative — the crossing curve bends back at larger $\tau$, consistent with
+the non-monotone $\Delta\Phi$ seen in D4); the fit uncertainties are tiny
+($\Delta\Phi_0 \pm 10^{-4}$, $\Delta\Phi_1 \pm 10^{-3}$), so the quoted
+$\tau_c^{(1)}$ values are numerically well-determined at the fixed
+representatives; re-evaluating $\tau_c^{(1)}$ with alternative
+representatives $F_B$ (second/third seed, or the stored $\tau=0.05$
+optimum for $N=3$) shifts it by $\lesssim 4\times10^{-3}$; and the
+measured $\tau_c$ comes from linear interpolation on a grid whose local
+spacing is $2\times10^{-3}$ ($N=3$) or $10^{-2}$ ($N=4,5$), so the
+measured values carry an interpolation resolution of at most
+$\pm 5\times10^{-3}$. "Derived, not fitted" therefore means: $\tau_c$ is
+predicted analytically from $t=0$ operator matrix elements at fixed basin
+configurations $(F_A,F_B)$ — it is not fitted to the time-dependent curve
+$\Delta\Phi(\tau)$ — while the representative choice and the grid
+resolution contribute a documented uncertainty of a few $\times10^{-3}$.
+
 ![Figure 4: Crossover mechanism (Claim 4c, Phase E). Predicted
 $\tau_c^{(1)} = -\Delta\Phi_0/\Delta\Phi_1$ (open squares) and quadratic
 $\tau_c^{(2)}$ (filled circles) vs the measured $\tau_c$ for the four
@@ -489,7 +560,9 @@ thermal, with $\tau_c \in (0.3, 1.0)$, it would be $\sim 0.2\text{–}0.66$)
 — not concentrated. The crossover scale is therefore **not simply set by
 the global Liouvillian relaxation time**. This negative result is kept as a
 constraint: any mechanistic account of $\tau_c$ must explain why it is so
-much shorter than $\tau_L$.
+much shorter than $\tau_L$. The comparison targets the slowest Liouvillian
+mode only; more subtle spectral or mode-coupling explanations are not
+excluded.
 
 ## 9.2 The crossover scale as an objective balance
 
@@ -502,7 +575,9 @@ geometry of the objective landscape, not about the relaxation spectrum of
 $L$; it explains both the magnitude ($\tau_c \sim |\Delta\Phi_0| /
 |\Delta\Phi_1| \approx 0.02$) and the approximately flat trend across $N$
 (both $\Delta\Phi_0$ and $\Delta\Phi_1$ vary only mildly over the tested
-finite-size range).
+finite-size range). For the states where a crossover was found (Haar,
+thermal), the selected structure depends on the timescale; ground and mixed
+show no crossover up to $\tau = 1$ in the tested protocol.
 
 ## 9.3 Limitations and scope
 
@@ -527,7 +602,37 @@ finite-size range).
   modified by this paper's evidence; the verification trail is documented
   in the Validation Addendum.
 
-## 9.4 Implications
+## 9.4 Reproducibility
+
+All scripts, JSON outputs, and commits are listed in the Phase D Validation
+Report §9 and the repository (`github.com/malko73/rem`, branch `open`).
+Key protocol details for this paper: Adam with lr $10^{-2}$,
+finite-difference gradients ($\epsilon = 10^{-5}$), fixed step counts
+(200 steps $N=3$; 100 steps $N \ge 4$), no early stopping; reported
+$\Phi^*$ values are best-of-seed with per-state seed std; $\Delta\Phi(\tau)$
+is objective-level at fixed representatives (deterministic); the
+representatives are $F_A$ = optimum at $\tau=10^{-3}$ and $F_B$ = optimum
+at $\tau=10^{-1}$ (per-system records in the JSONs); the quotient distance
+$d_F$ is the gauge-invariant projector distance between TPS algebras
+$P_F = \sum_k U(G_k \otimes I_B)U^\dagger$ (traceless generators),
+$d_F = \|P_1 - P_2\|_F / \sqrt{2\,\mathrm{rank}}$; the quotient is
+parameterized by the horizontal-basis exponential map (dimensions
+45/225/189/945 for the four systems); the $N=5$ closure used the full
+945-dim basis with 2 seeds.
+
+## 9.5 Relation to prior REM work
+
+The REM specification (Spec v2.2) is frozen and is *not* modified by this
+paper. Relative to the earlier REM results, the new contributions here are:
+(i) the falsification of the normalized rate as a global objective
+(Claim 1); (ii) the canonical well-posed functional and its validation
+chain (Claims 2–3; the re-verifications D1-R/D2-R under the canonical
+functional); (iii) the finite-time structural crossover and its mechanism
+(Claims 4a–4c). The numerical evidence is deliberately post-hoc: the
+specification defines the quantities, this paper reports how they were
+verified.
+
+## 9.6 Implications
 
 The arc falsified → replaced → survived has a methodological moral for
 variational structure selection: objectives must be checked for
@@ -560,12 +665,12 @@ tensor-product selection program of the Relational Emergence Model:
    relaxation time.
 
 The central contribution is the research arc itself: a canonical functional
-was falsified mid-course, its replacement survived a battery of tests, and
-the emergent phenomenon (structural crossover) was both characterized and
-explained. The next steps are the publication pipeline (figures, QC,
-independent review) and the extension of the mechanism analysis to the
-thermal crossover and to larger systems where a genuine scaling question
-becomes accessible.
+was falsified mid-course, its replacement passed the validation checks
+reported here, and the emergent phenomenon (structural crossover) was both
+characterized and explained. The next steps are the publication pipeline
+(figures, QC, independent review) and the extension of the mechanism
+analysis to the thermal crossover and to larger systems where a genuine
+scaling question becomes accessible.
 
 # Supplementary — restricted-domain history and additional brackets
 
@@ -595,6 +700,32 @@ $\lambda=0.2$; Adam lr $10^{-2}$; seeds $20260813$ (D-series) /
 $20260812$ (D1-series); steps 200 ($N=3$), 100 ($N\ge4$); seeds 6 ($N=3$),
 4 ($N=4,5$ subspace), 2 ($N=5$ full closure). All scripts, JSON outputs,
 and commits are listed in the Phase D Validation Report §9.
+
+**Supplementary Table S1 — Phase E sensitivity and uncertainty.** Fitted
+coefficients $\Delta\Phi_0,\Delta\Phi_1,\Delta\Phi_2$ (with least-squares
+uncertainties), the first-order prediction $\tau_c^{(1)}$ (with propagated
+uncertainty), the quadratic prediction $\tau_c^{(2)}$, the measured
+$\tau_c$, the spread of $\tau_c^{(1)}$ over alternative representatives
+$F_B$, and the local $\tau$-grid spacing at the crossing. Full data:
+`analysis_output/e1_sensitivity.json`.
+
+| System | $\Delta\Phi_0$ | $\Delta\Phi_1$ | $\Delta\Phi_2$ | $\tau_c^{(1)}\pm$ | $\tau_c^{(2)}$ | meas | rep. spread | grid |
+|---|---|---|---|---|---|---|---|---|
+| $N=3,\ 2\|1$ | −0.0260 | +1.5267 | −4.752 | 0.0170 ± 0.0000 | 0.0180 | 0.0180 | 0.0154 | 0.002 |
+| $N=4,\ 2\|2$ | −0.0099 | +0.5271 | −2.274 | 0.0188 ± 0.0000 | 0.0206 | 0.0206 | 0.022–0.026 | 0.010 |
+| $N=4,\ 1\|3$ | −0.0339 | +1.6393 | −5.432 | 0.0207 ± 0.0000 | 0.0224 | 0.0224 | 0.021–0.021 | 0.010 |
+| $N=5,\ 2\|3$ | −0.0219 | +1.1327 | −5.577 | 0.0193 ± 0.0000 | 0.0216 | 0.0217 | 0.0192 | 0.010 |
+
+**Supplementary Table S2 — D3 full fine grid (Haar, $N=3$).** The complete
+$\Delta\Phi(\tau)$ curve used for the crossing interpolation in §6
+(19 points; the main text shows selected points). Values are
+objective-level at the fixed representatives (deterministic).
+
+| $\tau$ | 0.003 | 0.004 | 0.005 | 0.006 | 0.007 | 0.008 | 0.009 | 0.010 | 0.012 | 0.014 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| $\Delta\Phi$ | −0.0214 | −0.0199 | −0.0185 | −0.0170 | −0.0155 | −0.0141 | −0.0126 | −0.0112 | −0.0083 | −0.0055 |
+| $\tau$ | 0.016 | 0.018 | 0.020 | 0.025 | 0.030 | 0.040 | 0.050 | 0.070 | 0.100 | |
+| $\Delta\Phi$ | −0.0028 | −0.0000 | +0.0027 | +0.0092 | +0.0155 | +0.0275 | +0.0385 | +0.0576 | +0.0794 | |
 
 # Data and code availability
 
