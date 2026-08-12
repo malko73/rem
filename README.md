@@ -106,8 +106,8 @@ The test suite is the fast integrity check. Full or partial numerical reproducti
 
 | Record | DOI | Role |
 |---|---|---|
-| **REM Structural Selection — paper v1.0** | [10.5281/zenodo.21900701](https://zenodo.org/records/21900701) | Current preprint: *Well-Posed Structural Selection and Finite-Time Crossovers in Variational Tensor-Product Factorization* |
-| REM_lambda v5 | [10.5281/zenodo.21880505](https://zenodo.org/records/21880505) | Earlier reference-code/manuscript record; repository-level `CITATION.cff` currently points here |
+| **REM Structural Selection — paper v1.0** | [10.5281/zenodo.21900701](https://zenodo.org/records/21900701) | Current preprint and repository `preferred-citation` |
+| REM_lambda v5 | [10.5281/zenodo.21880505](https://zenodo.org/records/21880505) | Earlier reference-code/manuscript and software/reproducibility record; retained as a separate identifier in `CITATION.cff` |
 | REM_lambda v4 | [10.5281/zenodo.21427776](https://zenodo.org/records/21427776) | Previous numerical record; see [CHANGELOG](CHANGELOG.md) before citing its numerical claims |
 | REM1 reproducibility package | [10.5281/zenodo.19642303](https://zenodo.org/records/19642303) | Earlier research record |
 
@@ -119,4 +119,4 @@ Files under `papers/reviews/` are **internal AI-assisted review and revision art
 
 ## Citation
 
-For the current structural-selection preprint, cite DOI **10.5281/zenodo.21900701**. The repository-level [CITATION.cff](CITATION.cff) presently identifies the REM_lambda v5 reproducibility record (DOI **10.5281/zenodo.21880505**); the two records therefore serve different citation targets.
+For the current structural-selection results, cite DOI **10.5281/zenodo.21900701**. The repository-level [CITATION.cff](CITATION.cff) uses this preprint as its `preferred-citation`, while retaining DOI **10.5281/zenodo.21880505** as the separate REM_lambda v5 software/reproducibility record.
