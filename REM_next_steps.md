@@ -470,7 +470,20 @@ Spec v2.0 の C_dyn^(0) と C_dyn^(τ) を「同じものの近似」と考え�
 - tools/gen_paper.py（再現可能 .tex 生成、--check でドリフト検出）+ latex.yml に論文ビルドステップとドリフトゲート追加
 - 10セクション順序・公式値の機械検証済み。suite 74 passed + 1 xfailed
 
-**工程**: ~~v0.1本文~~ → **図表固定** → 数式・数値QC → 独立査読 → v1.0 → Zenodo。新しい実験は追加しない。
+**工程**: ~~v0.1本文~~ → ~~図表固定~~ → **数式・数値QC** → 独立査読 → v1.0 → Zenodo。新しい実験は追加しない。
+
+### 図表固定（✅ 2026-08-12 実施・commit 62c8d8a）
+
+**Figure 1–4 + Supplementary S1 を JSON から再生成**（tools/gen_figures.py、PDF+PNG 300dpi、白黒セーフ: marker shape/line style で識別）:
+- **Fig 1**（Claim 1/D2.1）: Φ vs log₁₀C_F²(0) 散布（blow-up）。corr=−0.999、Φ=25.7、C_F²→4e-4、p_max=0.9998
+- **Fig 2**（Claim 4a/D3・最重要）: ΔΦ(τ) crossing、τ_c=0.0180 に縦線、ゼロ線、inset で seed 値フリップ（0→6 @ τ=0.018–0.02）
+- **Fig 3**（Claim 4b/D4）: τ_c(N) フラットトレンド（0.0180/0.0206/0.0224/0.0217、点プロット）。caption に "finite-size persistence, not a thermodynamic scaling law" 明記
+- **Fig 4**（Claim 4c/E1・最重要）: 案A（measured vs predicted、y=x 対角線、一次=□/二次=●）。一次 5.1–10.9%、二次 0.0–0.5% が対角線に乗る
+- **Fig S1**（Supplementary）: N=5 subspace 0.0173 vs full 0.0217（制限探索履歴。**本文図には混ぜない**）
+
+**QC 実施**: QC-A（本文・caption・表・JSON 完全一致、unicode マイナス考慮）**全 PASS** / QC-B（J_dyn^(0)・J_dyn^(τ) の factor-of-2・τ_c^(1) 符号・ΔΦ₂ 展開を確認）**OK** / QC-C（用語統一: conjecture→hypothesis、"Liouvillian-gap hypothesis is rejected"、ΔΦ₂ 明示）**OK**。
+
+**1件の記録修正（QC-A 由来）**: D2.1 の「Φ→44 / 6e-5 / −222」は保存されていない sweep 由来の値だったため、**保存済み 30-trial JSON の実値（Φ=25.7 / C_F²=6e-4 / Γ=−129 / p_max=0.9998）に本文・caption を統一**（text=caption=JSON 原則）。
 
 ### D2.1（✅ 2026-08-12 実施・commit 0ad8840）: Haar Singularity Audit — **D2.1-A 確定**
 
