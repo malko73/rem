@@ -446,6 +446,21 @@ Spec v2.0 の C_dyn^(0) と C_dyn^(τ) を「同じものの近似」と考え�
 
 **次フェーズ Phase E — Mechanism**: τ_c ≈ −ΔΦ₀/ΔΦ₁ の解析的近似を N=3,4,5 の τ_c（0.0180/0.0206/0.0224/0.0217 full）で検証 → structural crossover timescale の理論的導出へ。**順序**: ~~N=5 full quotient~~（✅ 完了 0.0217）→ 論文化・Zenodo 更新 → Phase E。
 
+### Phase E（✅ 2026-08-12 実施・commit 08beebb）: τ_c Mechanism — **τ_c ≈ −ΔΦ₀/ΔΦ₁ が一次近似で 5–11%、二次補正で 0–0.5% の精度で再現 / 全ゲート PASS**
+
+**問い**: なぜ τ_c ≈ 0.02 か。有限時間展開 J_τ(F) = J₀(F) + τJ₁(F) + O(τ²) から ΔΦ(τ) ≈ ΔΦ₀ + τΔΦ₁、leading-order 予測 **τ_c^(1) = −ΔΦ₀/ΔΦ₁**。4系の固定 (F_A,F_B)（D3/D4 確定値、N=5 は full quotient 0.0217）で ΔΦ₀ と ΔΦ₁ を独立計算（数値 small-τ スロープ + 解析的 J₁ = −C''(0)/4、固定 Schmidt basis）。
+
+| 系 | ΔΦ₀ | ΔΦ₁ (数値/解析) | **τ_c^(1)** | **τ_c^(2)** | 実測 τ_c | 一次誤差 | 二次誤差 |
+|---|---|---|---|---|---|---|---|
+| N=3, 2\|1 | −0.0260 | +1.521/+1.526 | 0.0171 | 0.018 | 0.0180 | 5.1% | 0.1% |
+| N=4, 2\|2 | −0.0099 | +0.526/+0.528 | 0.0188 | 0.0206 | 0.0206 | 8.6% | 0.0% |
+| N=4, 1\|3 | −0.0339 | +1.633/+1.639 | 0.0208 | 0.0224 | 0.0224 | 7.2% | 0.2% |
+| N=5, 2\|3 full | −0.0219 | +1.130/+1.136 | 0.0193 | 0.0216 | 0.0217 | 10.9% | 0.5% |
+
+**全ゲート PASS**: E1（J_τ = J₀+τJ₁+O(τ²) 数値成立、dev ≤ 2.4e-5 @τ=1e-3、解析 J₁ と一致）✓ / E2（符号構造 ΔΦ₀<0<ΔΦ₁ を4系全てで確認）✓ / E3（τ_c^(1) が実測を 5–11% で再現、≤20% 許容内）✓ / E4（予測フラット性 spread 0.195 ≒ 実測 0.213 — サイズ非依存の τ_c は −ΔΦ₀/ΔΦ₁ のフラット性で説明）✓ / E5（二次補正で系統的改善: 平均誤差 7.96% → **0.21%**、τ_c^(2) = 0.018/0.0206/0.0224/0.0216）✓ / E6（inter-basin competition 誤差 5–11% ≪ Liouvillian gap 誤差 83–136× — τ_c ≈ 0.02 は global relaxation time ではなく competing basins 間の objective balance で決まる）✓
+
+**成果**: **クロスオーバータイムスケールは導出量になった**（τ_c ≈ −ΔΦ₀/ΔΦ₁、単なる数値観測ではない）。論文 Claim 4 は「finite-time TPS crossover exists, persists with system size, and its characteristic scale is explained by competition between structural basins」に昇格。Phase D Report に §10 Addendum として反映済み。**次は論文ドラフト → Zenodo 更新**。
+
 ### D2.1（✅ 2026-08-12 実施・commit 0ad8840）: Haar Singularity Audit — **D2.1-A 確定**
 
 **C_Γ^(0) の正規化は unrestricted TPS optimization 上で特異**（重要な反証結果）:

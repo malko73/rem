@@ -349,7 +349,51 @@ Spec (theory specification ≠ post-hoc numerical evidence).
 
 ---
 
-## 10. Phase E outlook — τ_c mechanism
+## 10. Phase E addendum — τ_c mechanism (2026-08-12, commit `08beebb`)
+
+**Question**: why is τ_c ≈ 0.02? With the finite-time expansion
+J_τ(F) = J₀(F) + τJ₁(F) + O(τ²) and ΔΦ(τ) = ΔΦ₀ + τΔΦ₁, the leading-order
+prediction is **τ_c^(1) = −ΔΦ₀/ΔΦ₁**.
+
+**Method** (script `analysis/e1_tauc_mechanism.py`): for each of the four
+systems, fix the D3/D4-confirmed reps (F_A, F_B) and compute ΔΦ₀ =
+Φ₀(F_B) − Φ₀(F_A) and ΔΦ₁ = d/dτ ΔΦ(τ)|₀ independently (numerical small-τ
+slope AND analytic J₁ = −C''(0)/4 with the fixed Schmidt basis). N=5 uses
+the full-quotient official value.
+
+| System | ΔΦ₀ | ΔΦ₁ (num / ana) | **τ_c^(1)** | **τ_c^(2)** | measured τ_c | err(1st) | err(2nd) |
+|---|---|---|---|---|---|---|---|
+| N=3, 2\|1 | −0.0260 | +1.521 / +1.526 | 0.0171 | 0.018 | 0.0180 | 5.1% | 0.1% |
+| N=4, 2\|2 | −0.0099 | +0.526 / +0.528 | 0.0188 | 0.0206 | 0.0206 | 8.6% | 0.0% |
+| N=4, 1\|3 | −0.0339 | +1.633 / +1.639 | 0.0208 | 0.0224 | 0.0224 | 7.2% | 0.2% |
+| N=5, 2\|3 full | −0.0219 | +1.130 / +1.136 | 0.0193 | 0.0216 | 0.0217 | 10.9% | 0.5% |
+
+**All Phase E gates PASS**:
+- **E1**: J_τ = J₀ + τJ₁ + O(τ²) holds numerically (dev ≤ 2.4×10⁻⁵ at
+  τ=10⁻³); the analytic J₁ = −C''(0)/4 (fixed Schmidt basis) matches the
+  numerical slope in all 4 cases.
+- **E2**: crossover-generating sign structure **ΔΦ₀ < 0 < ΔΦ₁** in all 4 —
+  F_A is instantaneously better, F_B's advantage grows with τ.
+- **E3**: **τ_c^(1) within 5.1–10.9% of the measured τ_c** (≤20% tolerance).
+- **E4**: predicted flatness (spread 0.195) matches the measured flat trend
+  (0.213) — the size-independent τ_c is explained by the size-independent
+  ratio −ΔΦ₀/ΔΦ₁.
+- **E5**: the quadratic term improves systematically: mean relative error
+  drops from 7.96% (first order) to **0.21%** (quadratic); τ_c^(2) =
+  0.018/0.0206/0.0224/0.0216 (err 0.0–0.5%).
+- **E6**: inter-basin objective competition (5–11% error) dominates the
+  Liouvillian gap timescale (83–136× off) — **the τ_c ≈ 0.02 scale is set by
+  the objective balance between competing basins, not by the global
+  relaxation time.**
+
+**Outcome**: the crossover timescale is now a **derived quantity**
+(τ_c ≈ −ΔΦ₀/ΔΦ₁), not a numerical observation. Paper claim 4 upgrades to:
+*finite-time TPS crossover exists, persists with system size, and its
+characteristic scale is explained by competition between structural basins.*
+
+---
+
+## 11. Phase E outlook (original) — τ_c mechanism
 
 The natural next phase: **why does τ_c ≈ 0.02?** With the finite-time
 expansion J_τ(F) = J₀(F) + τJ₁(F) + O(τ²), two basins A,B give
@@ -362,3 +406,6 @@ which can be tested against τ_c(3..5) = 0.0180, 0.0206, 0.0224, 0.0173. If
 the formula reproduces the trend, the crossover timescale becomes a derived
 quantity rather than a numerical observation. This is the priority for the
 next research cycle (after paper submission / Zenodo update).
+
+**[RESOLVED 2026-08-12 — see §10]: the formula reproduces the trend
+(τ_c^(1) within 5–11%, τ_c^(2) within 0–0.5%).**
