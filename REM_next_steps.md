@@ -387,6 +387,22 @@ Haar 30 seeds: best **1.8595** / median 1.8582 / std **0.0077**（D2.1: 25.71 / 
 
 **次の一手（マスター承認順）**: **Spec v2.2**（J_dyn^(0) を canonical として書き起こし）→ **D1/D2 再確認**（新 canonical での再検証）→ **D3 Timescale** → **D4 N-scaling**。
 
+### Spec v2.2（✅ 2026-08-12 凍結・commit acecb86）
+
+`REM_spec_v2_2.md` + `papers/REM_spec_v2_2.tex`（`tools/gen_spec.py` で再現生成、CI latex gate ビルド成功）。
+
+- **canonical**: J_dyn^(0)(F;ρ,L) = −Re⟨Q_Fρ, Q_FL(ρ)⟩（分母なし・符号付き。「cost」とは呼ばない。正式名: instantaneous dynamical rate functional (signed)）
+- **canonical objective**: Φ(F;λ) = I_ρ(F) − λ·J_dyn^(0)、[J]=T⁻¹, [λ]=T
+- **Γ_F 格下げ**: fixed-(F) local diagnostic only; prohibited as unrestricted global TPS variational objective（D2.1 反証を v2.1 破棄の根拠として明記）
+- **finite-time**: J_dyn^(τ) = −[C_F²(τ)−C_F²(0)]/(2τ) を operational extension / consistency diagnostic として分離。lim_{τ→0} J_dyn^(τ) = J_dyn^(0) を主要整合条件に
+- **finite-τ TPS crossover を許容**: Haar の basin switch（τ≥1e-2）を genuine structural crossover として記録 → **D3 は τ-crossover 解析に昇格**
+- **G7 の記録**: 「PASS with documented finite-τ crossover」（完全 PASS とはしない）
+- v2.1 からの変更点（factor-of-2 revert、log-ratio → difference-ratio）を明記
+
+**付随修正（commit cfd7db1）**: ルート `conftest.py` 追加 — 素の `pytest tests/` が src/analysis を import できず CI が失敗していた問題を根本原因修正。CI（3.12/3.13）＋ latex-build ともに green。
+
+**次の一手（マスター承認順）**: **D1 再検証**（5 Hamiltonian families を J_dyn^(0) で再実行）→ **D2 再検証**（4状態を J_dyn^(0) で再実行）→ **D3 Timescale**（τ_c の特定: Haar の basin switch は 3e-3〜1e-2 の間）→ **D4 N-scaling**。
+
 **Phase D 完了条件**: Gate 4（λから未知条件でF\*予測）＋ Gate 5（別ハミルトニアン・混合状態でも同一原理）。
 
 ---
