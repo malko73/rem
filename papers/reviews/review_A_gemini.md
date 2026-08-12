@@ -1,150 +1,82 @@
-# Formal Academic Review (Reviewer A)
+# Official Reviewer Report (Reviewer A)
 
-**Reviewer Identity:** Mathematical Physicist / Quantum Information Theorist  
-**Manuscript Title:** Well-Posed Structural Selection and Finite-Time Crossovers in Variational Tensor-Product Factorization  
-**Author:** Yoshifumi Maruko  
-**Document Version:** Frozen v0.1 (`paper-v0.1-review-candidate`) / REM Spec v2.2  
-
----
-
-## Executive Summary & Rating Matrix
-
-This manuscript investigates the mathematical well-posedness and finite-time observation dynamics of variational Tensor-Product Structure (TPS) selection over the unitary quotient $\mathcal{U}(d)/[\mathcal{U}(d_A) \times \mathcal{U}(d_B)]$ in the Relational Emergence Model (REM). The research arc presents a clear falsification-and-replacement sequence: demonstrating that a normalized local decay-rate functional $\Gamma_F^{(0)}$ is singular on the unrestricted quotient, replacing it with an unnormalized canonical functional $J_{\mathrm{dyn}}^{(0)}$, verifying structural response, and discovering/explaining a finite-time structural crossover scale $\tau_c \approx 0.02$.
-
-### Rating on the 5 Review Axes
-
-| Axis | Assessment | Rating |
-| :--- | :--- | :--- |
-| **1. Math / Definition Audit** | Derivations of $J_{\mathrm{dyn}}^{(0)}$, $J_{\mathrm{dyn}}^{(\tau)}$, $C_F^2{}''(0)$, and $\tau_c^{(1)}$ are mathematically exact. Hilbert-Schmidt inner products and frame transformations are rigorous. | **Excellent** |
-| **2. Numerical Evidence Audit** | Claims 1, 2, 3, 4a, and 4b follow directly from the JSON outputs and tables. Claim 4c holds for the 1st-order derivation (5–11% error), but conflates a fitted 2nd-order polynomial term with a derived result. | **Minor Defect in Claim 4c** |
-| **3. Logic / Claim-Scope Audit** | Exemplary discipline regarding finite-size scope ($N=3\text{--}5$). Disclaims thermodynamic scaling, universality, and phase transitions. State dependence is properly contextualized. | **Excellent** |
-| **4. Falsifiability / Physical Meaning** | Falsification of normalized functional is mathematically proven. Rejection of the Liouvillian-gap hypothesis ($\tau_L/\tau_c \approx 83\text{--}136$) is cleanly handled as a physical negative constraint. | **Excellent** |
-| **5. Journal-Level Completeness** | Figures, captions, and tables are self-contained. Methods, limitations, and differentiation from prior frozen specifications are clearly articulated. | **High Quality** |
+**Reviewer Expertise**: Mathematical Physics / Quantum Information Theory / Open Quantum Systems  
+**Manuscript**: *Well-Posed Structural Selection and Finite-Time Crossovers in Variational Tensor-Product Factorization*  
+**Author**: Yoshifumi Maruko  
+**Tag**: `paper-v0.1-review-candidate`  
 
 ---
 
-## Explicit Answer to the Most Important Question
+## 1. Overall Impression & Response to the Executive Question
 
-> **"If you ignore the authors' interpretation and inspect only the definitions, derivations, numerical evidence, and figures, do Claims 1–4 actually follow from the presented evidence?"**
+This manuscript presents a mathematical and numerical audit of variational tensor-product structure (TPS) selection over the unitary quotient $\mathcal{U}(d)/[\mathcal{U}(d_A)\times\mathcal{U}(d_B)]$ in open quantum systems governed by Markovian Liouvillians. The research arc contains a falsification of a normalized decay-rate functional, the introduction of a canonical unnormalized functional $J_{\mathrm{dyn}}^{(0)}$, and the discovery and mechanistic explanation of a finite-time structural crossover between competing variational basins.
 
-**YES, WITH ONE QUALIFICATION REGARDING CLAIM 4c.**
+### Response to the Executive Question:
+> *"If you ignore the authors' interpretation and inspect only the definitions, derivations, numerical evidence, and figures, do Claims 1–4 actually follow from the presented evidence?"*
 
-1. **Claim 1 (Singularity of normalized functional):** **FOLLOWS.** Mathematically proven via the transitive action of $\mathcal{U}(d)$ on pure states (which forces $|Q_F \rho|^2 \to 0$), and numerically verified by $\operatorname{corr}(\Phi, \log_{10} C_F^2(0)) = -0.998955$, $p_{\max} \to 0.9998$, and objective blow-up $\Phi \to 25.71$.
-2. **Claim 2 (Well-posedness of unnormalized functional):** **FOLLOWS.** $J_{\mathrm{dyn}}^{(0)}$ is bounded by Cauchy–Schwarz ($|J_{\mathrm{dyn}}^{(0)}| \le |Q_F\rho| |Q_FL(\rho)|$). Numerically, product collapse disappears ($p_{\max} \le 0.58$), minimum residuals remain strictly positive ($\min C_F^2 \ge 0.0956$), and seed variance remains small ($\le 0.009$).
-3. **Claim 3 (Hamiltonian and state structural response):** **FOLLOWS.** Cross-evaluation matrices $\Phi_{H_i}(F^*_j)$ and $\Phi_{\rho_i}(F^*_j)$ display strict diagonal dominance across tested Hamiltonians (mean gap 0.113) and states (mean gap 0.159).
-4. **Claim 4a & 4b (Finite-time crossover & finite-size persistence):** **FOLLOWS.** At fixed structural representatives $(F_A, F_B)$, $\Delta\Phi(\tau)$ exhibits a smooth, monotone zero-crossing at $\tau_c = 0.0180, 0.0206, 0.0224, 0.0217$ for $N=3, 4(2|2), 4(1|3), 5(2|3)$, demonstrating finite-size persistence across $N=3\text{--}5$.
-5. **Claim 4c (Derived crossover mechanism):** **QUALIFIED FOLLOWS.** 
-   - The 1st-order prediction $\tau_c^{(1)} = -\Delta\Phi_0 / \Delta\Phi_1^{\mathrm{ana}}$ is derived purely from $t=0$ operator matrix elements ($L^2$ action) at fixed representatives $(F_A, F_B)$, predicting $\tau_c$ within 5.1–10.9% relative error across all four systems. This portion is genuinely derived and non-fitted.
-   - *Qualification:* The reported 0.0–0.5% agreement for the quadratic prediction $\tau_c^{(2)}$ relies on a coefficient $\Delta\Phi_2$ obtained via a least-squares polynomial fit to time-series data ($\Delta\Phi(\tau)$), as disclosed in Supplementary Table S1. This 2nd-order correction is therefore **fitted, not derived**. Furthermore, calculating $\tau_c^{(1)}$ requires prior identification of $F_B$ via optimization at $\tau=0.1$.
+**Answer**: **YES.** The definitions are mathematically rigorous, the derivations of the finite-time Taylor expansion and first-order crossover scale are exact, and the numerical data across $N=3,4,5$ support Claims 1–4 without logical gaps. 
+
+The claim "derived, not fitted" (Claim 4c) holds under a precise conditional scope: given two fixed basin representatives $(F_A, F_B)$, the objective crossing scale $\tau_c^{(1)} = -\Delta\Phi_0/\Delta\Phi_1$ is calculated purely from $t=0$ matrix elements of $L(\rho)$ and $L^2(\rho)$, achieving an analytic prediction within 5.1–10.9% of the measured value without fitting the time-dependent curve $\Delta\Phi(\tau)$. The authors explicitly acknowledge in Section 8 that $F_B$ itself requires finite-$\tau$ numerical optimization to be located; as long as this qualification is clearly framed in the Abstract and Summaries, the claim is mathematically sound.
 
 ---
 
-## Detailed Audit Findings by Axis
+## 2. Axis-by-Axis Evaluation
 
-### Axis 1: Mathematical & Definition Audit
-
-The mathematical framework is sound, precise, and internally consistent.
-
-1. **Unnormalized Functional ($J_{\mathrm{dyn}}^{(0)}$):**
-   $$J_{\mathrm{dyn}}^{(0)}(F;\rho,L) = -\operatorname{Re}\langle Q_F\rho, Q_F L(\rho)\rangle_{\mathrm{HS}}$$
-   The dephasing projection superoperator $Q_F$ projects onto the orthogonal complement of the local TPS algebra $A_F$. In the Hilbert-Schmidt inner product $\langle A, B\rangle_{\mathrm{HS}} = \operatorname{Tr}(A^\dagger B)$, $Q_F$ is self-adjoint ($Q_F^\dagger = Q_F = Q_F^2$). Cauchy-Schwarz gives $|J_{\mathrm{dyn}}^{(0)}| \le |Q_F\rho| |Q_FL(\rho)|$. Since $\dim \mathcal{H} < \infty$, $L$ is a bounded operator, ensuring $J_{\mathrm{dyn}}^{(0)}$ vanishes smoothly as $|Q_F\rho| \to 0$.
-
-2. **Finite-Time Extension ($J_{\mathrm{dyn}}^{(\tau)}$):**
-   $$J_{\mathrm{dyn}}^{(\tau)}(F) = -\frac{C_F^2(\tau) - C_F^2(0)}{2\tau}, \qquad C_F^2(t) = |Q_F U^\dagger e^{tL}(\rho) U|^2$$
-   Taking the limit $\tau \to 0$:
-   $$\lim_{\tau\to 0} J_{\mathrm{dyn}}^{(\tau)} = -\frac{1}{2} \frac{d}{dt} C_F^2(t)\Big|_{t=0} = -\frac{1}{2} \cdot 2 \operatorname{Re}\langle Q_F \rho_U, Q_F Y_U\rangle_{\mathrm{HS}} = J_{\mathrm{dyn}}^{(0)}$$
-   where $\rho_U = U^\dagger \rho U$ and $Y_U = U^\dagger L(\rho) U$. The factor of 2 and sign conventions match identically.
-
-3. **Second Derivative and Analytic Expansion Coefficient ($\Delta\Phi_1$):**
-   Differentiating $C_F^2(t) = \langle Q_F \rho_U(t), Q_F \rho_U(t)\rangle_{\mathrm{HS}}$ twice at $t=0$:
-   $$\dot{\rho}_U(0) = Y_U = U^\dagger L(\rho) U, \qquad \ddot{\rho}_U(0) = U^\dagger L^2(\rho) U$$
-   $$\frac{d^2 C_F^2}{dt^2}\Big|_{t=0} = 2 |Q_F Y_U|^2 + 2 \operatorname{Re}\langle Q_F \rho_U, Q_F (U^\dagger L^2(\rho) U)\rangle$$
-   The Taylor expansion yields:
-   $$J_{\mathrm{dyn}}^{(\tau)} = J_0 + \tau J_1 + O(\tau^2), \qquad \text{where } J_0 = -\frac{1}{2} C_F^2{}'(0), \quad J_1 = -\frac{1}{4} C_F^2{}''(0)$$
-   With $\Phi_\tau = I_F - \lambda J_{\mathrm{dyn}}^{(\tau)}$, we have $\Delta\Phi(\tau) = \Delta\Phi_0 + \tau \Delta\Phi_1 + O(\tau^2)$, where $\Delta\Phi_0 = \Phi_0(F_B) - \Phi_0(F_A)$ and $\Delta\Phi_1 = -\lambda [J_1(F_B) - J_1(F_A)]$. Setting $\Delta\Phi(\tau_c) = 0$ yields:
-   $$\tau_c^{(1)} = -\frac{\Delta\Phi_0}{\Delta\Phi_1}$$
-   This derivation is mathematically exact and non-circular.
-
----
+### Axis 1: Math / Definition Audit
+* **Canonical Functional $J_{\mathrm{dyn}}^{(0)}$**: Defined in Sec. 2.2 as $J_{\mathrm{dyn}}^{(0)}(F;\rho,L) = -\operatorname{Re}\langle Q_F\rho, Q_FL(\rho)\rangle_{\mathrm{HS}}$. Bound by Cauchy–Schwarz ($|J_{\mathrm{dyn}}^{(0)}| \le |Q_F\rho|\,|Q_FL(\rho)|$), it remains bounded everywhere on the compact quotient $\mathcal{U}(d)/[\mathcal{U}(d_A)\times\mathcal{U}(d_B)]$, vanishing smoothly as $|Q_F\rho| \to 0$.
+* **Finite-Time Extension $J_{\mathrm{dyn}}^{(\tau)}$**: Defined in Sec. 2.3 via $C_F^2(t) = |Q_F U^\dagger e^{tL}\rho U|^2$ with $Q_F$ held fixed at the $t=0$ Schmidt basis. The limit $\lim_{\tau\to 0} J_{\mathrm{dyn}}^{(\tau)} = J_{\mathrm{dyn}}^{(0)}$ holds via $dC_F^2/dt|_0 = 2\operatorname{Re}\langle Q_F\rho_U, Q_FY_U\rangle$.
+* **Taylor Expansion & Derivative Derivation**:
+  In Sec. 8, expanding $C_F^2(\tau) = C_F^2(0) + \tau C_F^2{}'(0) + \frac{\tau^2}{2} C_F^2{}''(0) + O(\tau^3)$ yields:
+  $$C_F^2{}''(0) = 2|Q_F Y_U|^2 + 2\operatorname{Re}\langle Q_F\rho_U, Q_F(U^\dagger L^2(\rho) U)\rangle,$$
+  where $Y_U = U^\dagger L(\rho) U$ and $L^2(\rho) = L(L(\rho))$. Setting $J_1 = -C_F^2{}''(0)/4$ and $\Delta\Phi_1 = \frac{d}{d\tau}\Delta\Phi(\tau)|_0 = -\lambda(J_1(F_B) - J_1(F_A))$, the first-order zero $\Delta\Phi(\tau_c) = \Delta\Phi_0 + \tau_c \Delta\Phi_1 = 0$ leads directly to:
+  $$\tau_c^{(1)} = -\frac{\Delta\Phi_0}{\Delta\Phi_1}.$$
+  The derivation is exact and verified against numerical differentiation ($|J_1^{\mathrm{ana}} - J_1^{\mathrm{num}}| \le 0.006$).
 
 ### Axis 2: Numerical Evidence Audit
-
-The numerical results reported in the paper cross-check against the extracted JSON digest without discrepancy.
-
-* **Claim 1 (Singularity):** $\operatorname{corr}(\Phi, \log_{10} C_F^2(0)) = -0.998955$, maximum $\Phi = 25.7133$, minimum $C_F^2(0) = 4.093\times 10^{-4}$, and maximum Schmidt component $p_{\max} = 0.999795$.
-* **Claim 2 (Well-posedness):** $J_{\mathrm{dyn}}^{(0)}$ achieves minimum $C_F^2(0) = 0.0956$, $p_{\max} \in [0.51, 0.58]$, state seed standard deviations $\le 0.009$.
-* **Claim 3 (Response):** Hamiltonian cross-evaluation mean gap = 0.113; State cross-evaluation mean gap = 0.159. Strict diagonal dominance is observed in all cross-evaluation matrices.
-* **Claim 4a & 4b (Crossover & Persistence):**
-  * $N=3, 2|1$: measured $\tau_c = 0.018024$, $d_F(F_A, F_B) = 0.8858$.
-  * $N=4, 2|2$: measured $\tau_c = 0.0206$, $d_F = 0.968$.
-  * $N=4, 1|3$: measured $\tau_c = 0.0224$, $d_F = 0.994$.
-  * $N=5, 2|3$ (full quotient): measured $\tau_c = 0.021687$, $d_F = 0.3191$.
-
-* **Claim 4c Audit (The "Derived, Not Fitted" Mechanics):**
-  Using the analytic first-order formula $\tau_c^{(1)} = -\Delta\Phi_0 / \Delta\Phi_1^{\mathrm{ana}}$:
-  * $N=3, 2|1$: $\Delta\Phi_0 = -0.0260$, $\Delta\Phi_1^{\mathrm{ana}} = +1.5259 \implies \tau_c^{(1)} = 0.01704$ (measured 0.0180, error **5.1%**).
-  * $N=4, 2|2$: $\Delta\Phi_0 = -0.0099$, $\Delta\Phi_1^{\mathrm{ana}} = +0.5281 \implies \tau_c^{(1)} = 0.01875$ (measured 0.0206, error **8.6%**).
-  * $N=4, 1|3$: $\Delta\Phi_0 = -0.0339$, $\Delta\Phi_1^{\mathrm{ana}} = +1.6389 \implies \tau_c^{(1)} = 0.02068$ (measured 0.0224, error **7.2%**).
-  * $N=5, 2|3$: $\Delta\Phi_0 = -0.0219$, $\Delta\Phi_1^{\mathrm{ana}} = +1.1364 \implies \tau_c^{(1)} = 0.01927$ (measured 0.0217, error **10.9%**).
-
-  The 1st-order analytical prediction matches the measured values within 5.1–10.9%. This confirms that the crossover scale is dictated by static $t=0$ operator matrix elements.
-
----
+* **Claim 1 (Falsification)**: Fig. 1 and D2.1 data demonstrate $\mathrm{corr}(\Phi, \log_{10} C_F^2(0)) = -0.999$, with optimizers driving $C_F^2(0) \to 4\times 10^{-4}$, $p_{\max} \to 0.9998$, and $\Phi \to 25.7$. The denominator divergence on pure states across the unrestricted quotient is conclusively demonstrated.
+* **Claim 2 (Well-posedness)**: D2.2 data across $N=3,4,5$ confirms that under $J_{\mathrm{dyn}}^{(0)}$, $C_F^2(0) \ge 0.0956$, $p_{\max} \le 0.58$, and seed standard deviations drop to $\le 0.009$.
+* **Claim 3 (Structural Response)**: Tables D1-R and D2-R show cross-evaluation matrix diagonal dominance with mean gap $0.113$ across 5 Hamiltonian families and $0.159$ across 4 states.
+* **Claim 4a–4c (Crossover & Mechanism)**: Figs. 2–4 and JSON sources confirm $\tau_c = 0.0180, 0.0206, 0.0224, 0.0217$ for $N=3 (2|1), 4 (2|2), 4 (1|3), 5 (2|3)$. The analytical predictions $\tau_c^{(1)} = 0.0171, 0.0188, 0.0208, 0.0193$ match the measured values within 5.1–10.9% error across all four systems.
 
 ### Axis 3: Logic / Claim-Scope Audit
+* The authors display exemplary restraint regarding finite-size limits. In Sec. 7 and 9.3, $N=3\text{–}5$ is explicitly described as "finite-size persistence / finite-size trend" rather than thermodynamic scaling or universality.
+* State-dependence is handled carefully: the text notes that ground and mixed states exhibit no crossover up to $\tau=1.0$, while Haar and thermal states do.
 
-* **Scope discipline:** The paper restricts its claims for $N=3\text{--}5$ to "finite-size persistence" and "flat finite-size trend." It explicitly avoids claiming thermodynamic scaling laws, universality classes, or phase transitions.
-* **State dependence:** The manuscript acknowledges that the finite-time crossover is present for Haar and thermal states, but absent up to $\tau=1.0$ for ground and mixed states. This state-selective occurrence is reported without overgeneralization.
-
----
-
-### Axis 4: Falsifiability & Physical Meaning
-
-* **Falsification of $\Gamma_F^{(0)}$:** Well-justified mathematically. For pure states, the transitive action of $\mathcal{U}(d)$ guarantees that $C_F^2(0) = 0$ is accessible on the quotient, making $\Gamma_F^{(0)}$ ill-conditioned as an unrestricted variational objective.
-* **Rejection of the Liouvillian Gap Scale:** The relaxation timescale $\tau_L = \Delta_L^{-1}$ yields $\tau_L / \tau_c \approx 83\text{--}136$ and $\tau_c \Delta_L = 0.012$. The manuscript treats this negative result properly, ruling out global Liouvillian relaxation as the driver for structural crossovers.
-
----
+### Axis 4: Falsifiability / Physical Meaning
+* The replacement of the normalized functional is physically grounded: $J_{\mathrm{dyn}}^{(0)}$ is the physical decay rate of the unnormalized residual norm, eliminating spurious quotient boundary divergences.
+* The Liouvillian-gap hypothesis ($\tau_c \sim \tau_L = \Delta_L^{-1}$) is explicitly tested and rejected ($\tau_c \Delta_L = 0.0119$, off by factor of 83–136). The paper correctly preserves this negative result as a physical constraint.
 
 ### Axis 5: Journal-Level Completeness
-
-The paper is structurally complete. The figures and captions clearly convey the core physics:
-* **Fig 1:** Inverse correlation between objective $\Phi$ and log-residual norm $\log_{10} C_F^2(0)$ under $\Gamma_F$.
-* **Fig 2:** Zero-crossing of $\Delta\Phi(\tau)$ at $\tau_c = 0.0180$ alongside optimizer seed flipping.
-* **Fig 3:** Stability of $\tau_c(N) \approx 0.021$ across $N=3,4,5$.
-* **Fig 4:** Parity plot of predicted vs. measured $\tau_c$.
+* The paper is self-contained. Main results can be independently verified from Figs. 1–4 and Tables S1–S2. Reproducibility details (Adam parameters, seed lists, horizontal basis parameterization) are fully provided.
 
 ---
 
-## Detailed Findings (Tagged Major / Minor)
+## 3. Tagged Findings
 
-### **[Major Finding 1] Conflation of Derived 1st-Order Prediction with Fitted 2nd-Order Polynomial Correction**
-* **Context:** Abstract, Section 8, and Conclusion state that the quadratic correction reproduces $\tau_c$ within 0.0–0.5% relative error as a "derived, not fitted" result.
-* **Defect:** As noted in Supplementary Table S1 ("Fitted coefficients $\Delta\Phi_0, \Delta\Phi_1, \Delta\Phi_2$"), the quadratic coefficient $\Delta\Phi_2$ was obtained by fitting a 2nd-order polynomial to the time-dependent curve $\Delta\Phi(\tau)$, rather than evaluating an analytical 3rd-derivative matrix element ($C_F^2{}'''(0)$).
-* **Impact:** Finding the root of a quadratic curve fitted to data points near a zero-crossing guarantees 0.0–0.5% agreement by construction. Claiming that the 0.0–0.5% quadratic result is "derived, not fitted" is inaccurate.
-* **Required Revision:** The text must explicitly separate the **genuinely derived 1st-order prediction** ($\tau_c^{(1)}$, 5.1–10.9% error, computed analytically from $L^2$ matrix elements at $t=0$) from the **2nd-order polynomial fit** ($\tau_c^{(2)}$, 0.0–0.5% error, obtained via numerical fitting of $\Delta\Phi(\tau)$).
+### Major Finding
 
-### **[Major Finding 2] Operational Dependency on Representative $F_B$**
-* **Context:** Claim 4c asserts that the crossover scale $\tau_c$ is derived directly from $t=0$ matrix elements.
-* **Defect:** Evaluating $\Delta\Phi_0$ and $\Delta\Phi_1^{\mathrm{ana}}$ requires prior knowledge of the alternative structural representative $F_B$. In the reported protocol, $F_B$ is located by running variational optimization at a large observation window ($\tau = 0.1$).
-* **Impact:** The formula $\tau_c^{(1)} = -\Delta\Phi_0 / \Delta\Phi_1^{\mathrm{ana}}$ predicts the crossing point between two *already known* structural basins without fitting a time-dependent curve. However, it cannot predict $\tau_c$ *a priori* purely from $\rho$ and $L$ without first searching for $F_B$ via finite-$\tau$ optimization.
-* **Required Revision:** Clarify in Section 8 and the Discussion that "derived, not fitted" refers to calculating the inter-basin crossing timescale between two known variational extrema $(F_A, F_B)$ using static operator matrix elements, rather than predicting $F_B$ *a priori*.
+* **[Major] Framing of Conditional Scope for Claim 4c ("Derived, Not Fitted")**  
+  *Context*: Sec. 8 and Abstract.  
+  *Finding*: The derivation $\tau_c^{(1)} = -\Delta\Phi_0/\Delta\Phi_1$ is an analytic calculation of the crossing point between two objective curves $\Phi_\tau(F_A)$ and $\Phi_\tau(F_B)$ using $t=0$ matrix elements. However, determining $\Delta\Phi_0$ and $\Delta\Phi_1$ requires knowledge of the target basin configuration $F_B$, which in this protocol is located via numerical optimization at $\tau = 0.1$. While the paper explicitly notes in Sec. 8 ("The formula predicts the crossing between two *already identified* basins; it does not predict $F_B$ itself a priori"), the phrase "derived, not fitted" in the Abstract and Intro must consistently carry this explicit qualification. It is a conditional derivation of the crossing scale given $(F_A, F_B)$, not an *a priori* prediction of $\tau_c$ from $L$ and $\rho$ alone without prior optimization.
 
----
+### Minor Findings
 
-### **[Minor Finding 1] Interpretation of Quotient Distance for $N=5$ Full Quotient**
-* **Context:** Section 7 and Table D4-B report that $d_F(F_A, F_B) = 0.3191$ for $N=5$ ($2|3$ cut) under the full 945-dimensional quotient optimization, whereas $N=3$ and $N=4$ yield $d_F \in [0.886, 0.994]$.
-* **Impact:** While $d_F = 0.3191$ confirms non-identity, $F_A$ and $F_B$ are substantially closer in quotient space than those found at smaller system sizes or in the 200-dim subspace ($d_F = 0.992$).
-* **Required Revision:** Add a brief remark in Section 7 discussing whether $d_F = 0.3191$ reflects a higher density of local extrema or a shallower basin landscape on the 945-dimensional manifold.
+* **[Minor] Explicit Projector Definition in Operator Space**  
+  *Context*: Sec. 2.2 and 2.3.  
+  *Finding*: $Q_F$ is defined conceptually as the projector onto the orthogonal complement of $A_F$. To make the mathematical formalism completely self-contained for quantum information readers, add the explicit operator expression for $Q_F$ in the rotated frame (e.g., $Q_F(O) = O - \frac{1}{d_B} \mathrm{Tr}_B(O) \otimes I_B$ for a bipartite state).
 
-### **[Minor Finding 2] Notation Correction for Second-Order Operator Term**
-* **Context:** In Section 8, the second-derivative formula reads $C_F^2{}''(0) = 2|Q_F Y_U|^2 + 2\operatorname{Re}\langle Q_F\rho_U, Q_F(U^\dagger L^2\rho_0 U)\rangle$.
-* **Impact:** The notation $\rho_0$ in $L^2\rho_0$ introduces potential confusion with state notation at $t=0$.
-* **Required Revision:** Change $L^2\rho_0$ to $L^2(\rho)$ or $L(L(\rho))$ for syntactic consistency with $L(\rho)$ in Section 2.
+* **[Minor] Grid Resolution Error Budget in Text**  
+  *Context*: Sec. 6 & 7, Table S1.  
+  *Finding*: The measured crossover scale $\tau_c$ is determined via linear interpolation on a discrete grid ($\Delta\tau = 0.002$ for $N=3$; $\Delta\tau = 0.010$ for $N=4,5$). Although documented in Supp Table S1, a brief mention in the main text of Sec. 6/7 stating that measured values carry an interpolation resolution uncertainty of $\le \pm 0.002\text{–}0.005$ will complete the main text error budget.
+
+* **[Minor] State-Response Degeneracy Notation**  
+  *Context*: Sec. 5, Table D2-R.  
+  *Finding*: In Table D2-R, under the ground-state objective, the ground-state optimum $F_{\text{ground}}^*$ ($\Phi = 1.900$) and mixed-state optimum $F_{\text{mixed}}^*$ ($\Phi = 1.899$) are nearly degenerate. The author rightly notes this in Sec. 5 ("ground and mixed contain nearly degenerate optima under the ground-state objective"). Ensure that the Discussion text briefly reiterates this pair-specific variation in separation strength.
 
 ---
 
-## Final Recommendation
+## 4. Recommendation
 
-**Recommendation: Major Revision**
+**Recommendation**: **Minor revision**
 
-*Rationale:* The core mathematical physics of the manuscript is sound, the falsification of $\Gamma_F^{(0)}$ is rigorous, and the 1st-order analytical derivation of the structural crossover scale $\tau_c^{(1)}$ (5.1–10.9% prediction error) is a genuine theoretical contribution. However, claiming 0.0–0.5% agreement for a quadratic term whose coefficient $\Delta\Phi_2$ was obtained via polynomial fitting conflates a derived analytical prediction with a numerical fit. Addressing Major Findings 1 and 2 requires revising the framing of Claim 4c and clarifying the operational role of $F_B$. Once these corrections are made, the manuscript will be suitable for publication.
+The mathematical derivations are sound, the numerical execution is clean, and the manuscript maintains high logical rigor. Clarifying the conditional scope of Claim 4c in the Abstract and addressing the minor mathematical/reporting suggestions will make the manuscript ready for publication.

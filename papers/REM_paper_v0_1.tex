@@ -220,7 +220,10 @@ rotated frame with \(\rho_U = U^\dagger \rho U\) and
 \(Y_U = U^\dagger L(\rho) U\):
 \(J_{\mathrm{dyn}}^{(0)} = -\operatorname{Re}\langle Q_F\rho_U,
 Q_FY_U\rangle_{\mathrm{HS}}\) (Sec. 2.3 and Sec. 8 use this frame
-explicitly). By Cauchy--Schwarz,
+explicitly). In the rotated frame the projector has the explicit form
+\(Q_F(O) = O - \frac{1}{d_B}\mathrm{Tr}_B(O)\otimes I_B\) (the dephasing
+projection onto the complement of the TPS algebra \(A_F\)). By
+Cauchy--Schwarz,
 
 \[|J_{\mathrm{dyn}}^{(0)}| \le |Q_F\rho|\,|Q_FL(\rho)|.\]
 
@@ -279,8 +282,9 @@ The pre-canonical candidate was the normalized local decay rate
 quotient, \(N=3\)), \(\Gamma_F^{(0)}\) is singular as a variational
 objective: the optimizer drives \(|Q_F\rho|^2 \to 0\), which sends
 \(\Gamma_F \to \pm\infty\) and \(\Phi \to +\infty\) along non-physical
-near-product directions. The mechanism is general for pure states (see
-below), and the numerical evidence demonstrates it in the tested
+near-product directions. The transitivity argument below shows the
+mechanism is available for pure states in general; the numerical
+evidence demonstrates that the optimizer exploits it in the tested
 setting.}
 
 \emph{Evidence (Haar states, full quotient, \(N=3\)).} The optimizer
@@ -334,8 +338,9 @@ dotted line marks the well-posed optimum \(\Phi \approx 1.86\) under
 \(J_{\mathrm{dyn}}^{(0)}\).}
 \end{figure}
 
-\section{4. Claim 2 --- the unnormalized functional is well-posed
-(D2.2)}\label{claim-2-the-unnormalized-functional-is-well-posed-d2.2}
+\section{4. Claim 2 --- the unnormalized functional removes the
+singularity
+(D2.2)}\label{claim-2-the-unnormalized-functional-removes-the-singularity-d2.2}
 
 \textbf{Claim 2.} \emph{Under \(J_{\mathrm{dyn}}^{(0)}\), the
 singularity, product collapse, and seed instability observed under
@@ -561,13 +566,19 @@ depends on the dynamical observation scale.}
 \begin{itemize}
 \tightlist
 \item
-  \(\Delta\Phi\) is smooth and monotone; \textbf{\(\tau_c = 0.0180\)} by
-  linear interpolation of the sign change (Fig. 2; full 19-point grid
-  \(\tau \in [0.003, 0.1]\) in Supplementary Table S2 --- the table
-  shows selected points). \(\Delta\Phi\) is evaluated at fixed
-  representatives and is therefore deterministic; the optimizer seed
-  spread is reported as the per-\(\tau\) std of \(\Phi\) across the 6
-  seeds.
+  \(\Delta\Phi\) is smooth and monotonically increasing on the plotted
+  interval \(\tau \in [0.003, 0.1]\); \textbf{\(\tau_c = 0.0180\)} by
+  linear interpolation between the two grid points bracketing the sign
+  change (Fig. 2; full 19-point grid in Supplementary Table S2 --- the
+  table shows selected points; the interpolation rule is stated in Sec.
+  9.4). The measured value carries an interpolation resolution
+  \(\le \pm 2\times10^{-3}\) on this grid. \(\Delta\Phi\) is evaluated
+  at fixed representatives and is therefore deterministic; the optimizer
+  seed spread is reported as the per-\(\tau\) std of \(\Phi\) across the
+  6 seeds. At larger \(\tau\) the curve develops downward curvature and
+  bends back (the negative \(\Delta\Phi_2\) in Table S1; for \(N=4,5\)
+  the D4 curves peak at \(\tau \approx 0.15\text{–}0.2\) and decline)
+  --- the monotonicity statement is restricted to the plotted window.
 \item
   The optimizer follows sharply: at \(\tau=0.018\) all 6 seeds sit at
   the \(A\)-value, at \(\tau=0.02\) all 6 at the \(B\)-value
@@ -728,7 +739,9 @@ separation at the \emph{objective} level (\(\Delta\Phi\) crossing) is
 unchanged. The \(N=5\) value is protocol-dependent at the level of a few
 \(\times10^{-3}\) (the restricted-domain search gave a somewhat lower
 value; see S1); the persistence statement rests on the full-quotient
-value and is framed as a finite-\(N\) observation.
+value and is framed as a finite-\(N\) observation. The \(N=4,5\)
+measured values carry an interpolation resolution
+\(\le \pm 5\times10^{-3}\) (grid spacing \(10^{-2}\); Table S1).
 
 \begin{figure}
 \centering
@@ -778,8 +791,11 @@ throughout. The first-order coefficient is computed both numerically
 (small-\(\tau\) slope) and analytically. With the fixed Schmidt basis
 \(Q_F\), \(C^2(\tau) = |Q_F U^\dagger e^{\tau L}\rho\, U|^2\) and
 \(C^2(0) = |Q_F\rho_U|^2\), \(C^2{}'(0) = 2\mathrm{Re}\langle Q_F\rho_U,
-Q_F Y_U\rangle\) with \(Y_U = U^\dagger L(\rho) U\); the second
-derivative is
+Q_F Y_U\rangle\) with \(Y_U = U^\dagger L(\rho) U\). The second
+derivative follows from the product rule on
+\(C^2(t) = \langle Q_F\rho_U(t),
+Q_F\rho_U(t)\rangle\) with \(\dot\rho_U(t) = U^\dagger L(\rho(t))U\) and
+\(\ddot\rho_U(0) = U^\dagger L(L(\rho))U\):
 
 \[C^2{}''(0) = 2|Q_F Y_U|^2 + 2\mathrm{Re}\langle Q_F\rho_U,
 Q_F(U^\dagger L(L(\rho)) U)\rangle,\]
@@ -856,36 +872,38 @@ sensitivity, and the \(\tau\)-grid resolution are reported per system in
 Supplementary Table S1 (full data in the repository
 \texttt{analysis\_output/e1\_sensitivity.json}). In brief: the quadratic
 coefficients are \(\Delta\Phi_2 = -4.75, -2.27, -5.43, -5.58\) (all
-negative --- the crossing curve bends back at larger \(\tau\),
-consistent with the non-monotone \(\Delta\Phi\) seen in D4); the fit
-uncertainties are tiny (\(\Delta\Phi_0 \pm 10^{-4}\),
-\(\Delta\Phi_1 \pm 10^{-3}\)), so the quoted \(\tau_c^{(1)}\) values are
-numerically well-determined at the fixed representatives; re-evaluating
-\(\tau_c^{(1)}\) with alternative representatives \(F_B\) (second/third
-seed, or the stored \(\tau=0.05\) optimum for \(N=3\)) shifts it by
-\(\lesssim 4\times10^{-3}\); and the measured \(\tau_c\) comes from
-linear interpolation on a grid whose local spacing is \(2\times10^{-3}\)
-(\(N=3\)) or \(10^{-2}\) (\(N=4,5\)), so the measured values carry an
-interpolation resolution of at most \(\pm 5\times10^{-3}\). ``Derived to
-first order'' therefore means: \(\tau_c^{(1)}\) is predicted
-analytically from \(t=0\) operator matrix elements at fixed basin
-configurations \((F_A,F_B)\) --- it is not fitted to the time-dependent
-curve \(\Delta\Phi(\tau)\) --- while the representative choice and the
-grid resolution contribute a documented uncertainty of a few
-\(\times10^{-3}\). The quadratic correction \(\tau_c^{(2)}\), by
-contrast, is a polynomial fit and is presented as a consistency check
-only.
+negative --- the crossing curve bends back at larger \(\tau\); the
+monotonicity in Fig. 2 is restricted to the plotted window
+\(\tau \le 0.1\)); the fit uncertainties are tiny
+(\(\Delta\Phi_0 \pm 10^{-4}\), \(\Delta\Phi_1 \pm 10^{-3}\)), so the
+quoted \(\tau_c^{(1)}\) values are numerically well-determined at the
+fixed representatives; re-evaluating \(\tau_c^{(1)}\) with alternative
+representatives \(F_B\) (second/third seed, or the stored \(\tau=0.05\)
+optimum for \(N=3\)) shifts it by \(\lesssim 4\times10^{-3}\); and the
+measured \(\tau_c\) comes from linear interpolation on a grid whose
+local spacing is \(2\times10^{-3}\) (\(N=3\)) or \(10^{-2}\)
+(\(N=4,5\)), so the measured values carry an interpolation resolution of
+at most \(\pm 5\times10^{-3}\). ``Derived to first order'' therefore
+means: \(\tau_c^{(1)}\) is predicted analytically from \(t=0\) operator
+matrix elements at fixed basin configurations \((F_A,F_B)\) --- it is
+not fitted to the time-dependent curve \(\Delta\Phi(\tau)\) --- while
+the representative choice and the grid resolution contribute a
+documented uncertainty of a few \(\times10^{-3}\). The quadratic
+correction \(\tau_c^{(2)}\), by contrast, is a polynomial fit and is
+presented as a consistency check only.
 
 \begin{figure}
 \centering
-\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 4: Crossover mechanism (Claim 4c, Phase E). Predicted \textbackslash tau\_c\^{}\{(1)\} = -\textbackslash Delta\textbackslash Phi\_0/\textbackslash Delta\textbackslash Phi\_1 (open squares) and quadratic \textbackslash tau\_c\^{}\{(2)\} (filled circles) vs the measured \textbackslash tau\_c for the four systems; the dashed diagonal is y = x. First order reproduces the measured values within 5.1--10.9\%; the quadratic correction places the predictions on the diagonal (0.0--0.5\% relative error) --- the crossover timescale is derived, not fitted.}]{figures/fig4_mechanism}}
+\pandocbounded{\includegraphics[keepaspectratio,alt={Figure 4: Crossover mechanism (Claim 4c, Phase E). Predicted \textbackslash tau\_c\^{}\{(1)\} = -\textbackslash Delta\textbackslash Phi\_0/\textbackslash Delta\textbackslash Phi\_1 (open squares) and quadratic \textbackslash tau\_c\^{}\{(2)\} (filled circles) vs the measured \textbackslash tau\_c for the four systems; the dashed diagonal is y = x. First order (derived from t=0 matrix elements at the fixed basin pair (F\_A,F\_B); F\_B itself is located by finite-\textbackslash tau optimization) reproduces the measured values within 5.1--10.9\%; the quadratic correction (a polynomial fit, shown for consistency) places the predictions on the diagonal (0.0--0.5\% relative error).}]{figures/fig4_mechanism}}
 \caption{Figure 4: Crossover mechanism (Claim 4c, Phase E). Predicted
 \(\tau_c^{(1)} = -\Delta\Phi_0/\Delta\Phi_1\) (open squares) and
 quadratic \(\tau_c^{(2)}\) (filled circles) vs the measured \(\tau_c\)
 for the four systems; the dashed diagonal is \(y = x\). First order
-reproduces the measured values within 5.1--10.9\%; the quadratic
-correction places the predictions on the diagonal (0.0--0.5\% relative
-error) --- the crossover timescale is derived, not fitted.}
+(derived from \(t=0\) matrix elements at the fixed basin pair
+\((F_A,F_B)\); \(F_B\) itself is located by finite-\(\tau\)
+optimization) reproduces the measured values within 5.1--10.9\%; the
+quadratic correction (a polynomial fit, shown for consistency) places
+the predictions on the diagonal (0.0--0.5\% relative error).}
 \end{figure}
 
 \section{9. Discussion}\label{discussion}
@@ -944,7 +962,11 @@ protocol.
   thermal at larger \(\tau\)), absent for ground and mixed up to
   \(\tau=1\). The precise claim is that relational structure \emph{can}
   depend on the observation scale, with the presence and location of
-  crossovers state-dependent.
+  crossovers state-dependent. The separation strength also varies by
+  state pair --- e.g.~ground and mixed are nearly degenerate under the
+  ground-state objective (\(\Phi = 1.900\) vs \(1.899\);
+  \(d_F = 0.343\)), while mixed and thermal are structurally distinct
+  (\(d_F = 0.868\)) despite similar \(\Phi\) values.
 \item
   \textbf{Protocol reductions}: the \(N=5\) full-quotient run used 2
   seeds × 100 steps (documented; std \(2\times10^{-4}\)). A 200-dim
@@ -979,7 +1001,11 @@ between TPS algebras \(P_F = \sum_k U(G_k \otimes I_B)U^\dagger\)
 \(d_F = \|P_1 - P_2\|_F / \sqrt{2\,\mathrm{rank}}\); the quotient is
 parameterized by the horizontal-basis exponential map (dimensions
 45/225/189/945 for the four systems); the \(N=5\) closure used the full
-945-dim basis with 2 seeds. The key scripts are
+945-dim basis with 2 seeds. The interpolation rule for the measured
+\(\tau_c\) is linear interpolation between the two grid points
+bracketing the sign change of \(\Delta\Phi\); the value-based basin
+classification assigns each seed to the closer of \(\Phi_\tau(F_A)\),
+\(\Phi_\tau(F_B)\). The key scripts are
 \texttt{analysis/d2\_2a\_unnormalized\_instantaneous.py},
 \texttt{d2\_2b\_finite\_time.py}, \texttt{d3\_timescale.py},
 \texttt{d4\_nscaling.py}, \texttt{e1\_tauc\_mechanism.py},
@@ -1036,12 +1062,13 @@ tensor-product selection program of the Relational Emergence Model:
   a \textbf{finite-time structural crossover} exists between competing
   basins, persists across \(N = 3\text{–}5\) with
   \(\tau_c = 0.0180, 0.0206, 0.0224,
-  0.0217\), and its characteristic scale is \textbf{derived} from the
-  leading terms of the finite-time expansion,
-  \(\tau_c \approx -\Delta\Phi_0/
-  \Delta\Phi_1\) (5--11\% first order, 0.0--0.5\% with the quadratic
-  correction) --- an inter-basin objective balance, not the Liouvillian
-  relaxation time.
+  0.0217\), and its characteristic scale is \textbf{derived to first
+  order} from the leading terms of the finite-time expansion,
+  \(\tau_c \approx
+  -\Delta\Phi_0/\Delta\Phi_1\) (5--11\% first order at the fixed basin
+  pair \((F_A,F_B)\); 0.0--0.5\% with the quadratic correction, which is
+  a fit used as a consistency check) --- an inter-basin objective
+  balance, not the Liouvillian relaxation time.
 \end{enumerate}
 
 The central contribution is the research arc itself: a canonical
@@ -1147,54 +1174,40 @@ grid
 The complete \(\Delta\Phi(\tau)\) curve used for the crossing
 interpolation in §6 (19 points; the main text shows selected points).
 Values are objective-level at the fixed representatives (deterministic).
+\textbar{} \(\tau\) \textbar{} 0.003 \textbar{} 0.004 \textbar{} 0.005
+\textbar{} 0.006 \textbar{} 0.007 \textbar{} 0.008 \textbar{} 0.009
+\textbar{} 0.010 \textbar{} 0.012 \textbar{} 0.014 \textbar{}
+\textbar---\textbar---\textbar---\textbar---\textbar---\textbar---\textbar---\textbar---\textbar---\textbar---\textbar---\textbar{}
+\textbar{} \(\Delta\Phi\) \textbar{} −0.0214 \textbar{} −0.0199
+\textbar{} −0.0185 \textbar{} −0.0170 \textbar{} −0.0155 \textbar{}
+−0.0141 \textbar{} −0.0126 \textbar{} −0.0112 \textbar{} −0.0083
+\textbar{} −0.0055 \textbar{} \textbar{} \(\tau\) \textbar{} 0.016
+\textbar{} 0.018 \textbar{} 0.020 \textbar{} 0.025 \textbar{} 0.030
+\textbar{} 0.040 \textbar{} 0.050 \textbar{} 0.070 \textbar{} 0.100
+\textbar{} \textbar{} \textbar{} \(\Delta\Phi\) \textbar{} −0.0028
+\textbar{} −0.0000 \textbar{} +0.0027 \textbar{} +0.0092 \textbar{}
++0.0155 \textbar{} +0.0275 \textbar{} +0.0385 \textbar{} +0.0576
+\textbar{} +0.0794 \textbar{} \textbar{}
+
+\textbf{Supplementary Table S3 --- D1-R full cross-evaluation matrix.}
+Rows = objective family, columns = \(F^*_j\) for asymmetric\_XY,
+transverse\_field\_ising, heisenberg\_xxz, xyz, random\_local. Diagonal
+dominance with mean gap \(0.113\) (main text §5 reports the summary).
 
 {\def\LTcaptype{none} % do not increment counter
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0909}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0909}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0909}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0909}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0909}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0909}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0909}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0909}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0909}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0909}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0909}}@{}}
+\begin{longtable}[]{@{}llllll@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-\(\tau\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-0.003
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-0.004
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-0.005
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-0.006
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-0.007
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-0.008
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-0.009
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-0.010
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-0.012
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-0.014
-\end{minipage} \\
+\(H_i \backslash F^*_j\) & asym\_XY & ising & heis\_xxz & xyz &
+random \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-\(\Delta\Phi\) & −0.0214 & −0.0199 & −0.0185 & −0.0170 & −0.0155 &
-−0.0141 & −0.0126 & −0.0112 & −0.0083 & −0.0055 \\
-\(\tau\) & 0.016 & 0.018 & 0.020 & 0.025 & 0.030 & 0.040 & 0.050 & 0.070
-& 0.100 & \\
-\(\Delta\Phi\) & −0.0028 & −0.0000 & +0.0027 & +0.0092 & +0.0155 &
-+0.0275 & +0.0385 & +0.0576 & +0.0794 & \\
+asymmetric\_XY & 1.8994 & 0.4678 & 1.8308 & 1.8316 & 1.4097 \\
+transverse\_field\_ising & 1.7325 & 1.8246 & 1.5301 & 1.1803 & 1.7241 \\
+heisenberg\_xxz & 1.4220 & 1.1569 & 1.8695 & 1.3194 & 1.7635 \\
+xyz & 1.8489 & 0.7904 & 1.7957 & 1.8740 & 1.4348 \\
+random\_local & 1.4119 & 0.9348 & 0.5722 & 1.5745 & 1.8481 \\
 \end{longtable}
 }
 
