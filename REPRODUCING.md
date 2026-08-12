@@ -35,6 +35,8 @@ Before launching a numerical rerun, locate the claim in [CURRENT_STATUS.md](CURR
 
 The primary committed outputs are under `analysis_output/`. The report's [§9 reproducibility table](analysis/PHASE_D_FINAL_REPORT.md#9-reproducibility) records the script, output, and commit associated with each validation phase.
 
+> **Do not rerun current analysis scripts directly on the authoritative evidence archive.** Several scripts write to tracked files under `analysis_output/`; perform reruns on a dedicated working branch or disposable clone/worktree, keep the starting tree clean, and review any `analysis_output/` diff before preserving new results.
+
 This allows a third party to audit the evidence chain without assuming that a newly rerun optimizer must reproduce every floating-point value bit-for-bit.
 
 ## 4. Current claim-to-script map
