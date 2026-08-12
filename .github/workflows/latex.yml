@@ -28,7 +28,13 @@ jobs:
             texlive-latex-recommended texlive-latex-extra \
             texlive-fonts-recommended \
             lmodern \
-            latexmk
+            latexmk \
+            pandoc
+
+      - name: Drift gate — paper .tex matches the Markdown source
+        run: |
+          python3 tools/gen_paper.py --check
+          python3 tools/gen_spec.py --check
 
       - name: Build REM_lambda v5 (pdflatex)
         run: |
@@ -42,10 +48,14 @@ jobs:
         run: |
           latexmk -pdf -outdir=papers -interaction=nonstopmode papers/REM_spec_v2_2.tex
 
+      - name: Build REM Paper v0.1 (pdflatex, utf8 inputenc)
+        run: |
+          latexmk -pdf -outdir=papers -interaction=nonstopmode papers/REM_paper_v0_1.tex
+
       - name: Gate — logs must be clean
         run: |
           set -e
-          for log in papers/REM_lambda_v5_source.log papers/REM_spec_v2_0.log papers/REM_spec_v2_2.log; do
+          for log in papers/REM_lambda_v5_source.log papers/REM_spec_v2_0.log papers/REM_spec_v2_2.log papers/REM_paper_v0_1.log; do
             echo "=== $log ==="
             if grep -qE "^! |Fatal error|Emergency stop|LaTeX Error|Undefined control sequence" "$log"; then
               echo "FATAL in $log:"; grep -E "^! |Fatal error|Emergency stop|LaTeX Error|Undefined control sequence" "$log" | head -20; exit 1
@@ -70,4 +80,5 @@ jobs:
             papers/REM_lambda_v5_source.pdf
             papers/REM_spec_v2_0.pdf
             papers/REM_spec_v2_2.pdf
+            papers/REM_paper_v0_1.pdf
           if-no-files-found: error
