@@ -20,16 +20,15 @@
 
 Reference code and manuscript working snapshots for the **Relational Emergence Model (REM)** research series by Yoshifumi Maruko.
 
-Primary record: **DOI 10.5281/zenodo.21880505** (REM_lambda Version 5)
-Zenodo: https://zenodo.org/records/21880505
+## Publications and records (by DOI)
 
-Previous version: **DOI 10.5281/zenodo.21427776** (REM_lambda Version 4)
-Zenodo: https://zenodo.org/records/21427776
-
-Superseded numerical release: **DOI 10.5281/zenodo.21427451** (REM_lambda Version 3)
-
-Earlier record: **DOI 10.5281/zenodo.19642303** (REM1 reproducibility package, REM_lambda v2)  
-Zenodo: https://zenodo.org/records/19642303
+| Record | DOI | Content |
+|---|---|---|
+| **REM Structural Selection — paper v1.0** | **DOI 10.5281/zenodo.21900701** | Preprint: *Well-Posed Structural Selection and Finite-Time Crossovers in Variational Tensor-Product Factorization* ([Zenodo](https://zenodo.org/records/21900701)) |
+| REM_lambda v5 (primary numerical record) | DOI 10.5281/zenodo.21880505 | Reference code + manuscripts ([Zenodo](https://zenodo.org/records/21880505)) |
+| REM_lambda v4 | DOI 10.5281/zenodo.21427776 | Previous version ([Zenodo](https://zenodo.org/records/21427776)) |
+| REM_lambda v3 (superseded) | DOI 10.5281/zenodo.21427451 | Superseded numerical release |
+| REM1 reproducibility package (v2) | DOI 10.5281/zenodo.19642303 | Earlier record ([Zenodo](https://zenodo.org/records/19642303)) |
 
 > The Zenodo records are the authoritative published versions of the manuscripts. Files under `papers/` are repository working snapshots intended to support code-to-paper traceability and ongoing revision.
 
