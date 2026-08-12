@@ -21,15 +21,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install TeX Live
+      - name: Install TeX Live + pinned pandoc 3.9
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
             texlive-latex-recommended texlive-latex-extra \
             texlive-fonts-recommended \
             lmodern \
-            latexmk \
-            pandoc
+            latexmk
+          # Pin pandoc to 3.9 (matches the local generator; apt pandoc
+          # versions differ and would trip the byte-exact drift gate).
+          curl -fsSL -o /tmp/pandoc.tar.gz \
+            https://github.com/jgm/pandoc/releases/download/3.9/pandoc-3.9-linux-amd64.tar.gz
+          tar -xzf /tmp/pandoc.tar.gz -C /tmp
+          sudo mv /tmp/pandoc-3.9/bin/pandoc /usr/local/bin/
+          pandoc --version | head -1
 
       - name: Drift gate — paper .tex matches the Markdown source
         run: |

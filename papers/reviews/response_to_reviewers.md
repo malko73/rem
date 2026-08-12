@@ -52,6 +52,22 @@ grid-resolution in main text (added r3/r4), state-degeneracy reiteration
    validation checks reported here"). **Mostly closed; residual is
    stylistic.**
 
+## Final disposition (author)
+
+- **Review A**: Minor revision / converged.
+- **Review B**: Major revision label remains, but **no unresolved Critical or
+  new technical defect**.
+- **Residual concerns**: claim-scope / editorial conservatism.
+- **Author disposition**: addressed where scientifically justified; further
+  wording attenuation **rejected as non-substantive**.
+- **Status sentence**: independent adversarial review completed; all
+  identified technical defects resolved, with residual disagreements
+  limited to claim-scope wording.
+- `well-posed` is retained with the qualifier **"in the tested protocol"**;
+  `finite-size persistence` is retained, scoped to the **tested finite
+  systems N = 3–5**. These scope boundaries make the scientific claims
+  sufficiently precise.
+
 ## Assessment
 
 - Every **technical** finding from both reviewers has been addressed and
@@ -65,20 +81,12 @@ grid-resolution in main text (added r3/r4), state-degeneracy reiteration
   directions"). The stochasticity of LLM reviewing also means severity
   can vary run to run.
 - The manuscript itself now contains the bounded claims, the error
-  budget, and the reproducibility trail that a journal referee needs.
+  budget, and the reproducibility trail that a referee needs.
 
-## Recommendation to the author
+## Decision
 
-Two viable options:
-
-- **(A) Accept-and-respond**: freeze the current revision as the
-  `paper-v1.0` candidate, and carry the point-by-point response document
-  (this file) as the rebuttal/revision summary. This is standard practice
-  when a strict referee's remaining comments are wording-level.
-- **(B) One more iteration**: run r5 and keep polishing wording until
-  Review B also lands on Minor revision. Diminishing returns expected
-  (the same 5 themes are likely to be re-raised in new phrasing).
-
-Author's call: the scientific content, the error budget, and the
-reproducibility trail are complete; the residual items do not change any
-result.
+**r5 cancelled by the author (2026-08-12).** The current revision is
+frozen as the `paper-v1.0` candidate after the final release QC. This
+document and the review logs (review_A_gemini_r1..r3, review_B_openai_r1..r3,
+round-4 outputs, integrated_findings.md) are kept permanently as the
+review record.

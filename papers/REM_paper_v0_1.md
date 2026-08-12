@@ -1,7 +1,10 @@
 ---
 title: "Well-Posed Structural Selection and Finite-Time Crossovers in Variational Tensor-Product Factorization"
 author: Yoshifumi Maruko
-date: 2026-08-12 (v0.1 draft)
+date: 2026-08-12
+version: 1.0
+status: release candidate (independent adversarial review completed)
+doi: "10.5281/zenodo.<to-be-assigned at Zenodo upload> (primary record: 10.5281/zenodo.21880505)"
 ---
 
 # Abstract
