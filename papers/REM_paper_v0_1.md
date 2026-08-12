@@ -30,7 +30,7 @@ order in the finite-time expansion $\tau_c^{(1)} = -\Delta\Phi_0/\Delta\Phi_1$
 reproduces the measured values within 5–11%, and the quadratic correction
 within 0.0–0.5%. The crossover timescale is therefore set by the objective
 balance between competing structural basins, not by the global Liouvillian
-relaxation time ($\tau_c \Delta_L = 0.012$; the $O(1)$ conjecture is
+relaxation time ($\tau_c \Delta_L = 0.012$; the $O(1)$ hypothesis is
 rejected). The falsification-then-replacement arc is the central result:
 a canonical functional was shown to be ill-posed mid-course, and its
 replacement survived a battery of tests including a finite-size persistence
@@ -181,11 +181,12 @@ denominator directly:
 
 - correlation of the objective with the log residual:
   $\mathrm{corr}(\Phi, \log_{10} C_F^2(0)) = -0.999$;
-- $C_F^2(0) \to 6\times10^{-5}$ drives $\Gamma \to -222$ and $\Phi \to 44$
-  (vs. the well-behaved optimum $\Phi \approx 1.86$ under the unnormalized
-  functional);
-- the selected structure collapses to a near-product state with Schmidt
-  spectrum $p = [0.9997, 0.0003]$;
+- the best trial reaches $C_F^2(0) = 6\times10^{-4}$ with $\Gamma \to
+  -129$ and $\Phi = 25.7$ (vs. the well-behaved optimum $\Phi \approx
+  1.86$ under the unnormalized functional); the minimum residual across
+  trials is $C_F^2 = 4\times10^{-4}$;
+- the selected structure collapses toward a product state: the largest
+  Schmidt $p_{\max} = 0.9998$ among trials;
 - a singularity-direction sweep (approaching $|Q_F\rho|^2 \to 0$ directly)
   confirms the blow-up.
 
@@ -194,6 +195,15 @@ denominator can vanish on any open neighborhood of the quotient. The
 normalized rate is therefore retained only as a **fixed-$(F)$ local
 diagnostic** (Spec v2.2 §7) and is **prohibited as a global variational
 objective**.
+
+![Figure 1: Normalized functional breakdown (Claim 1, D2.1). The
+variational objective $\Phi$ vs $\log_{10} C_F^2(0)$ over 30 Haar seeds on
+the unrestricted quotient. $\mathrm{corr}(\Phi,\log_{10} C_F^2(0)) \approx
+-0.999$: as the denominator $|Q_F\rho|^2 \to 4\times10^{-4}$ the objective
+blows up to $\Phi = 25.7$ (best seed, annotated) and the Schmidt spectrum
+collapses toward a product state ($p_{\max} = 0.9998$). The dotted line
+marks the well-posed optimum $\Phi \approx 1.86$ under
+$J_{\mathrm{dyn}}^{(0)}$.](figures/fig1_falsification)
 
 # 4. Claim 2 — the unnormalized functional is well-posed (D2.2)
 
@@ -302,12 +312,22 @@ the dynamical observation scale.*
 | $\Delta\Phi$ | −0.021 | −0.011 | −0.003 | **0.000** | +0.003 | +0.009 | +0.016 | +0.039 | +0.079 |
 
 - $\Delta\Phi$ is smooth and monotone; **$\tau_c = 0.0180$** by linear
-  interpolation of the sign change.
+  interpolation of the sign change (Fig. 2).
 - The optimizer follows sharply: at $\tau=0.018$ all 6 seeds sit at the
   $A$-value, at $\tau=0.02$ all 6 at the $B$-value (value-based
   classification; the seed std collapses from $5\times10^{-3}$ to
   $9\times10^{-4}$).
 - $d_F(F_A, F_B) = 0.886$: the two basins are structurally distinct.
+
+![Figure 2: Finite-time structural crossover (Claim 4a, D3; Haar, $N=3$).
+$\Delta\Phi(\tau) = \Phi_\tau(F_B) - \Phi_\tau(F_A)$ at fixed
+representatives (main panel): the curve is smooth and monotone and crosses
+zero at the objective crossing $\tau_c = 0.0180$ (dashed vertical line);
+the crossover is defined by $\Delta\Phi(\tau_c)=0$, never by optimizer
+basin hops. Inset: number of optimizer seeds (of 6) sitting at the
+$B$-basin value flips from 0 to 6 between $\tau = 0.018$ and
+$\tau = 0.02$ — the optimizer follows the objective crossing.
+](figures/fig2_crossover)
 
 *Transition nature.* The objective crossing is continuous (smooth
 monotone $\Delta\Phi$), but the structural realization is
@@ -367,8 +387,8 @@ $p_{\max} \le 0.58$, seed std $\le 0.009$; $\tilde I \approx 0.98\text{–}
 | 5 | $2\|3$ | 945 (full) | 0.319 | **0.0217** |
 
 The crossover exists at $N=4,5$ with $\Delta\Phi$ sign flips within
-$\tau \in [10^{-3}, 1]$ and genuinely distinct competing basins. The
-N=4 balanced ($2|2$) vs asymmetric ($1|3$) control gives nearly identical
+$\tau \in [10^{-3}, 1]$ and genuinely distinct competing basins (Fig. 3).
+The N=4 balanced ($2|2$) vs asymmetric ($1|3$) control gives nearly identical
 $\tau_c$ ($0.021$ vs $0.022$): **bipartition shape has little effect at
 fixed size**, which validates the $N=5$ (asymmetric $2|3$) reading as a
 size effect rather than a shape artifact. The $N=5$ full-quotient closure
@@ -376,6 +396,14 @@ confirms persistence under full TPS optimization; the interesting contrast
 $d_F = 0.319$ (full) vs $0.992$ (200-dim random subspace, see
 Supplementary) shows the full quotient finds closer competing basins while
 the crossing and timescale are unchanged.
+
+![Figure 3: Finite-size persistence of the crossover (Claim 4b, D4).
+$\tau_c(N)$ for $N=3$ (cut $2|1$, full 45-dim), $N=4$ ($2|2$, full
+225-dim), $N=4$ ($1|3$, full 189-dim), $N=5$ ($2|3$, full 945-dim):
+$\tau_c = 0.0180, 0.0206, 0.0224, 0.0217$. The crossover persists across
+Hilbert-space sizes with an essentially flat timescale (dotted line:
+mean $\approx 0.021$) — finite-size persistence, not a thermodynamic
+scaling law.](figures/fig3_tau_c_trend)
 
 Scope: $N = 3\text{–}5$ establishes **finite-size persistence / finite-size
 trend** — not a scaling law and not a thermodynamic limit.
@@ -393,10 +421,11 @@ $\tau_c$ within 5–11%, and the quadratic correction within 0.0–0.5%.*
 
 *Derivation.* Expanding $J_\tau(F) = J_0(F) + \tau J_1(F) + O(\tau^2)$,
 with $I_F$ independent of $\tau$, gives
-$\Delta\Phi(\tau) = \Delta\Phi_0 + \tau\Delta\Phi_1 + O(\tau^2)$, hence the
-crossing $\Delta\Phi(\tau_c)=0$ implies the boxed formula. The first-order
-coefficient is computed both numerically (small-$\tau$ slope) and
-analytically. With the fixed Schmidt basis $Q_F$,
+$\Delta\Phi(\tau) = \Delta\Phi_0 + \tau\Delta\Phi_1 + \tau^2\Delta\Phi_2
++ \cdots$, hence the crossing $\Delta\Phi(\tau_c)=0$ implies the boxed
+formula to first order. The first-order coefficient is computed both
+numerically (small-$\tau$ slope) and analytically. With the fixed Schmidt
+basis $Q_F$,
 $C^2(\tau) = |Q_F U^\dagger e^{\tau L}\rho\, U|^2$ and
 $C^2(0) = |Q_F\rho_U|^2$, $C^2{}'(0) = 2\mathrm{Re}\langle Q_F\rho_U,
 Q_F Y_U\rangle$ with $Y_U = U^\dagger L\rho_0 U$; the second derivative is
@@ -419,7 +448,7 @@ value $0.0217$).*
 *Gates.* (E1) The expansion $J_\tau = J_0 + \tau J_1 + O(\tau^2)$ holds
 numerically: $|J_\tau - J_0 - \tau J_1^{\mathrm{ana}}| \le 2.4\times10^{-5}$
 at $\tau=10^{-3}$, and the analytic $J_1$ matches the numerical slope in
-all four cases. (E2) The crossover-generating sign structure
+all four cases (Fig. 4). (E2) The crossover-generating sign structure
 $\Delta\Phi_0 < 0 < \Delta\Phi_1$ holds in all four cases: $F_A$ is
 instantaneously better, $F_B$'s advantage grows with $\tau$. (E3) First
 order within 5.1–10.9% ($\le 20\%$ tolerance). (E4) The predicted
@@ -432,9 +461,17 @@ correction improves systematically: mean relative error drops from 7.96%
 decisively outperforms the Liouvillian gap timescale (83–136× off; see
 Sec. 9).
 
+![Figure 4: Crossover mechanism (Claim 4c, Phase E). Predicted
+$\tau_c^{(1)} = -\Delta\Phi_0/\Delta\Phi_1$ (open squares) and quadratic
+$\tau_c^{(2)}$ (filled circles) vs the measured $\tau_c$ for the four
+systems; the dashed diagonal is $y = x$. First order reproduces the
+measured values within 5.1–10.9%; the quadratic correction places the
+predictions on the diagonal (0.0–0.5% relative error) — the crossover
+timescale is derived, not fitted.](figures/fig4_mechanism)
+
 # 9. Discussion
 
-## 9.1 The Liouvillian-gap conjecture is rejected
+## 9.1 The Liouvillian-gap hypothesis is rejected
 
 A natural guess is that the crossover scale is set by the slowest
 relaxation mode of the environment, $\tau_L = \Delta_L^{-1}$ with
@@ -536,6 +573,11 @@ $\tau_c = 0.0173$ with $d_F(F_A,F_B) = 0.992$. The full-quotient closure
 (2 seeds × 100 steps) gives the official value $\tau_c(5) = 0.0217$ with
 $d_F = 0.319$. The subspace value is retained here as restricted-domain
 history only; the main text uses the full-quotient value.
+
+![Supplementary Figure S1: N=5 restricted-domain history. The 200-dim
+random-subspace search gave $\tau_c = 0.0173$; the full-quotient closure
+(945-dim) gives the official value $\tau_c = 0.0217$ used in the main
+text.](figures/figS1_subspace)
 
 **S2. Thermal crossover bracket.** For the thermal state,
 $\Delta\Phi(\tau)$ crosses zero between $\tau = 0.3$ and $\tau = 1.0$:
