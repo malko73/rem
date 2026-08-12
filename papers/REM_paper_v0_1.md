@@ -27,13 +27,16 @@ instantaneously optimal factorization and a distinct finite-time-optimal
 factorization cross at $\Delta\Phi(\tau_c) = 0$, with
 $\tau_c = 0.0180, 0.0206, 0.0224, 0.0217$ for $N = 3,4,4,5$
 (cuts $2|1$, $2|2$, $1|3$, $2|3$) — approximately flat over the tested
-finite-size range. The crossover scale is **derived**, not fitted: to first
-order in the finite-time expansion $\tau_c^{(1)} = -\Delta\Phi_0/\Delta\Phi_1$
-reproduces the measured values within 5–11%, and the quadratic correction
-within 0.0–0.5%. The crossover timescale is therefore set by the objective
-balance between competing structural basins, not by the global Liouvillian
-relaxation time ($\tau_c \Delta_L = 0.012$; the $O(1)$ hypothesis is
-rejected). The falsification-then-replacement arc is the central result:
+finite-size range. The crossover scale is **derived to first order**, not
+fitted: $\tau_c^{(1)} = -\Delta\Phi_0/\Delta\Phi_1$, evaluated from
+$t=0$ operator matrix elements at fixed basin configurations
+$(F_A,F_B)$, reproduces the measured values within 5–11%; a quadratic fit
+of $\Delta\Phi(\tau)$ reduces the residual to 0.0–0.5% (consistency check,
+not a derivation). The crossover timescale is therefore set by the
+objective balance between the two competing structural basins, not by the
+global Liouvillian relaxation time ($\tau_c \Delta_L = 0.012$; the $O(1)$
+hypothesis is rejected). The falsification-then-replacement arc is the
+central result:
 a canonical functional was found to be singular mid-course, and its
 replacement remained stable across the validation checks reported here
 (including a finite-size persistence check).
@@ -183,10 +186,12 @@ The pre-canonical candidate was the normalized local decay rate
 $$\Gamma_F^{(0)} = -\frac{\mathrm{Re}\langle Q_F\rho, Q_FL(\rho)\rangle}
 {|Q_F\rho|^2}.$$
 
-**Claim 1.** *On the unrestricted TPS quotient, $\Gamma_F^{(0)}$ is singular
-as a variational objective: the optimizer drives $|Q_F\rho|^2 \to 0$, which
-sends $\Gamma_F \to \pm\infty$ and $\Phi \to +\infty$ along non-physical
-near-product directions.*
+**Claim 1.** *In the tested protocol (Haar states, full quotient, $N=3$),
+$\Gamma_F^{(0)}$ is singular as a variational objective: the optimizer
+drives $|Q_F\rho|^2 \to 0$, which sends $\Gamma_F \to \pm\infty$ and
+$\Phi \to +\infty$ along non-physical near-product directions. The
+mechanism is general for pure states (see below), and the numerical
+evidence demonstrates it in the tested setting.*
 
 *Evidence (Haar states, full quotient, $N=3$).* The optimizer exploits the
 denominator directly in the tested setting:
@@ -207,8 +212,12 @@ transitively on pure states, so for every pure $\rho$ there exists a
 $U$ on the quotient such that the dominant eigenvector of
 $\rho_U = U^\dagger \rho U$ is (arbitrarily close to) a product state
 across the fixed cut; hence $|Q_F\rho|^2$ can be made arbitrarily small
-over the quotient, and $\Gamma_F$ diverges. The normalized rate is
-therefore retained only in its proper role —
+over the quotient. Whether the numerator
+$\mathrm{Re}\langle Q_F\rho, Q_FL(\rho)\rangle$ stays favorable along such
+directions is a finer question; the numerical evidence (Fig. 1) shows that
+the optimizer does find sign-favorable near-product directions in the
+tested setting, which is what drives $\Phi \to +\infty$. The normalized
+rate is therefore retained only in its proper role —
 *fixed-$(F)$ local diagnostic only; not an unrestricted global TPS
 variational objective* (Spec v2.2 §7).
 
@@ -222,12 +231,12 @@ $\Phi \approx 1.86$ under $J_{\mathrm{dyn}}^{(0)}$.](figures/fig1_falsification)
 
 # 4. Claim 2 — the unnormalized functional is well-posed (D2.2)
 
-**Claim 2.** *Under $J_{\mathrm{dyn}}^{(0)}$, singularity, product collapse,
-and seed instability disappear; the optimization is non-singular on the
-unrestricted quotient (existence of a maximizer follows from the
-compactness of the quotient and the continuity of $\Phi$; the numerical
-evidence addresses the absence of singular directions and pathologies in
-the tested protocol).*
+**Claim 2.** *Under $J_{\mathrm{dyn}}^{(0)}$, the singularity, product
+collapse, and seed instability observed under $\Gamma_F$ disappear in the
+tested protocol. A maximizer exists on the compact quotient by continuity
+of $\Phi$; the numerical evidence addresses the absence of singular
+directions and pathologies in the tested protocol (a global proof of the
+absence of singular directions is beyond this numerical work).*
 
 The unnormalized functional also has a direct physical reading:
 $J_{\mathrm{dyn}}^{(0)} = -\tfrac12\,dC_F^2/dt\big|_0$ is the instantaneous
@@ -266,7 +275,7 @@ identity holds ($\mathrm{dev} \approx 0.96\,\tau\,|J_0|$, $\le 2.5\times
 10^{-3}$ at $\tau=10^{-3}$); all states share the same basin at
 $\tau \le 3\times10^{-3}$; the state ranking
 $\Phi_{\mathrm{mixed}} > \Phi_{\mathrm{thermal}} > \Phi_{\mathrm{ground}}
-> \Phi_{\mathrm{haar}}$ is preserved at every $\tau$; and no pathology
+> \Phi_{\mathrm{haar}}$ is preserved at every fixed $\tau$; and no pathology
 recurs on the window $\tau \in [10^{-3}, 10^{-1}]$. The Haar basin shift
 observed at larger $\tau$ is the subject of Claim 4a.
 
@@ -438,7 +447,10 @@ confirms persistence under full TPS optimization (2 seeds × 100 steps;
 seed std $2\times10^{-4}$, marked in the table); the interesting contrast
 $d_F = 0.319$ (full) vs $0.992$ (200-dim random subspace, see
 Supplementary) shows the full quotient finds closer competing basins while
-the crossing and timescale are unchanged. The $N=5$ value is
+the crossing and timescale are unchanged. The smaller $d_F$ at $N=5$ full
+(0.319) than at $N=3,4$ (0.89–0.99) plausibly reflects a denser landscape
+of local extrema on the 945-dim quotient; the basin separation at the
+*objective* level ($\Delta\Phi$ crossing) is unchanged. The $N=5$ value is
 protocol-dependent at the level of a few $\times10^{-3}$ (the
 restricted-domain search gave a somewhat lower value; see S1); the
 persistence statement rests on the full-quotient value and is framed as a
@@ -458,14 +470,20 @@ not a thermodynamic limit.
 
 # 8. Claim 4c — crossover mechanism (Phase E)
 
-**Claim 4c.** *The crossover timescale is a derived quantity: to first order
-in the finite-time expansion,*
+**Claim 4c.** *Between two known variational extrema $(F_A, F_B)$, the
+crossover timescale is a derived quantity to first order in the
+finite-time expansion:*
 
 $$\tau_c^{(1)} = -\frac{\Delta\Phi_0}{\Delta\Phi_1},$$
 
 *with $\Delta\Phi_0 = \Phi_0(F_B) - \Phi_0(F_A)$ and $\Delta\Phi_1 =
-\frac{d}{d\tau}\Delta\Phi(\tau)\big|_0$. It reproduces the measured
-$\tau_c$ within 5–11%, and the quadratic correction within 0.0–0.5%.*
+\frac{d}{d\tau}\Delta\Phi(\tau)\big|_0$, evaluated from $t=0$ operator
+matrix elements. It reproduces the measured $\tau_c$ within 5–11%; the
+quadratic correction (a fit of $\Delta\Phi(\tau)$) is a consistency check
+reducing the residual to 0.0–0.5%.* The formula predicts the crossing
+between two *already identified* basins; it does not predict $F_B$ itself
+a priori — in the protocol $F_B$ is located by optimization at a large
+window ($\tau = 0.1$).
 
 *Derivation.* Expanding $J_\tau(F) = J_0(F) + \tau J_1(F) + \tau^2 J_2(F) +
 O(\tau^3)$, with $I_F$ independent of $\tau$, gives
@@ -478,12 +496,12 @@ numerically (small-$\tau$ slope) and analytically. With the fixed Schmidt
 basis $Q_F$,
 $C^2(\tau) = |Q_F U^\dagger e^{\tau L}\rho\, U|^2$ and
 $C^2(0) = |Q_F\rho_U|^2$, $C^2{}'(0) = 2\mathrm{Re}\langle Q_F\rho_U,
-Q_F Y_U\rangle$ with $Y_U = U^\dagger L\rho_0 U$; the second derivative is
+Q_F Y_U\rangle$ with $Y_U = U^\dagger L(\rho) U$; the second derivative is
 
 $$C^2{}''(0) = 2|Q_F Y_U|^2 + 2\mathrm{Re}\langle Q_F\rho_U,
-Q_F(U^\dagger L^2\rho_0 U)\rangle,$$
+Q_F(U^\dagger L(L(\rho)) U)\rangle,$$
 
-so $J_1 = -C^2{}''(0)/4$.
+so $J_1 = -C^2{}''(0)/4$ (with $L^2(\rho) := L(L(\rho))$).
 
 *Evidence (fixed reps from D3/D4; $N=5$ uses the full-quotient official
 value $0.0217$).*
@@ -528,11 +546,13 @@ optimum for $N=3$) shifts it by $\lesssim 4\times10^{-3}$; and the
 measured $\tau_c$ comes from linear interpolation on a grid whose local
 spacing is $2\times10^{-3}$ ($N=3$) or $10^{-2}$ ($N=4,5$), so the
 measured values carry an interpolation resolution of at most
-$\pm 5\times10^{-3}$. "Derived, not fitted" therefore means: $\tau_c$ is
-predicted analytically from $t=0$ operator matrix elements at fixed basin
-configurations $(F_A,F_B)$ — it is not fitted to the time-dependent curve
-$\Delta\Phi(\tau)$ — while the representative choice and the grid
-resolution contribute a documented uncertainty of a few $\times10^{-3}$.
+$\pm 5\times10^{-3}$. "Derived to first order" therefore means:
+$\tau_c^{(1)}$ is predicted analytically from $t=0$ operator matrix
+elements at fixed basin configurations $(F_A,F_B)$ — it is not fitted to
+the time-dependent curve $\Delta\Phi(\tau)$ — while the representative
+choice and the grid resolution contribute a documented uncertainty of a few
+$\times10^{-3}$. The quadratic correction $\tau_c^{(2)}$, by contrast, is
+a polynomial fit and is presented as a consistency check only.
 
 ![Figure 4: Crossover mechanism (Claim 4c, Phase E). Predicted
 $\tau_c^{(1)} = -\Delta\Phi_0/\Delta\Phi_1$ (open squares) and quadratic
@@ -618,7 +638,14 @@ $P_F = \sum_k U(G_k \otimes I_B)U^\dagger$ (traceless generators),
 $d_F = \|P_1 - P_2\|_F / \sqrt{2\,\mathrm{rank}}$; the quotient is
 parameterized by the horizontal-basis exponential map (dimensions
 45/225/189/945 for the four systems); the $N=5$ closure used the full
-945-dim basis with 2 seeds.
+945-dim basis with 2 seeds. The key scripts are
+`analysis/d2_2a_unnormalized_instantaneous.py`, `d2_2b_finite_time.py`,
+`d3_timescale.py`, `d4_nscaling.py`, `e1_tauc_mechanism.py`,
+`e1_sensitivity.py`, and `tools/qc_paper.py`; seed lists are
+$20260813 + s$ ($s = 0\ldots$; D-series) and $20260812 + s$
+(D1-series), and the representative-selection procedure is recorded in the
+per-system JSONs (`F_A` = optimum at $\tau=10^{-3}$, `F_B` = optimum at
+$\tau=10^{-1}$).
 
 ## 9.5 Relation to prior REM work
 
