@@ -14,7 +14,7 @@ Repository working snapshots:
 - [`REM_paper_v0_1.tex`](REM_paper_v0_1.tex)
 - figures in [`figures/`](figures/)
 
-The `v0_1` filename is a retained working filename from the drafting pipeline. **It does not indicate the publication version.** The manuscript front matter and Zenodo record identify the released preprint as version 1.0. The Zenodo record is the authoritative published artifact.
+The `v0_1` filename is a retained working filename from the drafting pipeline. **It does not indicate the publication version.** The Markdown working snapshot also still carries a pre-publication `release candidate` status label; that label is a drafting artifact, not the current publication state. The version/DOI metadata and the Zenodo record identify the released preprint as version 1.0. **Zenodo is the authoritative published artifact.**
 
 ## Current canonical specification
 
