@@ -74,10 +74,16 @@ def tps_projector(U: np.ndarray, d_a: int = D_A, d_b: int = D_B) -> np.ndarray:
     return P
 
 
-def tps_distance(U1: np.ndarray, U2: np.ndarray) -> float:
-    """Gauge-invariant TPS distance d_F(F1, F2) in [0, 1]."""
-    P1 = tps_projector(U1)
-    P2 = tps_projector(U2)
+def tps_distance(U1: np.ndarray, U2: np.ndarray, d_a: int = D_A,
+                 d_b: int = D_B) -> float:
+    """Gauge-invariant TPS distance d_F(F1, F2) in [0, 1].
+
+    d_a/d_b parameterize the bipartition (defaults to the N=3 benchmark
+    cut 2|1 for backward compatibility; pass explicitly for other sizes,
+    e.g. N=4 balanced cut 2|2 -> tps_distance(U1, U2, 4, 4)).
+    """
+    P1 = tps_projector(U1, d_a, d_b)
+    P2 = tps_projector(U2, d_a, d_b)
     rank = np.linalg.matrix_rank(P1, tol=1e-8)
     return float(np.linalg.norm(P1 - P2, ord="fro") / np.sqrt(2.0 * max(rank, 1)))
 
