@@ -1,257 +1,122 @@
-# REM Reproducibility Package
+# Relational Emergence Model (REM)
 
-> **REM_lambda Version 5 (2026-08-11)** is a corrective revision of
-> Version 4, addressing two independent issues found in post-publication
-> validation. (1) The continuous optimiser previously built
-> `U = exp(i Σ θ_k G_k)` from anti-Hermitian generators, which is NOT
-> unitary; it now builds `U = exp(Σ θ_k G_k)`, and all
-> continuous-optimisation numbers were recomputed — the earlier
-> `Φ ≈ 1.05` / "1.95× improvement" claim is withdrawn, and the quotient
-> dimension is corrected 44 → 45. (2) Open-system falsification tests
-> (C0–C2) show that `C_H = <H_boundary^2>` does not predict
-> factorization-dependent decoherence stability; it is retained only as a
-> closed-system structural surrogate. The canonical form is generalised
-> to `Φ(F; λ, ρ, L, τ) = I_ρ(F) − λ C_dyn(F; ρ, L, τ)` with the signed
-> structural decoherence rate `C_Γ^(0) = Γ_F^exact(0)` as the first
-> operational realization. See `CHANGELOG.md` for the full correction
-> list. Version 4 is retained as part of the publication history; the
-> discrete-cut XY benchmark and `λ* ≈ 0.165` (re-scoped to a surrogate
-> crossover) are unchanged.
+REM asks a specific structural question in quantum theory: **if the tensor-product structure (TPS) used to define subsystems is treated as a variable, which factorization should be preferred?** The current framework ranks candidate factorizations by balancing informational articulation against a dynamical functional. It is a structural-selection framework; it does **not** modify quantum dynamics.
 
-Reference code and manuscript working snapshots for the **Relational Emergence Model (REM)** research series by Yoshifumi Maruko.
+> **Current canonical specification:** [REM Spec v2.2](REM_spec_v2_2.md)  
+> **Current research status:** [CURRENT_STATUS.md](CURRENT_STATUS.md)  
+> **Primary numerical record:** [Phase D validation report](analysis/PHASE_D_FINAL_REPORT.md)  
+> **Current preprint:** *Well-Posed Structural Selection and Finite-Time Crossovers in Variational Tensor-Product Factorization*, DOI [10.5281/zenodo.21900701](https://zenodo.org/records/21900701)
 
-## Publications and records (by DOI)
+## How to read this repository
 
-| Record | DOI | Content |
+For a first visit, use this order:
+
+1. **This README** — five-minute orientation.
+2. **[CURRENT_STATUS.md](CURRENT_STATUS.md)** — what is canonical, supported, falsified, re-scoped, and still open.
+3. **[Current preprint](papers/REM_paper_v0_1.md)** — the paper-level argument and reported results. The historical filename is retained for traceability; the manuscript front matter is version 1.0.
+4. **[REPRODUCING.md](REPRODUCING.md)** — how to inspect committed evidence or rerun the current validation chain.
+5. **[REM Spec v2.2](REM_spec_v2_2.md)** and **[Phase D report](analysis/PHASE_D_FINAL_REPORT.md)** — exact definitions, protocols, gates, outputs, and limitations.
+
+If an older manuscript, script, or roadmap conflicts with the documents above, the **Spec v2.2 + current-status + Phase D/Phase E record takes precedence** for the present formulation.
+
+## Core formulation
+
+The current canonical instantaneous functional is
+
+$$
+J_{\mathrm{dyn}}^{(0)}(F;\rho,\mathcal L)
+= -\operatorname{Re}\langle Q_F\rho, Q_F\mathcal L(\rho)\rangle_{\mathrm{HS}},
+$$
+
+with the structural objective
+
+$$
+\Phi(F;\lambda)=I_\rho(F)-\lambda J_{\mathrm{dyn}}^{(0)}(F).
+$$
+
+The finite-time extension $J_{\mathrm{dyn}}^{(\tau)}$ is defined in [Spec v2.2 §§8–10](REM_spec_v2_2.md).
+
+## What the current numerical record supports
+
+Under the frozen asymmetric-XY / pure-dephasing protocol documented in the Phase D report:
+
+1. **The formerly normalized instantaneous rate is singular as an unrestricted global TPS objective.** Optimization can drive the coherence denominator toward zero and produce a near-product collapse rather than a physical optimum.
+2. **The denominator-free $J_{\mathrm{dyn}}^{(0)}$ removes that singularity in the tested unrestricted optimizations.** The reported product-collapse and seed-instability failure modes disappear in the D2.2 tests.
+3. **The selected TPS responds to the tested Hamiltonian and state choices.** This is supported by the D1-R / D2-R cross-evaluation analyses, with documented near-degeneracies and varying separation strength.
+4. **Competing TPS basins exhibit a finite-time objective crossing.** The measured crossover values lie at approximately $\tau_c=0.018$–$0.022$ for the reported $N=3$–$5$ cases, including the documented full-quotient $N=5$ closure run. The Phase E addendum further shows that the leading inter-basin expansion $\tau_c^{(1)}=-\Delta\Phi_0/\Delta\Phi_1$ explains the measured scale within about 5–11%; the quadratic fit is a consistency check, not the derivation.
+
+A negative result is also part of the record: the observed crossover scale is **not** simply the global Liouvillian relaxation timescale. See [Phase D §§6–10](analysis/PHASE_D_FINAL_REPORT.md).
+
+## What is not established
+
+The repository does **not** currently establish:
+
+- a universal result for arbitrary Hamiltonians, states, environments, or TPS dimensions;
+- a thermodynamic-limit result or scaling law beyond the tested $N=3$–$5$ range;
+- an experimentally confirmed laboratory realization;
+- independent third-party replication;
+- a claim that the finite-dimensional crossover is a thermodynamic phase transition.
+
+The intended wording is **finite-time structural crossover** or **first-order-like basin transition in the tested realization**, not phase transition.
+
+## Repository map
+
+| Path | Role | Status |
 |---|---|---|
-| **REM Structural Selection — paper v1.0** | **DOI 10.5281/zenodo.21900701** | Preprint: *Well-Posed Structural Selection and Finite-Time Crossovers in Variational Tensor-Product Factorization* ([Zenodo](https://zenodo.org/records/21900701)) |
-| REM_lambda v5 (primary numerical record) | DOI 10.5281/zenodo.21880505 | Reference code + manuscripts ([Zenodo](https://zenodo.org/records/21880505)) |
-| REM_lambda v4 | DOI 10.5281/zenodo.21427776 | Previous version ([Zenodo](https://zenodo.org/records/21427776)) |
-| REM_lambda v3 (superseded) | DOI 10.5281/zenodo.21427451 | Superseded numerical release |
-| REM1 reproducibility package (v2) | DOI 10.5281/zenodo.19642303 | Earlier record ([Zenodo](https://zenodo.org/records/19642303)) |
+| `CURRENT_STATUS.md` | Current claims, boundaries, and evidence map | **Start here** |
+| `REM_spec_v2_2.md` | Canonical definitions and validation gates | **Canonical** |
+| `analysis/PHASE_D_FINAL_REPORT.md` | Consolidated D0–D4 evidence plus Phase E addendum | **Primary evidence** |
+| `analysis/` | Validation and exploratory scripts | See [analysis index](analysis/README.md) |
+| `analysis_output/` | Committed machine-readable numerical outputs | Evidence archive |
+| `papers/` | Current preprint, specifications, historical manuscripts, figures, review artifacts | See [papers index](papers/README.md) |
+| `src/` | Earlier numerical scaffold and quotient-geometry utilities | Mixed current/legacy support code |
+| `tests/` | Regression and numerical tests | Automated checks |
+| `REM_next_steps.md` | Long-form research roadmap | Planning / historical context |
+| `CHANGELOG.md` | Corrections, withdrawals, and re-scoping history | Traceability |
 
-> The Zenodo records are the authoritative published versions of the manuscripts. Files under `papers/` are repository working snapshots intended to support code-to-paper traceability and ongoing revision.
+### Important legacy note
 
-## Scope
+`reproduce.sh` and `src/rem4_numerical.py` reproduce the **earlier REM4 asymmetric-XY benchmark**, not the current Spec v2.2 Phase D validation chain. They are retained for historical reproducibility. For the current formulation, use [REPRODUCING.md](REPRODUCING.md).
 
-This repository provides an auditable implementation of the finite-dimensional numerical scaffold used to study competition between:
+The CI smoke test likewise exercises the earlier REM4 scaffold in addition to the test suite; a green CI result should not be interpreted as a full rerun of all Phase D/D4/Phase E numerical experiments.
 
-- an informational criterion, represented by cross-boundary mutual information; and
-- a dynamical boundary cost, represented by the quadratic boundary-fluctuation measure `C_H = <H_boundary^2>`.
+## Active independent checks
 
-It includes:
+Current follow-up work is intentionally narrow:
 
-- Exact diagonalization for asymmetric XY chains
-- Candidate contiguous cuts and lambda-dependent structural selection
-- **Continuous factorization manifold optimisation** over a four-parameter submanifold via gradient ascent
-- Phase-diagram generation and finite-size scaling for small systems
-- A **sign-definite dynamical cost** `C_H = <H_boundary^2> ≥ 0` that eliminates the sign ambiguity documented in earlier versions
+- [Issue #5 — D3 independent finite-time crossover reproduction](https://github.com/malko73/rem/issues/5)
+- [Issue #4 — D4 finite-size persistence stress test](https://github.com/malko73/rem/issues/4)
 
-## Repository layout
+Older roadmap Issues #1 and #2 are closed as superseded.
 
-```
-src/rem4_numerical.py   Exact-diagonalization scaffold + continuous optimisation
-src/rem3.py             Earlier exploratory simulation
-papers/                 Working LaTeX snapshots for the REM series
-reproduce.sh            Main reproduction command
-tests/                  Numerical and output smoke tests (18 tests)
-outputs/                Generated figures, excluded from Git
-```
+## Reproduce and inspect
 
-## Installation
-
-Python 3.11 or newer is recommended.
+Python 3.11+ is recommended.
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python3 -m pip install --upgrade pip
 pip install -r requirements.txt
-```
-
-## Run the reference calculation
-
-```bash
-./reproduce.sh
-```
-
-Expected generated files include:
-
-```
-outputs/REM4_phase_exact.png
-outputs/REM4_scaling.png
-```
-
-For a faster smoke run:
-
-```bash
-python3 src/rem4_numerical.py \
-  --outdir outputs \
-  --mode all \
-  --state-mode ground \
-  --j12 1.5 --j23 0.6 --h 0.2 \
-  --lambda 0.2 \
-  --grid-r 12 --grid-l 12
-```
-
-## Tests
-
-```bash
 pytest -q
 ```
 
-18 tests covering Hamiltonian and state invariants, the exact quadratic-cost definition, the distinction between `<H_boundary^2>` and `<H_boundary>^2`, discrete-cut benchmarks, finite-size and output smoke tests, identity-factorisation consistency, factorisation-dependent boundary cost, continuous-optimisation improvement, Adam optimiser correctness, and SGD–Adam divergence.
+The test suite is the fast integrity check. Full or partial numerical reproduction is described separately in [REPRODUCING.md](REPRODUCING.md), with the exact script/output map tied to the Phase D report.
 
-## Dynamical-cost convention
+## Publications and records
 
-The code uses the **quadratic dynamical cost** `C_H = <H_boundary^2>`. This is a **sign-definite** measure:
+| Record | DOI | Role |
+|---|---|---|
+| **REM Structural Selection — paper v1.0** | [10.5281/zenodo.21900701](https://zenodo.org/records/21900701) | Current preprint and repository `preferred-citation` |
+| REM_lambda v5 | [10.5281/zenodo.21880505](https://zenodo.org/records/21880505) | Earlier reference-code/manuscript and software/reproducibility record; retained as a separate identifier in `CITATION.cff` |
+| REM_lambda v4 | [10.5281/zenodo.21427776](https://zenodo.org/records/21427776) | Previous numerical record; see [CHANGELOG](CHANGELOG.md) before citing its numerical claims |
+| REM1 reproducibility package | [10.5281/zenodo.19642303](https://zenodo.org/records/19642303) | Earlier research record |
 
-- `C_H ≥ 0` for any state and any cut
-- The dynamics-only selection (`λ → ∞`) favours the cut with smallest boundary fluctuation cost
-- No sign ambiguity: an antiferromagnetic ground state that gives a negative boundary expectation still yields a positive `C_H`
+Zenodo records are the authoritative published artifacts. Repository manuscript files are working snapshots used for code-to-paper traceability and ongoing research organization.
 
-The earlier `phi_h = -<H_boundary>` convention (used in REM3 and pre-v4 numerical snapshots) is superseded. The quadratic form aligns with REM_lambda v4 and REM5.
+## Review-material note
 
-## Continuous manifold optimisation
-
-Beyond the site-contiguous partitions, the code searches a four-parameter generator submanifold of the factorisation space. For the three-qubit benchmark (`J12=1.5, J23=0.6, h=0.2, λ=0.2`), **after the 2026-08-11 unitarity fix**:
-
-- Best contiguous-cut Φ: **0.560**
-- SGD (30 seeds): **0.581 ± 0.112** (success rate 60%)
-- Adam (30 seeds): **0.654 ± 0.191** (success rate 67%)
-- The improvement over contiguous is modest at N=3 and strongly depends on the random generator basis.
-
-The full quotient `U(8)/(U(4) ⊗ U(2))` has real dimension **45** (dim U(8)=64 minus 19 = dim of the embedded U(4)×U(2) image, which includes the U(1) kernel: 16+4−1). The reported result is not a global optimum over that full space.
-
-> ⚠️ Superseded (pre-fix) values: best recovered Φ **1.05**, mean **1.09 ± 0.22** (1.95×). Those were artifacts of the non-unitary `exp(iGθ)` map and are no longer reproducible.
-
-## Robustness across system sizes
-
-The `evaluate_factorization` routine has been extended to accept an arbitrary
-`n_a` parameter, allowing the optimisation to target any factorisation of the
-form `A = sites[0, n_a)`, `B = sites[n_a, n)`.  This enables a systematic
-robustness study across N = 3, 4, 5.
-
-Procedure for each N:
-1. Determine the best site-contiguous cut `n_a` from the discrete set of candidates.
-2. Fix `n_a` to that value so the continuous optimisation explores the same
-   Hilbert–Schmidt boundary-reconstruction problem as the discrete benchmark.
-3. Run 30 independent seeds for each of two axes:
-   - **Axis A** (initial-θ): fixed generator basis, 30 random initial θ.
-   - **Axis B** (generator basis): 30 independent random generator bases + θ.
-
-| N | n_a | contiguous Φ | optimised Φ (mean ± σ) | improvement ratio | success rate |
-|---|-----|-------------|------------------------|-------------------|-------------|
-| 3 | 2   | 0.560       | A: 0.661 ± 0.120 / B: 0.568 ± 0.116 | A: 1.18× / B: 1.01× | A: 87% / B: 43% |
-| 4 | 3   | 1.723       | A: 1.719 ± 0.060 / B: 1.700 ± 0.054 | A: 1.00× / B: 0.99× | A: 57% / B: 47% |
-| 5 | 4   | 1.458       | A: 1.437 ± 0.049 / B: 1.445 ± 0.038 | A: 0.99× / B: 0.99× | A: 47% / B: 53% |
-
-(A = fixed generator basis, random initial θ; B = random generator basis + θ. 30 trials per axis, post unitarity-fix.)
-
-**2026-08-11 re-verification conclusion**: after the unitarity fix the continuous
-optimiser no longer reliably beats the best contiguous cut. Only the N=3
-initial-θ axis shows a robust improvement (87% success, 1.18×); the
-generator-basis axis and all N=4,5 axes are essentially coin flips (43–57%,
-±1–2%). The pre-fix claim "180/180 trials beat contiguous, up to 1.95×" is
-**not reproducible** and was an artifact of the non-unitary map. The earlier
-statement that scatter shrinks sharply with N no longer holds.
-
-Raw data (180-trial JSON) and violin plots are in `analysis_output/`.
-
-**Caveat:** these results are conditioned on the chosen generator-subspace
-dimension, a plain gradient-ascent optimiser (SGD or Adam, lr = 0.01,
-steps = 200, no momentum), and the particular Hamiltonian parameters
-(`J12=1.5, J23=0.6, h=0.2, λ=0.2`).  They do not represent a global
-optimum over the full factorisation manifold. Improving the generator
-subspace / initialisation strategy is an open Phase B problem.
-
-## Optimiser comparison: SGD vs Adam
-
-The default optimiser is plain gradient ascent (SGD, lr = 0.01).  A
-separate Adam variant (`optimize_factorization_adam`) provides adaptive
-moment estimates.  Both are compared under identical starting conditions:
-same Hamiltonian, same generator basis, same initial θ, same step budget
-(200), across 30 independent seeds per system size.
-
-| N | SGD Φ (mean ± σ) | Adam Φ (mean ± σ) | Adam > SGD | improvement |
-|---|-------------------|-------------------|------------|-------------|
-| 3 | 0.581 ± 0.112     | **0.654 ± 0.191** | 20/30      | +12.5 %    |
-| 4 | 1.709 ± 0.064     | **1.752 ± 0.031** | 22/30      | +2.5 %     |
-| 5 | 1.454 ± 0.049     | **1.480 ± 0.028** | 21/30      | +1.8 %     |
-
-Adam outperforms SGD in the majority of trials at all three system sizes,
-with a much tighter spread (σ roughly halved at N=4,5), and is the only
-optimiser that reliably beats the contiguous-cut Φ at N=4,5 (Adam success
-100%/97% vs SGD 53%/60%).  The improvement is modest (≤ 12.5 %) and the
-absolute Φ values are far below the pre-fix (non-unitary) numbers.
-
-**Caveat:** the comparison is at fixed step budget (200), not at equal
-wall time.  Adam's per-step cost is negligibly higher (two vector
-updates); the practical run time is dominated by the evaluation + gradient
-overhead shared by both methods.
-
-## Early stopping
-
-The Adam optimiser supports early stopping via `tol_grad` (gradient-norm
-threshold) and `tol_phi` (relative Φ-change threshold over a `patience`
-window).  When both criteria hold for `patience` consecutive steps the run
-terminates early.
-
-With `max_steps = 500` the Adam optimiser does not saturate: at step 200
-most seeds have not reached a stationary point, so early stopping under a
-200-step budget is ineffective.  Increasing the budget to 500 steps and
-setting `tol_grad = 0.2`, `tol_phi = 5 × 10⁻⁴`, `patience = 10` gives:
-
-| Mode      | Φ (mean ± σ) | steps (mean) | step saving |
-|-----------|--------------|--------------|-------------|
-| Full 500  | 0.690 ± 0.218 | 500          | —           |
-| Early     | 0.690 ± 0.218 | 277          | **45 %**    |
-
-(Post unitarity-fix, 2026-08-11. Pre-fix values were 1.251 ± 0.273 / 233 steps / 53 %.)
-
-Across 30 seeds the final Φ is statistically indistinguishable
-(max individual degradation < 0.002).  No trial had a quality loss
-> 0.01.
-
-For N = 4 and 5 the early-stopping mechanism is available via the same
-`optimize_factorization_adam` keyword arguments, but the convergence
-behaviour differs.  At a 150-step budget (the largest that runs reliably
-on a laptop for 16‑qubit matrices), the Φ‑change criterion
-(5 × 10⁻⁴ over 10 steps) is never met, and no step saving is observed.
-Larger systems require more steps to settle, and the practical benefit of
-early stopping is expected to be smaller than for N = 3.
-
-## Limitations
-
-The current numerical work is an existence-oriented toy-model study. It does not yet provide:
-
-- a guarantee of global optimality on the continuous manifold (finite-difference gradients, fixed generator-basis subspace, SGD or Adam);
-- a microscopic derivation of the tradeoff parameter λ;
-- a full system-environment decoherence calculation;
-- experimental validation.
-
-The robustness study in the previous section is conditioned on the
-generator-subspace dimension, a fixed-step gradient-ascent optimiser
-(lr = 0.01, steps = 200), and the single Hamiltonian point
-(J12=1.5, J23=0.6, h=0.2, λ=0.2).
-
-These limitations are part of the research program and should be retained when citing or extending the code.
+Files under `papers/reviews/` are **internal AI-assisted review and revision artifacts**. They are preserved for process transparency but must not be interpreted as independent external peer review. See [papers/README.md](papers/README.md).
 
 ## Citation
 
-Please cite the Zenodo record:
-
-```bibtex
-@misc{maruko2026rem,
-  author       = {Yoshifumi Maruko},
-  title        = {Competing Informational and Dynamical Criteria for Subsystem Structure: Relational Emergence Model — Revised Version 5},
-  year         = {2026},
-  publisher    = {Zenodo},
-  doi          = {10.5281/zenodo.21880505},
-  url          = {https://doi.org/10.5281/zenodo.21880505}
-}
-```
-
-## License
-
-CC BY 4.0. See `LICENSE`.
+For the current structural-selection results, cite DOI **10.5281/zenodo.21900701**. The repository-level [CITATION.cff](CITATION.cff) uses this preprint as its `preferred-citation`, while retaining DOI **10.5281/zenodo.21880505** as the separate REM_lambda v5 software/reproducibility record.

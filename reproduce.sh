@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+echo "NOTE: reproduce.sh runs the legacy REM4 asymmetric-XY benchmark, not the current Spec v2.2 Phase D validation chain." >&2
+echo "For current reproduction guidance, see REPRODUCING.md." >&2
+
 # Use .venv/bin/python if available (preferred), fallback to python3
 if [ -x .venv/bin/python ]; then
     PYTHON=".venv/bin/python"

@@ -1,14 +1,27 @@
 cff-version: 1.2.0
 title: "REM Reproducibility Package"
-message: "If you use this software or the accompanying manuscripts, please cite the Zenodo record."
+message: "For the current REM structural-selection results, please cite the preferred citation below. The REM_lambda v5 software/reproducibility record is retained as a separate repository identifier."
 type: software
 authors:
-  - family-names: Maruko
-    given-names: Yoshifumi
+  - family-names: "Maruko"
+    given-names: "Yoshifumi"
 identifiers:
   - type: doi
     value: 10.5281/zenodo.21880505
+    description: "REM_lambda v5 software and reproducibility record."
 repository-code: "https://github.com/malko73/rem"
 license: CC-BY-4.0
-version: 0.5.0
+version: "0.5.0"
 date-released: 2026-08-11
+preferred-citation:
+  type: article
+  authors:
+    - family-names: "Maruko"
+      given-names: "Yoshifumi"
+  title: "Well-Posed Structural Selection and Finite-Time Crossovers in Variational Tensor-Product Factorization"
+  doi: "10.5281/zenodo.21900701"
+  year: 2026
+  month: 8
+  status: preprint
+  publisher:
+    name: "Zenodo"
