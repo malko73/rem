@@ -1,271 +1,276 @@
-## Reviewer B report
+## Reviewer B Report
 
 ### Overall assessment
-The manuscript presents an interesting numerical narrative, but the evidence is not yet strong enough to support several of the stronger claims as written. The main issues are: (i) some derivations are internally inconsistent or under-specified, especially in the finite-time expansion; (ii) several claims rely on post-hoc representative choices and fixed-basin comparisons that are not fully reproducible from the paper alone; (iii) the scope of the conclusions is repeatedly broadened beyond what the finite-size data justify.
-
-**Bottom line:** the paper contains potentially publishable numerical observations, but the current version overstates what is established.
+The paper contains a coherent numerical narrative, but several central claims are only partially supported by the presented evidence, and some derivations/definitions are internally inconsistent or under-specified. The strongest results are the *existence of a numerical instability in the normalized functional* and the *empirical finite-time crossover in the tested protocol*. However, the manuscript repeatedly overstates scope beyond what the tables/figures/JSON digest establish, especially regarding “derived, not fitted,” finite-size persistence, and the universality of the crossover mechanism.
 
 ---
 
 # 1) Math / definition audit
 
-### 1.1 Canonical functional \(J_{\mathrm{dyn}}^{(0)}\)
-The definition
+### Finding 1.1 — Finite-time expansion coefficient conventions are inconsistent
+**Tag: Major**
+
+The paper alternates between treating \(J_1\) as a coefficient and as a derivative. In Sec. 8:
+
+- it writes \(J_\tau = J_0 + \tau J_1 + \tau^2 J_2 + O(\tau^3)\),
+- then says “\(J_1\) is the first-order coefficient in the expansion (equivalently \(dJ_\tau/d\tau|_0 = J_1\)).”
+
+That is fine if the convention is fixed. But the derivation of
 \[
-J_{\mathrm{dyn}}^{(0)}(F;\rho,L) = -\operatorname{Re}\langle Q_F\rho, Q_F L(\rho)\rangle_{\mathrm{HS}}
+J_1 = -C^2{}''(0)/4
 \]
-is clear and consistent with the later use in Sec. 2.2 and Sec. 4.
-
-**Minor:** The statement “Since \(\dim\mathcal{H}<\infty\), \(|Q_F L(\rho)|_{\mathrm{HS}}\) is bounded along any path, so \(J_{\mathrm{dyn}}^{(0)}\to 0\) as \(|Q_F\rho|^2\to 0\)” is not a derivation of continuity in the quotient variable \(U\); it is a bound in operator norm. The conclusion is plausible, but the paper should explicitly state the continuity assumptions on \(Q_F(U)\) and \(L(\rho)\) as functions of \(U\).
-
-### 1.2 Finite-time extension \(J_{\mathrm{dyn}}^{(\tau)}\)
-The definition
+depends on the exact relation between \(J_\tau\) and \(C^2(\tau)\). Since
 \[
-J_{\mathrm{dyn}}^{(\tau)}(F) = -\frac{C_F^2(\tau)-C_F^2(0)}{2\tau},\qquad
+J_{\mathrm{dyn}}^{(\tau)} = -\frac{C^2(\tau)-C^2(0)}{2\tau},
+\]
+the Taylor expansion gives
+\[
+J_{\mathrm{dyn}}^{(\tau)} = -\frac{C^{2\,\prime}(0)}{2} - \frac{\tau}{4} C^{2\,\prime\prime}(0) + O(\tau^2),
+\]
+so the coefficient of \(\tau\) is indeed \(-C^{2\,\prime\prime}(0)/4\). This is mathematically consistent, but the manuscript should state explicitly that \(J_1\) is the coefficient of \(\tau\), not the derivative of \(J_\tau\) unless the factor is understood. As written, the notation is easy to misread.
+
+### Finding 1.2 — The “canonical” projector \(Q_F\) is not fully defined consistently
+**Tag: Major**
+
+In Sec. 2.2, \(Q_F\) is described as “the projector onto the orthogonal complement of \(A_F\) acting on operators,” and then explicitly as
+\[
+Q_F(O) = O - \frac{1}{d_B}\mathrm{Tr}_B(O)\otimes I_B.
+\]
+This formula is only valid in the rotated frame and only for the specific TPS algebra in that frame. The paper also says the TPS is parameterized by a unitary \(U\) on the quotient and that the inner product is evaluated in the rotated frame with \(\rho_U = U^\dagger \rho U\). That is fine, but the manuscript never states clearly whether \(Q_F\) is a projector on the operator Hilbert space or a state-dependent dephasing map tied to the Schmidt basis of \(\rho_U\). The later use of “fixed Schmidt basis \(Q_F\)” in Sec. 2.3 and Sec. 8 suggests the latter.
+
+This matters because the derivation of
+\[
 C_F^2(t)=|Q_F U^\dagger e^{tL}\rho\,U|^2
 \]
-is fine as a finite-difference average decay rate.
+assumes \(Q_F\) is fixed at \(t=0\), while the optimization over \(F\) elsewhere treats \(Q_F\) as a function of the factorization. The paper should separate:
+1. the factorization-dependent projector \(Q_F\),
+2. the fixed projector used in the finite-time expansion at a chosen basin representative.
 
-However, the paper’s derivative identity and coefficient conventions need tightening.
+### Finding 1.3 — The claim that \(J_{\mathrm{dyn}}^{(0)}\) is “bounded by Cauchy–Schwarz” is correct but incomplete
+**Tag: Minor**
 
-You state:
+The inequality
 \[
-\frac{d}{dt}C_F^2(t)\big|_0 = 2\operatorname{Re}\langle Q_F\rho, Q_F L(\rho)\rangle
+|J_{\mathrm{dyn}}^{(0)}| \le |Q_F\rho|\,|Q_FL(\rho)|
 \]
-and then
+is correct. But the statement “Since \(\dim\mathcal{H}<\infty\), \(|Q_FL(\rho)|\) is bounded along any path, so \(J_{\mathrm{dyn}}^{(0)}\to 0\) as \(|Q_F\rho|^2\to 0\)” is not the same as proving well-posedness of the optimization. It only shows the numerator vanishes in the singular direction. The actual well-posedness claim depends on the mutual-information term and on compactness of the quotient. That is plausible, but not fully demonstrated numerically.
+
+### Finding 1.4 — The derivation of \(C^2{}''(0)\) is plausible but not fully justified from the text
+**Tag: Major**
+
+The paper states
 \[
-\lim_{\tau\to 0} J_{\mathrm{dyn}}^{(\tau)} = J_{\mathrm{dyn}}^{(0)}.
+C^2{}''(0) = 2|Q_F Y_U|^2 + 2\mathrm{Re}\langle Q_F\rho_U, Q_F(U^\dagger L(L(\rho))U)\rangle.
 \]
-This is consistent.
-
-But in Claim 4c you then write:
+This is consistent with differentiating
 \[
-C^2{}''(0) = 2|Q_F Y_U|^2 + 2\operatorname{Re}\langle Q_F\rho_U, Q_F(U^\dagger L(L(\rho))U)\rangle,
+C^2(t)=\langle Q_F\rho_U(t),Q_F\rho_U(t)\rangle
 \]
-and therefore
-\[
-J_1 = -C^2{}''(0)/4.
-\]
-
-This is **not fully justified as written**. If
-\[
-J_\tau = -\frac{C^2(\tau)-C^2(0)}{2\tau},
-\]
-then Taylor expanding
-\[
-C^2(\tau)=C^2(0)+\tau C^{2\prime}(0)+\frac{\tau^2}{2}C^{2\prime\prime}(0)+\cdots
-\]
-gives
-\[
-J_\tau = -\frac{1}{2}C^{2\prime}(0)-\frac{\tau}{4}C^{2\prime\prime}(0)+O(\tau^2).
-\]
-So if \(J_\tau = J_0+\tau J_1+\cdots\), then indeed
-\[
-J_0=-\frac12 C^{2\prime}(0),\qquad J_1=-\frac14 C^{2\prime\prime}(0).
-\]
-That part is correct.
-
-**Major:** The paper does not show the derivation of the second derivative formula from the product rule in enough detail to verify the sign and factor conventions. Since Claim 4c depends on this, the derivation should be written out explicitly.
-
-### 1.3 \(\tau_c^{(1)}\) derivation
-The first-order formula
-\[
-\tau_c^{(1)}=-\frac{\Delta\Phi_0}{\Delta\Phi_1}
-\]
-is mathematically standard and follows from \(\Delta\Phi(\tau)=\Delta\Phi_0+\tau\Delta\Phi_1+\cdots\).
-
-**Minor:** The paper alternates between calling \(J_1\) a “coefficient” and a derivative. This is acceptable if stated clearly, but the notation should be standardized to avoid ambiguity.
-
-### 1.4 Internal consistency of the finite-time expansion
-There is a notable inconsistency between the main text and the supplementary sensitivity note:
-
-- Main text says the curve is smooth and monotone in Fig. 2 and that the quadratic correction is a “consistency check.”
-- Later, the sensitivity note says \(\Delta\Phi_2<0\) “consistent with the non-monotone \(\Delta\Phi\) seen in D4.”
-
-These are not the same statement. A negative quadratic coefficient does **not** by itself imply non-monotonicity on the interval shown.
-
-**Major:** The paper needs to reconcile whether \(\Delta\Phi(\tau)\) is monotone on the plotted interval or whether it bends back at larger \(\tau\). The current wording is inconsistent.
+if \(Q_F\) is fixed and \(\dot\rho_U(t)=U^\dagger L(\rho(t))U\). However, the text does not address whether \(Q_F\) commutes with the time evolution in the rotated frame or whether the basis is frozen at \(t=0\). The manuscript later says it is fixed at the \(t=0\) Schmidt basis, which resolves this, but the derivation should state that assumption up front.
 
 ---
 
 # 2) Numerical evidence audit
 
-## Claim 1: normalized functional is singular
-The evidence is strong for the tested case \(N=3\), Haar state, full quotient:
+### Finding 2.1 — Claim 1 is supported numerically, but the evidence is protocol-specific
+**Tag: Major**
 
-- \(\mathrm{corr}(\Phi,\log_{10} C_F^2)=-0.998955\)
-- \(\Phi_{\max}=25.7133\)
-- \(\Gamma_{\min}=-128.5251\)
-- \(C_{F,0}^2{}_{\min}=4.093466\times10^{-4}\)
-- \(p_{\max}=0.999795\)
+The digest gives:
+- \(\mathrm{corr}(\Phi,\log_{10} C_F^2) = -0.998955\),
+- \(\Phi_{\max}=25.7133\),
+- \(\Gamma_{\min}=-128.5251\),
+- \(C_{F,0}^2{}_{\min}=4.093466\times10^{-4}\),
+- \(p_{\max}=0.999795\).
 
-These numbers do support the claim that the normalized objective can be driven toward a near-product singular direction in the tested protocol.
+This strongly supports the statement that the normalized functional can drive the optimizer toward near-product, singular directions in the tested Haar/\(N=3\) protocol. So the *existence* of the pathology is well supported.
 
-**Major:** The paper overgeneralizes from one tested setting. The claim says “the mechanism is general for pure states,” but the numerical evidence only demonstrates the phenomenon for Haar states at \(N=3\). The transitivity argument shows existence of product-like directions, not that the optimizer generically finds them or that \(\Phi\to+\infty\) occurs for all pure states.
+However, the paper’s wording “the normalized local decay rate is singular on the unrestricted quotient” is stronger than the evidence. The data show a singularity in the tested protocol and a transitivity argument suggests the quotient contains arbitrarily close product directions for pure states. But the numerical evidence alone does not establish that the optimizer always exploits this, nor that the singularity is unavoidable for all states or all implementations.
 
-## Claim 2: unnormalized functional is well-posed
-The table gives:
+### Finding 2.2 — Claim 2 is supported as a numerical comparison, but “well-posed” is stronger than the data justify
+**Tag: Major**
 
-- ground: \(\Phi^*=1.8995\), std \(0.0007\)
-- haar: \(\Phi^*=1.8594\), std \(0.0090\)
-- mixed: \(\Phi^*=1.9845\), std \(0.0051\)
-- thermal: \(\Phi^*=1.9465\), std \(0.0058\)
+The table in Sec. 4 shows under \(J_{\mathrm{dyn}}^{(0)}\):
+- ground: \(\Phi^*=1.8995\), std \(0.0007\),
+- haar: \(\Phi^*=1.8594\), std \(0.0090\),
+- mixed: \(\Phi^*=1.9845\), std \(0.0051\),
+- thermal: \(\Phi^*=1.9465\), std \(0.0058\),
 
-and the listed minima:
-- minimum \(C_F^2(0)=0.0956\)
-- maximum \(|\gamma_{\mathrm{ref}}|=1.66\)
-- \(p_{\max}\in[0.51,0.58]\)
+with minimum \(C_F^2(0)=0.0956\), maximum \(|\gamma_{\mathrm{ref}}|=1.66\), and \(p_{\max}\in[0.51,0.58]\).
 
-This supports the narrower statement that the optimizer did not encounter the same singular collapse in the tested runs.
+This supports “the singularity/product-collapse pathology disappears in the tested protocol.” But “a maximizer exists on the compact quotient by continuity” is a mathematical statement, not a numerical one, and the paper does not prove the continuity of the full objective in the exact quotient parameterization used in code. The evidence is consistent with well-posedness, but the claim should be phrased as “no pathology was observed in the tested protocol.”
 
-**Major:** “Well-posed” is stronger than “no pathology observed in the tested protocol.” The existence of a maximizer on a compact quotient is a mathematical statement, but the paper does not prove continuity of the full objective in the parameterization used numerically, nor does it show that the optimizer is not missing sharper maxima. The evidence supports “numerically stable in the tested runs,” not a full well-posedness theorem.
+### Finding 2.3 — Claim 3 is supported, but the diagonal-dominance argument is weaker than implied
+**Tag: Major**
 
-**Minor:** The phrase “seed instability disappear” is too absolute. The Haar std is \(0.0090\), which is small, but not zero.
+For D1-R, the cross-evaluation matrix in Supplementary Table S3 does show diagonal dominance in the sense that each row’s diagonal entry is the row maximum. The reported mean gap is \(0.113\). For D2-R, the state cross-evaluation matrix also shows diagonal dominance with mean gap \(0.159\).
 
-## Claim 3: structure responds to Hamiltonian and state
-The cross-evaluation matrices do show nontrivial dependence:
+This supports the claim that the selected structure depends on both Hamiltonian and state. However:
+- the paper does not define the “mean gap” precisely enough to verify the reported \(0.113\) and \(0.159\) from the tables alone;
+- the statement “physically related families are closer in the quotient” is not directly supported by the matrix and distances given;
+- the phrase “not a state-independent common solution” is justified, but only for the tested families/states.
 
-- D1-R mean gap \(0.113\)
-- D2-R mean gap \(0.159\)
+### Finding 2.4 — Claim 4a is supported, but the interpolation and basin language need tighter evidence
+**Tag: Major**
 
-and the diagonal entries are generally larger than off-diagonal entries.
+The D3 table gives:
+\[
+\Delta\Phi(\tau)= -0.021,-0.011,-0.003,0.000,0.003,0.009,0.016,0.039,0.079
+\]
+at \(\tau=0.003,0.01,0.016,0.018,0.02,0.025,0.03,0.05,0.1\).
 
-This supports the claim that the selected structure is not universal across all Hamiltonians or states.
+This clearly supports a sign change near \(\tau\approx 0.018\). The digest gives \(\tau_c=0.018024\), consistent with linear interpolation. So the crossing itself is supported.
 
-**Major:** The paper’s language “\(F^*=F^*(\rho,L,\lambda)\), not a state-independent common solution” is stronger than the evidence. The data show dependence in the tested families/states, but not that no common solution exists in some broader sense. Also, the ground/mixed near-degeneracy noted in the text weakens the claim of strong state separation.
+But the claim that “the instantaneous optimum and the finite-time optimum belong to distinct structural basins” is less directly supported. The paper uses value-based classification and fixed representatives \(F_A\), \(F_B\), but the evidence shown is objective crossing, not a full landscape analysis. The statement that the optimizer “follows sharply” from 0 to 6 seeds between \(\tau=0.018\) and \(0.02\) is suggestive, but not sufficient to establish basin identity in a rigorous sense.
 
-**Minor:** The cross-evaluation matrices are informative, but the paper should report the full matrices for the Hamiltonian-response case, not only the mean gaps, if the claim is to be independently checked.
+### Finding 2.5 — Claim 4b is only partially supported; the “finite-size persistence” wording overreaches
+**Tag: Major**
 
-## Claim 4a: finite-time structural crossover
-The D3 table and Supplementary Table S2 support a sign change in \(\Delta\Phi(\tau)\):
+The paper reports:
+- \(N=3\): \(\tau_c=0.0180\),
+- \(N=4\), \(2|2\): \(\tau_c=0.0206\),
+- \(N=4\), \(1|3\): \(\tau_c=0.0224\),
+- \(N=5\), full: \(\tau_c=0.0217\),
+and also a restricted-domain \(N=5\) subspace value \(0.0173\).
 
-- \(\Delta\Phi(0.016)=-0.003\)
-- \(\Delta\Phi(0.018)=-0.000\)
-- \(\Delta\Phi(0.020)=+0.0027\)
+This supports a finite-\(N\) observation of similar timescales. But the manuscript repeatedly says “persists” and “approximately flat” as if this were a robust trend. With only four systems and one of them having a protocol-dependent alternative value (\(0.0173\) vs \(0.0217\)), the evidence is too thin to support anything stronger than “the tested values are of the same order and vary modestly.”
 
-with reported \(\tau_c=0.018024\) and \(d_F(F_A,F_B)=0.8858\).
+### Finding 2.6 — Claim 4c is numerically supported, but “derived, not fitted” is only partly true
+**Tag: Major**
 
-This is good evidence for a crossover in the fixed-representative objective difference.
+The table in Sec. 8 gives:
+- \(N=3\): \(\tau_c^{(1)}=0.0171\), measured \(0.0180\), error \(5.1\%\);
+- \(N=4\), \(2|2\): \(0.0188\) vs \(0.0206\), error \(8.6\%\);
+- \(N=4\), \(1|3\): \(0.0208\) vs \(0.0224\), error \(7.2\%\);
+- \(N=5\): \(0.0193\) vs \(0.0217\), error \(10.9\%\).
 
-**Major:** The claim that “the selected structure depends on the dynamical observation scale” is only partially supported. The evidence shows that the objective difference between two fixed representatives crosses zero. It does **not** by itself prove that the optimizer’s selected structure changes in a physically meaningful way, because the basin classification is explicitly acknowledged to be value-based and not a full landscape analysis.
+This supports the first-order formula as a reasonable predictor. The analytic and numerical slopes also agree closely:
+- \(1.521/1.526\),
+- \(0.526/0.528\),
+- \(1.633/1.639\),
+- \(1.130/1.136\).
 
-**Major:** The paper says the crossover is “first-order-like” and that adjacent-\(\tau\) \(d_F\) jumps are \(O(1)\), but the evidence for this is sparse and partly qualitative. The actual \(d_F\) values at the relevant \(\tau\) points are not tabulated in the main text.
-
-## Claim 4b: finite-size persistence
-The reported \(\tau_c\) values are:
-
-- \(N=3\): \(0.0180\)
-- \(N=4\), \(2|2\): \(0.0206\)
-- \(N=4\), \(1|3\): \(0.0224\)
-- \(N=5\), \(2|3\): \(0.0217\)
-
-This does support a finite-size trend over \(N=3\)–5.
-
-**Major:** The claim “persists as the Hilbert-space size increases” is too broad. The data cover only four systems, with one \(N=5\) point and two different \(N=4\) cuts. This is finite-size evidence, not persistence under size increase in any asymptotic sense.
-
-**Major:** The paper mixes “full quotient” and “restricted-domain history” for \(N=5\). The main claim uses the full-quotient value \(0.0217\), but the supplementary notes that the earlier 200-dim subspace gave \(0.0173\). This protocol dependence should be emphasized more strongly because it affects reproducibility and the interpretation of “persistence.”
-
-## Claim 4c: derived, not fitted
-The table gives:
-
-- \(N=3\): \(\tau_c^{(1)}=0.0171\), measured \(0.0180\), error \(5.1\%\)
-- \(N=4\), \(2|2\): \(0.0188\) vs \(0.0206\), error \(8.6\%\)
-- \(N=4\), \(1|3\): \(0.0208\) vs \(0.0224\), error \(7.2\%\)
-- \(N=5\), \(2|3\): \(0.0193\) vs \(0.0217\), error \(10.9\%\)
-
-This is reasonable evidence that the first-order formula is predictive at the 5–11% level.
-
-**Major:** “Derived, not fitted” is only partly justified. The first-order formula is indeed derived from the expansion, but the paper also states that the representative choice \(F_B\) comes from optimization at \(\tau=0.1\), and the measured \(\tau_c\) depends on interpolation on a finite grid. The result is therefore derived from a chosen basin pair, not a fully prediction-only quantity.
-
-**Major:** The quadratic correction is described as a “consistency check,” but the paper also reports it as reducing the residual to \(0.0\)–\(0.5\%\). That is fine, but it should not be presented as independent validation because it is fit-based.
+However, “derived, not fitted” is too strong unless the representative pair \((F_A,F_B)\) is fixed independently of the crossing analysis. The paper says \(F_A\) is the optimum at \(\tau=10^{-3}\) and \(F_B\) at \(\tau=10^{-1}\), which is acceptable, but the choice of those representatives is still part of the protocol and affects the result by up to \(\lesssim 4\times10^{-3}\). So the derivation is not purely parameter-free; it is derived conditional on a representative selection procedure.
 
 ---
 
 # 3) Logic / claim-scope audit
 
-**Major:** The manuscript repeatedly slides from “tested finite-size trend” to “persistence” and from “objective crossing” to “structural crossover” to “selected structure depends on timescale.” These are not equivalent. The evidence supports a crossover in the objective evaluated on fixed representatives; it does not fully establish a universal structural phase-like phenomenon.
+### Finding 3.1 — “Finite-size persistence” is overextended toward trend/scaling language
+**Tag: Major**
 
-**Major:** The state dependence is handled inconsistently. The paper says:
-- Haar and thermal show crossovers;
-- ground and mixed do not up to \(\tau=1\).
+The paper correctly says “not a scaling law and not a thermodynamic limit” in places, but elsewhere it says:
+- “approximately flat over the tested finite-size range,”
+- “persistence across \(N=3\text{–}5\),”
+- “size effect rather than shape artifact,”
+- “the crossover scale is therefore set by the objective balance ... not by the global Liouvillian relaxation time.”
 
-That is fine. But then it also says the selected structure responds systematically to both Hamiltonian and state, and that the crossover is a general feature of relational structure. The latter is too broad.
+The first two are acceptable as finite-\(N\) observations. The last two are stronger and should be restricted. The data do not establish universality, asymptotic scaling, or thermodynamic persistence. They only show a finite-size trend over four cases.
 
-**Minor:** The statement that the normalized functional is “retained only in its proper role — fixed-\(F\) local diagnostic only” is a reasonable interpretation, but it should be framed as a recommendation from this dataset, not as a proven theorem.
+### Finding 3.2 — State dependence is handled better than in many such papers, but still needs tighter wording
+**Tag: Minor**
+
+The manuscript does acknowledge that:
+- Haar shows a crossover near \(0.018\),
+- thermal crosses between \(0.3\) and \(1.0\),
+- ground and mixed show no crossover up to \(1.0\).
+
+That is good. But the discussion sometimes generalizes from Haar to “the selected structure depends on the dynamical observation scale” without emphasizing that this is state-dependent and not universal across all states. The paper does eventually say this, but the abstract and conclusion should be more careful.
+
+### Finding 3.3 — The “first-order-like” language is acceptable only as an analogy
+**Tag: Minor**
+
+The paper explicitly says “not a phase transition,” which is good. Still, “first-order-like basin crossover” can be misleading because the evidence is from a finite-dimensional optimization landscape, not a thermodynamic order parameter. The analogy is fine, but should be clearly labeled as metaphorical.
 
 ---
 
 # 4) Falsifiability / physical meaning
 
-The replacement of the normalized functional by the unnormalized one is conceptually plausible and numerically motivated.
+### Finding 4.1 — The replacement of the normalized functional is justified, but the narrative is somewhat ad hoc
+**Tag: Major**
 
-**Major:** The argument risks looking ad hoc unless the paper more clearly distinguishes:
-1. a mathematical singularity of the normalized ratio on the quotient,
-2. a numerical optimization pathology,
-3. a physical interpretation of the unnormalized decay rate.
+The paper argues that the normalized functional \(\Gamma_F\) is singular and therefore should be replaced by the unnormalized \(J_{\mathrm{dyn}}^{(0)}\). This is physically sensible: the unnormalized quantity is the instantaneous decay rate of the residual norm, while the normalized one can blow up as the residual vanishes.
 
-Right now the paper asserts all three at once, but the evidence directly supports only (1) and (2) in the tested case.
+That said, the manuscript frames this as a “falsification-then-replacement arc” and “canonical functional” without fully discussing whether the normalization might still be useful as a diagnostic on a restricted domain. The paper does mention “fixed-\(F\) local diagnostic only,” which is good, but the replacement still reads somewhat ad hoc unless the intended domain of validity is sharply defined.
 
-**Major:** The Liouvillian-gap negative result is useful, but the comparison is incomplete. The paper reports \(\tau_c\Delta_L=0.0119\) and \(\tau_L/\tau_c\approx 83\text{–}136\), which indeed shows a large separation. However, this only rules out the slowest global Liouvillian mode as the controlling scale. It does not exclude mode coupling, local spectral features, or basin-specific dynamical rates. The discussion acknowledges this, which is good, but the abstract still sounds more definitive than the evidence warrants.
+### Finding 4.2 — The Liouvillian-gap negative result is handled appropriately, but the comparison is limited
+**Tag: Minor**
+
+The paper is careful to say the slowest Liouvillian mode is not the timescale controlling \(\tau_c\), and it explicitly notes that more subtle spectral or mode-coupling explanations are not excluded. That is good scientific practice.
+
+However, the quantitative comparison is thin:
+\[
+\tau_c \Delta_L = 0.0119 \quad (N=3), \qquad \tau_L/\tau_c \approx 83\text{–}136.
+\]
+This shows a mismatch, but the paper should avoid implying that the Liouvillian gap hypothesis is broadly falsified beyond the tested protocol. It is only rejected as a simple explanation here.
 
 ---
 
 # 5) Journal-level completeness
 
-**Minor:** The abstract is clear and informative, but it overstates the generality of the conclusions.
+### Finding 5.1 — Abstract and conclusion overstate certainty relative to the evidence
+**Tag: Major**
 
-**Major:** The introduction and discussion do not sufficiently differentiate this work from prior REM results beyond saying the specification is frozen and the evidence is post-hoc. The reader needs a sharper statement of what is genuinely new numerically versus what is a reanalysis of existing protocol outputs.
+The abstract says:
+- “We show that the natural normalized decay-rate functional is singular on the unrestricted quotient,”
+- “The selected factorization responds systematically to both the Hamiltonian and the state,”
+- “The crossover scale is therefore set by the objective balance ... not by the global Liouvillian relaxation time.”
 
-**Major:** Reproducibility is not yet fully adequate from the paper alone. Missing or under-specified items include:
-- exact optimizer stopping criteria beyond fixed step counts;
-- full per-seed outputs for the key claims;
-- the complete D1-R and D2-R cross-evaluation matrices;
-- the exact procedure for “value-based classification” of basins;
-- the full derivation of the second derivative formula used in Claim 4c;
-- the precise interpolation rule for \(\tau_c\) on the grid.
+These are stronger than the evidence warrants. The paper shows this in the tested protocols, not as a general theorem. The conclusion similarly reads too definitively.
 
-**Minor:** The figures are described well in captions, but the main text still relies on supplementary tables for essential evidence. That is acceptable, but the paper should make the main claims readable from the figures/tables alone more explicitly.
+### Finding 5.2 — The paper is reasonably complete on methods, but reproducibility is not fully sufficient from the manuscript alone
+**Tag: Major**
+
+Positives:
+- explicit Hamiltonian and Lindbladian,
+- seed counts,
+- optimizer settings,
+- interpolation rule,
+- representative selection procedure,
+- repository and script names.
+
+Concerns:
+- the exact definition of the quotient distance \(d_F\) is not fully operationalized in the manuscript;
+- the “mean gap” and “diagonal dominance” metrics are not defined precisely enough;
+- the JSON digest is helpful, but the paper still relies on supplementary tables for key claims;
+- the \(N=5\) protocol changed from a 200-dim random subspace to the full 945-dim quotient, which complicates reproducibility and interpretation.
+
+### Finding 5.3 — Differentiation from existing work is only partially convincing
+**Tag: Minor**
+
+The paper claims novelty in the falsification of the normalized rate, the replacement functional, and the finite-time crossover mechanism. That is plausible, but the relation to prior REM work is described mostly in programmatic terms. A journal reader would benefit from a sharper statement of what is new relative to Spec v2.2 and earlier REM papers.
 
 ---
 
 # MOST IMPORTANT QUESTION
 
-**If I ignore the authors' interpretation and inspect only the definitions, derivations, numerical evidence, and figures, do Claims 1–4 actually follow from the presented evidence?**
+**If you ignore the authors' interpretation and inspect only the definitions, derivations, numerical evidence, and figures, do Claims 1-4 actually follow from the presented evidence?**
 
-**Answer: partially, but not fully.**
+**Answer: Partially, but not fully.**
 
-- **Claim 1:** Yes, for the tested Haar \(N=3\) protocol the evidence strongly supports singular behavior of the normalized functional.  
-  But the broader “general for pure states” wording is not established.
-
-- **Claim 2:** The evidence supports that the unnormalized functional is numerically stable and avoids the observed singular collapse in the tested runs.  
-  But “well-posed” as a general statement is stronger than the evidence shown.
-
-- **Claim 3:** Yes, the cross-evaluation tables support state- and Hamiltonian-dependence in the tested families.  
-  But the claim should remain explicitly finite-protocol and finite-family.
-
-- **Claim 4a–4c:** The evidence supports a fixed-representative objective crossing and a first-order estimate of \(\tau_c\) with 5–11% error.  
-  But the stronger interpretation as a structural/timescale-dependent phenomenon is only partially supported, and the “derived, not fitted” phrasing needs qualification because representative selection and interpolation are part of the procedure.
+- **Claim 1:** Yes, in the tested Haar/\(N=3\) protocol the evidence strongly supports that the normalized functional can become singular and drive the optimizer toward near-product directions. But the claim should be scoped to the tested protocol, not stated as a general unrestricted theorem.
+- **Claim 2:** Mostly yes for the tested protocol: the unnormalized functional removes the observed singularity/product-collapse/seed-instability. But “well-posed” is stronger than the evidence alone establishes.
+- **Claim 3:** Yes, the cross-evaluation matrices support state- and Hamiltonian-dependence of the selected structure in the tested families/states.
+- **Claim 4a–c:** The existence of a finite-time crossover and the first-order predictor are supported numerically. However, “finite-size persistence” and “derived, not fitted” are overstated unless carefully qualified. The evidence supports a finite-\(N\) crossover trend, not a universal mechanism or scaling law.
 
 ---
 
-# Findings summary
+# Summary of findings by severity
 
-### Critical
-- None that force immediate rejection on the basis of a mathematical contradiction alone.
+## Critical
+- None. The main conclusions are not outright refuted by the presented evidence.
 
-### Major
-1. Claim 1 overgeneralizes from a single tested Haar \(N=3\) case to “general for pure states.”
-2. Claim 2 uses “well-posed” too strongly; the evidence shows numerical stability, not a full general proof.
-3. Claim 4a/4b overstate structural/timescale persistence beyond the finite-size, finite-protocol data.
-4. Claim 4c is “derived” only after fixing representatives and interpolation; this should be stated more carefully.
-5. The finite-time expansion derivation, especially the second derivative formula, needs a more explicit derivation and consistency check.
-6. The manuscript’s monotonicity/non-monotonicity statements about \(\Delta\Phi(\tau)\) are internally inconsistent.
+## Major
+1. Inconsistent/under-specified conventions for \(J_1\), \(Q_F\), and the finite-time expansion.
+2. Claim 2’s “well-posed” language exceeds the numerical evidence.
+3. Claim 4b overstates “finite-size persistence” and risks implying scaling/universality.
+4. Claim 4c’s “derived, not fitted” is only conditionally true because representative selection and interpolation still matter.
+5. Abstract/conclusion overstate generality relative to the finite tested protocols.
 
-### Minor
-1. Standardize coefficient vs derivative notation for \(J_1\).
-2. Provide full matrices and per-seed outputs in the main supplement.
-3. Tighten wording around seed stability and continuity.
-4. Clarify the exact basin-classification procedure and interpolation rule.
+## Minor
+1. “First-order-like” should be explicitly labeled as an analogy.
+2. The Liouvillian-gap negative result is fine but should be framed more narrowly.
+3. Definitions of mean gap / diagonal dominance / quotient distance should be made more operational.
+4. Prior-work differentiation could be sharper.
 
 ---
 

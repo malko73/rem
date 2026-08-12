@@ -135,8 +135,12 @@ $J_{\mathrm{dyn}}^{(0)} = -\operatorname{Re}\langle Q_F\rho_U,
 Q_FY_U\rangle_{\mathrm{HS}}$ (Sec. 2.3 and Sec. 8 use this frame
 explicitly). In the rotated frame the projector has the explicit form
 $Q_F(O) = O - \frac{1}{d_B}\mathrm{Tr}_B(O)\otimes I_B$ (the dephasing
-projection onto the complement of the TPS algebra $A_F$). By
-Cauchy–Schwarz,
+projection onto the complement of the TPS algebra $A_F = u(d_A)\otimes
+I_B$ in that frame). Formally $Q_F$ is the orthogonal projector on the
+operator Hilbert space onto $A_F^\perp$; in the numerics it is built from
+the Schmidt basis of the dominant eigenvector of $\rho_U$, which makes it
+state-dependent through $\rho_U$ — the two constructions coincide in the
+rotated frame. By Cauchy–Schwarz,
 
 $$|J_{\mathrm{dyn}}^{(0)}| \le |Q_F\rho|\,|Q_FL(\rho)|.$$
 
@@ -479,7 +483,7 @@ persistence, not a thermodynamic scaling law.](figures/fig3_tau_c_trend)
 
 Scope: $N = 3\text{–}5$ establishes **finite-size persistence / finite-size
 trend** — a finite-$N$ observation over four systems, not a scaling law and
-not a thermodynamic limit.
+not a thermodynamic limit; no statement is made about $N \to \infty$.
 
 # 8. Claim 4c — crossover mechanism (Phase E)
 
@@ -502,9 +506,12 @@ window ($\tau = 0.1$).
 O(\tau^3)$, with $I_F$ independent of $\tau$, gives
 $\Delta\Phi(\tau) = \Delta\Phi_0 + \tau\Delta\Phi_1 + \tau^2\Delta\Phi_2
 + \cdots$, hence the crossing $\Delta\Phi(\tau_c)=0$ implies the boxed
-formula to first order. Here $J_1$ is the first-order *coefficient* in the
-expansion (equivalently $dJ_\tau/d\tau|_0 = J_1$); we use the coefficient
-convention throughout. The first-order coefficient is computed both
+formula to first order. Here $J_1$ is the **coefficient of $\tau$** in the
+expansion $J_\tau = J_0 + \tau J_1 + \tau^2 J_2 + \cdots$, obtained from
+the Taylor expansion of $C^2(\tau)$ through the $1/(2\tau)$ prefactor in
+the definition of $J^{(\tau)}$ (so $J_1 = -C^2{}''(0)/4$, and
+numerically $dJ_\tau/d\tau|_0 = J_1$); we use the coefficient convention
+throughout. The first-order coefficient is computed both
 numerically (small-$\tau$ slope) and analytically. With the fixed Schmidt
 basis $Q_F$,
 $C^2(\tau) = |Q_F U^\dagger e^{\tau L}\rho\, U|^2$ and
@@ -705,7 +712,8 @@ tensor-product selection program of the Relational Emergence Model:
 1. the normalized local decay rate is **singular** on the unrestricted
    quotient and is prohibited as a global objective (D2.1);
 2. the unnormalized canonical functional $J_{\mathrm{dyn}}^{(0)}$ is
-   **well-posed** — singularity, product collapse, and seed instability
+   **well-posed in the tested protocol** — singularity, product collapse,
+   and seed instability
    disappear (D2.2);
 3. the selected structure $F^* = F^*(\rho, L, \lambda)$ **responds** to
    Hamiltonian and state (D1-R, D2-R);
