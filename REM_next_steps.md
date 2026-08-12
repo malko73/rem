@@ -477,7 +477,7 @@ Spec v2.0 の C_dyn^(0) と C_dyn^(τ) を「同じものの近似」と考え�
 - **新規レコード**として公開（マスター操作）: https://zenodo.org/records/21900701
 - メタデータ: Preprint / version 1.0 / Maruko, Yoshifumi / CC-BY-4.0 / keywords 7件 / 97ファイル（主成果物 REM_structural_selection_v1.0.pdf 含む）※description はマスター日本語版
 - **DOI 発行後更新（完了）**: README 論文別 DOI 表 ✓・論文 frontmatter DOI ✓・GitHub Release `paper-v1.0`（PDF+ZIP アセット）✓・パッケージ同期 ✓
-- **残（2点）**: (1) Zenodo レコードの related_identifiers（isSupplementTo→21880505）が**空** — API 追加はトークン必要（マスター対応 or トークン設定後に実行）。(2) CITATION.cff 更新 — リポジトリ全体の引用方針（REM_lambda を primary に維持するか論文を preferred-citation にするか）をマスター確認後に実施
+- **残（2点）→ 解決（✅ 2026-08-12）**: (1) related_identifiers（isSupplementTo→21880505）をマスターがレコードに追加済み・API 検証済み。(2) CITATION.cff は **REM_lambda v5 (21880505) プライマリ維持**で確定（変更なし。論文へは README の DOI 表で誘導）
 
 ### v1.0 リリース（✅ 2026-08-12・tag `paper-v1.0`・commit 6ba67f7）
 
