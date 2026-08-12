@@ -470,7 +470,14 @@ Spec v2.0 の C_dyn^(0) と C_dyn^(τ) を「同じものの近似」と考え�
 - tools/gen_paper.py（再現可能 .tex 生成、--check でドリフト検出）+ latex.yml に論文ビルドステップとドリフトゲート追加
 - 10セクション順序・公式値の機械検証済み。suite 74 passed + 1 xfailed
 
-**工程**: ~~v0.1本文~~ → ~~図表固定~~ → ~~数式・数値QC~~ → ~~独立査読（r1–r4 実施、A=Minor revision 収束 / B=Major label 残るが Critical 0・技術的欠陥なし、scope/wording 判断項目、response 文書永久保存）~~ → ~~v1.0（✅ tag `paper-v1.0`）~~ → **Zenodo 更新（トークン待ち）**。
+**工程**: ~~v0.1本文~~ → ~~図表固定~~ → ~~数式・数値QC~~ → ~~独立査読（r1–r4）~~ → ~~v1.0（tag `paper-v1.0`）~~ → ~~Zenodo 公開（✅ 2026-08-12 DOI 10.5281/zenodo.21900701）~~ → **DOI チェーン更新（完了・残: related identifier 追加 + CITATION.cff 方針確認）**。
+
+### Zenodo 公開（✅ 2026-08-12・DOI 10.5281/zenodo.21900701）
+
+- **新規レコード**として公開（マスター操作）: https://zenodo.org/records/21900701
+- メタデータ: Preprint / version 1.0 / Maruko, Yoshifumi / CC-BY-4.0 / keywords 7件 / 97ファイル（主成果物 REM_structural_selection_v1.0.pdf 含む）※description はマスター日本語版
+- **DOI 発行後更新（完了）**: README 論文別 DOI 表 ✓・論文 frontmatter DOI ✓・GitHub Release `paper-v1.0`（PDF+ZIP アセット）✓・パッケージ同期 ✓
+- **残（2点）**: (1) Zenodo レコードの related_identifiers（isSupplementTo→21880505）が**空** — API 追加はトークン必要（マスター対応 or トークン設定後に実行）。(2) CITATION.cff 更新 — リポジトリ全体の引用方針（REM_lambda を primary に維持するか論文を preferred-citation にするか）をマスター確認後に実施
 
 ### v1.0 リリース（✅ 2026-08-12・tag `paper-v1.0`・commit 6ba67f7）
 
