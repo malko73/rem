@@ -484,6 +484,14 @@ Spec v2.0 の C_dyn^(0) と C_dyn^(τ) を「同じものの近似」と考え�
 
 **Zenodo 更新は API トークン待ちでブロック**（環境に ZENODO_API_TOKEN なし）。トークン提供後: 新規レコード作成（推奨）→ PDF+ソースアップロード → DOI 発行 → README・CITATION.cff 更新。
 
+### Zenodo 公開準備（✅ 2026-08-12・新規レコード方針確定）
+
+- **方針**: 新規 Zenodo レコード（独立 DOI）。REM_lambda v5 (21880505) は維持し related identifier として紐付け。`papers/reviews/` は公開パッケージに含めない（GitHub のみ）
+- **公開パッケージ**: `~/Desktop/ToyBox/REM/zenodo_package_v1.0/`（95 files・9.6MB）— 主成果物 `REM_structural_selection_v1.0.pdf`（表示 version 1.0）+ 論文 md/tex + figures（Fig1-4+S1）+ data/（30 JSON）+ code/（再現スクリプト・REPRODUCTION.md・requirements）+ Addendum + Phase D/E Report + README/CITATION.cff/LICENSE（CC-BY-4.0）
+- **メタデータ**: タイトル = 論文タイトル / version 1.0 / type = preprint / 著者 Yoshifumi Maruko / description = 4 Claims 要旨 / keywords 7件 / related = 21880505 (isSupplementTo)
+- **公開スクリプト**: `tools/zenodo_publish.py` — ZENODO_API_TOKEN を環境から読取（出力・コミット・ログに含めない）→ deposit 作成 → ファイルアップロード → 検証 → publish → DOI 出力
+- **DOI 発行後**: README DOI 表・論文 frontmatter・GitHub Release `paper-v1.0` を更新。CITATION.cff はリポジトリ全体の引用方針をマスター確認後に更新（REM_lambda DOI は置換しない）
+
 ### 独立査読（✅ 2026-08-12 r1–r4 実施・commit 2ddf246..74d9ceb）
 
 **異種モデル2系統**（Review A = Gemini 3.6 flash 数学・量子情報寄り / Review B = OpenAI gpt-5.4-mini 数値・査読者寄り、`tools/run_review.py` で API 実行、成果物 `papers/reviews/`）:
