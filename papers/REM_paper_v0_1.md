@@ -15,8 +15,9 @@ information articulated by the cut against its dynamical stability. We show
 that the natural normalized decay-rate functional is **singular** on the
 unrestricted quotient: the denominator $|Q_F\rho|^2$ can vanish, driving the
 objective to $+\infty$ along non-physical near-product directions. We replace
-it with the unnormalized functional $J_{\mathrm{dyn}}^{(0)} = -\mathrm{Re}
-\langle Q_F\rho, Q_FL(\rho)\rangle$ and demonstrate numerically that
+it with the unnormalized functional $J_{\mathrm{dyn}}^{(0)} =
+-\operatorname{Re}\langle Q_F\rho, Q_FL(\rho)\rangle_{\mathrm{HS}}$ and
+demonstrate numerically that
 singularity, product collapse, and seed instability disappear. The selected
 factorization responds systematically to both the Hamiltonian and the state
 (cross-evaluation matrix diagonal dominance). Extending the functional to a
@@ -24,8 +25,8 @@ finite observation window $\tau$ reveals **competing structural basins**: the
 instantaneously optimal factorization and a distinct finite-time-optimal
 factorization cross at $\Delta\Phi(\tau_c) = 0$, with
 $\tau_c = 0.0180, 0.0206, 0.0224, 0.0217$ for $N = 3,4,4,5$
-(cuts $2|1$, $2|2$, $1|3$, $2|3$) — an essentially size-independent
-finite-size trend. The crossover scale is **derived**, not fitted: to first
+(cuts $2|1$, $2|2$, $1|3$, $2|3$) — approximately flat over the tested
+finite-size range. The crossover scale is **derived**, not fitted: to first
 order in the finite-time expansion $\tau_c^{(1)} = -\Delta\Phi_0/\Delta\Phi_1$
 reproduces the measured values within 5–11%, and the quadratic correction
 within 0.0–0.5%. The crossover timescale is therefore set by the objective
@@ -73,9 +74,9 @@ $J_{\mathrm{dyn}}^{(\tau)}$ exposes a genuinely new phenomenon: for the
 maximally entangled (Haar) state the instantaneous optimum and the
 finite-time optimum belong to **different structural basins**, and the two
 basins' objectives cross at a scale $\tau_c \approx 0.02$ (Claim 4a). The
-crossover persists at $N=4,5$ with an essentially flat $\tau_c(N)$ (Claim
-4b), and its scale is explained analytically by the leading terms of the
-finite-time expansion (Claim 4c).
+crossover persists at $N=4,5$ with an approximately flat $\tau_c(N)$ over
+the tested range (Claim 4b), and its scale is explained analytically by the
+leading terms of the finite-time expansion (Claim 4c).
 
 The paper is organized around four claims and their evidence, following the
 chronology of the research: the falsification (Claim 1), the well-posed
@@ -119,8 +120,8 @@ eigenvector $\psi_U$ of $U^\dagger \rho U$, the Schmidt basis defines the
 projector $Q_F$ onto the orthogonal complement of $A_F$ acting on operators
 (dephasing projection). The canonical dynamical functional is
 
-$$J_{\mathrm{dyn}}^{(0)}(F;\rho,L) = -\mathrm{Re}\langle Q_F\rho,
-Q_F L(\rho)\rangle,$$
+$$J_{\mathrm{dyn}}^{(0)}(F;\rho,L) = -\operatorname{Re}\langle Q_F\rho,
+Q_F L(\rho)\rangle_{\mathrm{HS}},$$
 
 where $\langle A,B\rangle = \mathrm{Tr}(A^\dagger B)$ is the Hilbert–Schmidt
 inner product. By Cauchy–Schwarz,
@@ -192,18 +193,17 @@ denominator directly:
 
 Since every pure state can be approached by a product-state TPS, the
 denominator can vanish on any open neighborhood of the quotient. The
-normalized rate is therefore retained only as a **fixed-$(F)$ local
-diagnostic** (Spec v2.2 §7) and is **prohibited as a global variational
-objective**.
+normalized rate is therefore retained only in its proper role —
+*fixed-$(F)$ local diagnostic only; not an unrestricted global TPS
+variational objective* (Spec v2.2 §7).
 
 ![Figure 1: Normalized functional breakdown (Claim 1, D2.1). The
 variational objective $\Phi$ vs $\log_{10} C_F^2(0)$ over 30 Haar seeds on
 the unrestricted quotient. $\mathrm{corr}(\Phi,\log_{10} C_F^2(0)) \approx
--0.999$: as the denominator $|Q_F\rho|^2 \to 4\times10^{-4}$ the objective
-blows up to $\Phi = 25.7$ (best seed, annotated) and the Schmidt spectrum
-collapses toward a product state ($p_{\max} = 0.9998$). The dotted line
-marks the well-posed optimum $\Phi \approx 1.86$ under
-$J_{\mathrm{dyn}}^{(0)}$.](figures/fig1_falsification)
+-0.999$: the best trial (annotated) reaches $C_F^2(0) = 6\times10^{-4}$
+with $\Phi = 25.7$, and the Schmidt spectrum collapses toward a product
+state ($p_{\max} = 0.9998$). The dotted line marks the well-posed optimum
+$\Phi \approx 1.86$ under $J_{\mathrm{dyn}}^{(0)}$.](figures/fig1_falsification)
 
 # 4. Claim 2 — the unnormalized functional is well-posed (D2.2)
 
@@ -224,7 +224,7 @@ unrestricted quotient.*
   under $\Gamma$); maximum $|\gamma_{\mathrm{ref}}| = 1.66$; the optimizer
   never approaches the singular region.
 - **No product collapse**: Schmidt $p_{\max} \in [0.51, 0.58]$ (vs
-  $0.9997$ under $\Gamma$); the Haar state retains genuine multi-partite
+  $0.9998$ under $\Gamma$); the Haar state retains genuine multi-partite
   correlation ($N=3$).
 - **Seed stability**: 30-seed Haar run: best $1.8595$, std $0.0077$
   (vs $25.71 / 5.96$ under $\Gamma$); per-state std $\le 0.009$.
@@ -239,8 +239,8 @@ identity holds ($\mathrm{dev} \approx 0.96\,\tau\,|J_0|$, $\le 2.5\times
 $\tau \le 3\times10^{-3}$; the state ranking
 $\Phi_{\mathrm{mixed}} > \Phi_{\mathrm{thermal}} > \Phi_{\mathrm{ground}}
 > \Phi_{\mathrm{haar}}$ is preserved at every $\tau$; and no pathology
-recurs on the window $\tau \in [10^{-3}, 10^{-1}]$. The Haar basin
-transition observed at larger $\tau$ is the subject of Claim 4a.
+recurs on the window $\tau \in [10^{-3}, 10^{-1}]$. The Haar basin shift
+observed at larger $\tau$ is the subject of Claim 4a.
 
 # 5. Claim 3 — structural response (D1-R, D2-R)
 
@@ -334,8 +334,8 @@ monotone $\Delta\Phi$), but the structural realization is
 **first-order-like**: the best solution hops between distinct local maxima
 (adjacent-$\tau$ $d_F$ jumps $O(1)$ at $\tau=0.02$ and $0.05$) and reaches
 $F_B$ exactly at $\tau=0.1$ ($d_F=0.000$). In a finite-dimensional system
-we use the language "sharp structural crossover / first-order-like basin
-transition", not "phase transition".
+we characterize this as a **sharp, first-order-like basin crossover in a
+finite-dimensional optimization problem**, not a phase transition.
 
 *Methodological note.* Per-seed basin labels via $d_F$ to fixed
 representatives are **not meaningful** on the quotient (many distinct local
@@ -358,7 +358,8 @@ state-dependent.*
 **Claim 4b.** *The structural crossover persists as the Hilbert-space size
 increases: $\tau_c = 0.0180, 0.0206, 0.0224, 0.0217$ for $N = 3$ ($2|1$),
 $N=4$ ($2|2$), $N=4$ ($1|3$), $N=5$ ($2|3$, full quotient). Within
-$N=3\text{–}5$ this is an essentially size-independent finite-size trend.*
+$N=3\text{–}5$ the timescale is approximately flat over the tested
+finite-size range.*
 
 *Well-posedness vs $N$ (D4-A; $J_{\mathrm{dyn}}^{(0)}$ only).*
 
@@ -401,9 +402,9 @@ the crossing and timescale are unchanged.
 $\tau_c(N)$ for $N=3$ (cut $2|1$, full 45-dim), $N=4$ ($2|2$, full
 225-dim), $N=4$ ($1|3$, full 189-dim), $N=5$ ($2|3$, full 945-dim):
 $\tau_c = 0.0180, 0.0206, 0.0224, 0.0217$. The crossover persists across
-Hilbert-space sizes with an essentially flat timescale (dotted line:
-mean $\approx 0.021$) — finite-size persistence, not a thermodynamic
-scaling law.](figures/fig3_tau_c_trend)
+Hilbert-space sizes with an approximately flat timescale over the tested
+finite-size range (dotted line: mean $\approx 0.021$) — finite-size
+persistence, not a thermodynamic scaling law.](figures/fig3_tau_c_trend)
 
 Scope: $N = 3\text{–}5$ establishes **finite-size persistence / finite-size
 trend** — not a scaling law and not a thermodynamic limit.
@@ -453,8 +454,9 @@ $\Delta\Phi_0 < 0 < \Delta\Phi_1$ holds in all four cases: $F_A$ is
 instantaneously better, $F_B$'s advantage grows with $\tau$. (E3) First
 order within 5.1–10.9% ($\le 20\%$ tolerance). (E4) The predicted
 flatness (spread $0.195$) matches the measured flat trend (spread
-$0.213$): the size-independent $\tau_c$ is explained by the
-size-independent ratio $-\Delta\Phi_0/\Delta\Phi_1$. (E5) The quadratic
+$0.213$): the approximately flat $\tau_c$ is explained by the
+approximately flat ratio $-\Delta\Phi_0/\Delta\Phi_1$ over the tested
+finite-size range. (E5) The quadratic
 correction improves systematically: mean relative error drops from 7.96%
 (first order) to 0.21% (quadratic); $\tau_c^{(2)} = 0.0180, 0.0206,
 0.0224, 0.0216$. (E6) Inter-basin objective competition (5–11% error)
@@ -498,24 +500,26 @@ advantage grows ($\Delta\Phi_1 > 0$). The structure that is worse at
 $t=0$ wins once the window is long enough. This is a statement about the
 geometry of the objective landscape, not about the relaxation spectrum of
 $L$; it explains both the magnitude ($\tau_c \sim |\Delta\Phi_0| /
-|\Delta\Phi_1| \approx 0.02$) and the flatness across $N$ (both
-$\Delta\Phi_0$ and $\Delta\Phi_1$ are size-insensitive in the tested
-range).
+|\Delta\Phi_1| \approx 0.02$) and the approximately flat trend across $N$
+(both $\Delta\Phi_0$ and $\Delta\Phi_1$ vary only mildly over the tested
+finite-size range).
 
 ## 9.3 Limitations and scope
 
 - **Finite dimension, finite size**: $N \le 5$, four systems; "finite-size
   persistence / trend", not a scaling law or thermodynamic limit. All
-  statements use "sharp structural crossover / first-order-like basin
-  transition", not "phase transition".
+  statements use "sharp structural crossover / sharp, first-order-like
+  basin crossover in a finite-dimensional optimization problem", not
+  "phase transition".
 - **State dependence**: the crossover is present for Haar (and thermal at
   larger $\tau$), absent for ground and mixed up to $\tau=1$. The precise
   claim is that relational structure *can* depend on the observation
   scale, with the presence and location of crossovers state-dependent.
 - **Protocol reductions**: the $N=5$ full-quotient run used 2 seeds × 100
   steps (documented; std $2\times10^{-4}$). A 200-dim random-subspace
-  search at $N=5$ is retained in the Supplementary as restricted-domain
-  history (it gave $\tau_c = 0.0173$, a slight underestimate).
+  search at $N=5$ predates the closure and is retained in the
+  Supplementary as restricted-domain history (see S1); it is not part of
+  the main results.
 - **Optimizer**: finite-difference Adam on the quotient; the crossover
   analysis itself is objective-level (fixed representatives) and does not
   depend on optimizer convergence details.
