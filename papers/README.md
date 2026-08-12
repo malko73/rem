@@ -39,7 +39,7 @@ The following files document the development of the research program and should 
 - `REM_lambda_v2_source.tex`
 - `REM_lambda_v5_source.tex`
 
-REM_lambda v5 has its own Zenodo record, DOI [10.5281/zenodo.21880505](https://zenodo.org/records/21880505), and remains the record referenced by the repository-level `CITATION.cff`. The current structural-selection preprint is a separate publication record with DOI 10.5281/zenodo.21900701.
+REM_lambda v5 has its own Zenodo record, DOI [10.5281/zenodo.21880505](https://zenodo.org/records/21880505), and is retained in the repository-level `CITATION.cff` as the software/reproducibility record. The CFF `preferred-citation` now points to the current structural-selection preprint, DOI [10.5281/zenodo.21900701](https://zenodo.org/records/21900701), so GitHub's default citation path follows the current paper while preserving the distinct software record.
 
 Before citing numerical claims from an earlier manuscript, check [`../CHANGELOG.md`](../CHANGELOG.md) and [`../CURRENT_STATUS.md`](../CURRENT_STATUS.md), because some earlier objectives and numerical interpretations were later falsified, corrected, withdrawn, or re-scoped.
 
