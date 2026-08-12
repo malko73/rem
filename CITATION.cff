@@ -11,7 +11,7 @@ identifiers:
     description: "REM_lambda v5 software and reproducibility record."
 repository-code: "https://github.com/malko73/rem"
 license: CC-BY-4.0
-version: 0.5.0
+version: "0.5.0"
 date-released: 2026-08-11
 preferred-citation:
   type: article
