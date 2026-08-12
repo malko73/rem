@@ -26,6 +26,40 @@ PAPER_NEWUNICODE = (
 )
 
 
+
+def _strip_figure_alt(body: str) -> str:
+    """Remove pandoc's alt={...} attribute from includegraphics.
+
+    Pandoc 3.x emits [keepaspectratio,alt={...}] where the alt text is a
+    text-mode linearization of the caption containing backslash commands.
+    That breaks pdflatex's keyval parsing (undefined control sequences /
+    brace imbalance). The visible \caption carries the same content in
+    proper math mode, so the alt attribute is dropped.
+    """
+    out = []
+    i = 0
+    while True:
+        j = body.find("alt={", i)
+        if j < 0:
+            out.append(body[i:])
+            break
+        out.append(body[i:j])
+        k = j + 5
+        depth = 1
+        while k < len(body) and depth > 0:
+            ch = body[k]
+            if ch == "\\":
+                k += 2
+                continue
+            if ch == "{":
+                depth += 1
+            elif ch == "}":
+                depth -= 1
+            k += 1
+        i = k
+    return "".join(out)
+
+
 def generate() -> str:
     spec = SPEC_TEX.read_text(encoding="utf-8")
     marker = "\\begin{document}"
@@ -35,6 +69,7 @@ def generate() -> str:
         ["pandoc", str(MD), "--from", "markdown", "--to", "latex"],
         capture_output=True, text=True, check=True,
     ).stdout
+    body = _strip_figure_alt(body)
 
     anchor = "\\newunicodechar{→}{\\ensuremath{\\to}}\n"
     if anchor in preamble:
