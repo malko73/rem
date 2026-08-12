@@ -74,12 +74,14 @@ def generate() -> str:
     anchor = "\\newunicodechar{→}{\\ensuremath{\\to}}\n"
     if anchor in preamble:
         preamble = preamble.replace(anchor, anchor + PAPER_NEWUNICODE, 1)
-    # pandoc >= 3.1 wraps includegraphics in \pandocbounded{...};
-    # the spec preamble (no figures) does not define it -> no-op.
-    if "\\pandocbounded" not in preamble:
+    # The spec preamble has no figures, so it neither loads graphicx nor
+    # defines \pandocbounded (pandoc >= 3.1 wraps includegraphics in it).
+    if "\\usepackage{graphicx}" not in preamble:
         preamble = preamble.replace(
             "\\begin{document}",
-            "\\providecommand{\\pandocbounded}[1]{#1}\n\\begin{document}",
+            "\\usepackage{graphicx}\n"
+            "\\providecommand{\\pandocbounded}[1]{#1}\n"
+            "\\begin{document}",
             1,
         )
     return preamble + "\n\n" + body + "\n\\end{document}\n"
