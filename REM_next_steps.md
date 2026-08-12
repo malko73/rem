@@ -360,12 +360,43 @@ Spec v2.0 の C_dyn^(0) と C_dyn^(τ) を「同じものの近似」と考え�
 - **R2** seed 安定（std ≤ 0.0090）✓
 - **R3** product collapse なし（p_max 0.510–0.580）✓
 - **R4** J_dyn / I / Φ 非自明（best >> contiguous、|J_dyn| > 0.1）✓
-- **R5 F* が state に応答** ✓ — cross-eval 対角優位、**mean gap = 0.159**（ground 0.000 / haar 0.332 / mixed 0.058 / thermal 0.247）。**state-dependent response with varying separation strength**。d_F 行列: **ground↔mixed = 0.343（近い）**、haar↔thermal は 0.87–0.89（強く分離）。ground と Haar は d_F 0.880 / gap 0.332 で明確に異なる。mixed と thermal は Φ 値が近いが **d_F 0.868 で構造は異なる**。**全状態が同一 attractor ではない**
+- **R5 F* が state に応答** ✓ — cross-eval 対角優位、**mean gap = 0.159**（ground 0.000 / haar 0.332 / mixed 0.058 / thermal 0.247）。**state-dependent response with varying separation strength**。**正確な記録**: state-dependent response is established overall, although ground and mixed contain nearly degenerate optima under the ground-state objective（ground の gap=0.000 のため「各状態固有の F* が存在する」とは断言しない）。d_F 行列: **ground↔mixed = 0.343（近い）**、haar↔thermal は 0.87–0.89（強く分離）。ground と Haar は d_F 0.880 / gap 0.332 で明確に異なる。mixed と thermal は Φ 値が近いが **d_F 0.868 で構造は異なる**。**全状態が同一 attractor ではない**（mean gap 0.159）
 - **R6** singularity 再発なし（min C_F² = 0.096、max|γ_ref| = 1.66、max|Φ| = 1.98）✓
 
 **解釈**: **Spec v2.2 canonical objective の下で、全4状態に安定した非自明 optimum が得られた。** 旧 D2（Φ_Γ）と D2-R（Φ_J）は目的関数が異なるため絶対値を直接比較しない（Haar の 49.10 → 1.8594 は singularity 除去であり、D2.1/D2.2-A で確立済み）。D2-R5 の cross-eval 対角優位は **F* = F*(ρ, L, λ) が状態に実際に応答する**ことを直接支持。**「State generality under the Spec v2.2 canonical functional」へ昇格。**
 
 **Spec v2.2 の3本柱が揃った**: well-posedness（D2.2-A/B）+ Hamiltonian generality（D1-R）+ **state generality（D2-R）**。→ **次は D3 Timescale**。
+
+### D3（✅ 2026-08-12 実施・commit 8c1a236）: Timescale — **τ_c = 0.018（Haar）、sharp structural crossover / 全ゲート PASS**
+
+**問い**: Does relational structure itself depend systematically on the dynamical observation scale? 中心対象: Haar（当初ブラケット 3e-3 < τ_c < 1e-2 は best-seed 由来で不正確 → 精密同定で修正）。
+
+**D3-A: τ_c 精密同定（Haar、τ=0.003..0.1 の19点、6 seeds、凍結 d2_2b プロトコル）**
+
+マスター定義の ΔΦ(τ) = Φ_τ(F_B) − Φ_τ(F_A)（F_A = D2.2-A Haar 最適、F_B = τ=0.1 Haar 最適、固定代表）:
+
+| τ | 0.003 | 0.01 | 0.016 | **0.018** | 0.02 | 0.025 | 0.03 | 0.05 | 0.1 |
+|---|---|---|---|---|---|---|---|---|---|
+| ΔΦ | −0.021 | −0.011 | −0.003 | **0.000** | +0.003 | +0.009 | +0.016 | +0.039 | +0.079 |
+
+**τ_c = 0.0180**（ΔΦ 符号反転の線形補間）。ΔΦ は滑らか・単調。optimizer は鋭く追随: **τ=0.018 で全6 seed A 値 → τ=0.02 で全6 seed B 値**（値ベース分類。std が 0.005 → 0.0009 に collapse）。
+
+**重要な方法論修正**:
+1. **d_F ベースの per-seed basin ラベルは無意味**（45次元商空間では多数の局所最大値がどの2盆地からも d_F≈0.87。例: τ=0.1 で「A 判定」された seed も Φ=1.911 ≈ B 値）。**値ベース分類**（Φ が Φ_τ(F_A) か Φ_τ(F_B) に近いか）が正しい
+2. D2.2-B の「τ≥1e-2 で全 seed 移動」は best-seed の見かけ（記録修正済み）。物理的クロスオーバーは ΔΦ 交差（τ_c=0.018）で定義 — optimizer の basin hopping と分離できる（マスター予告どおり）
+
+**D3-B: 転移の性質** — **first-order-like basin transition（sharp structural crossover）in the realization; continuous in the objective**。adjacent d_F は τ=0.02（0.859）と τ=0.05（0.877）で O(1) ジャンプ（best 解が異なる局所最大値をホップ）、一方 ΔΦ は滑らか。best 解は τ=0.1 で F_B に完全収束（d_F=0.000）。有限次元のため「相転移」とは呼ばず「sharp structural crossover / first-order-like basin transition」とする。
+
+**D3-C: Liouvillian timescale との比較** — **Δ_L = 0.658、τ_L = 1.519、τ_c·Δ_L = 0.0119**。**O(1) 予想は不支持**（τ_c は遅い緩和モードより遥かに短い）。τ_c は「B 盆地の瞬間的不利を有限時間 O(τ) 補正が上回る」**inter-basin competition scale** で決まり、Liouvillian gap ではない。thermal の τ_c∈(0.3,1.0) なら比 0.2–0.66 — 状態依存で集中せず。**結論: このベンチマークでは τ は単なる Liouvillian gap タイムスケールではない**（D3-C の仮説はこの系では棄却 — 重要な負の結果）
+
+**D3-7: Haar 以外のクロスオーバー（粗い確認、τ=0.2/0.3/1.0）**:
+- **ground: クロスオーバーなし**（τ=1.0 の F* は D2-R 最適から d_F=0.11、ΔΦ≈0）
+- **mixed: クロスオーバーなし**（d_F=0.12、ΔΦ≈0）
+- **thermal: クロスオーバーあり、τ_c ∈ (0.3, 1.0)**（ΔΦ: −0.011 → +0.001、d_F(F_A,F_B)=0.879）
+
+→ **クロスオーバーの有無・位置は状態依存**（Haar τ_c=0.018 ≪ thermal τ_c≈0.3-1.0、ground/mixed は 1.0 まで無し）。relational structure は dynamical observation scale に系統的に依存する（Haar・thermal で実証）。
+
+**Gate 判定（全て PASS）**: D3-1（τ_c=0.018 特定）✓ / D3-2（ΔΦ 符号反転）✓ / D3-3（seed 非依存 — ΔΦ は固定代表で objective レベル、optimizer は勝ち盆地の値に追随）✓ / D3-4（singularity/product collapse 再発なし）✓ / D3-5（連続性分類: 実現は first-order-like、objective は連続）✓ / D3-6（τ_c/τ_L 評価: 0.012、O(1) 不支持）✓ / D3-7（Haar 以外の確認: thermal にあり、ground/mixed なし）✓
 
 ### D2.1（✅ 2026-08-12 実施・commit 0ad8840）: Haar Singularity Audit — **D2.1-A 確定**
 
@@ -431,6 +462,8 @@ Haar 30 seeds: best **1.8595** / median 1.8582 / std **0.0077**（D2.1: 25.71 / 
 **G7 判定**:
 - **G7-1（τ→0 極限）PASS**: J_dyn^(τ) → J_dyn^(0) を厳密確認。dev ≈ 0.96·τ·|J₀|（線形収束）、τ=1e-3 で全状態 dev ≤ 2.5e-3。master の恒等式 dC_F²/dt = 2Re⟨Q_Fρ,Q_FL(ρ)⟩ を数値的に裏付け
 - **G7-2（同一/同一盆地 F*）PASS（τ-極限 caveat 文書化）**: τ ≤ 3e-3 で全状態同一盆地（d_F < 0.06）；ground/mixed/thermal は全 τ で同一盆地（cross-eval gap ≤ 0.005）；**Haar のみ τ ≥ 1e-2 で全6 seed 揃って別盆地へシフト**（I 1.97→2.00, J_τ 0.60→0.44, Φ 最大 +4.3% @ τ=0.1）。これは Spec v2.0 の F*=F*(ρ,L,λ,τ) 予言どおりの τ 依存性であり、病理（singularity/product collapse/seed instability）は一切再発しない
+
+> **記録修正（2026-08-12, D3 による精査）**: 「τ≥1e-2 で全6 seed 揃って別盆地へ」は **best-seed ベースの見かけ**でした。D3 の per-seed 値ベース解析では、τ_c 近傍（0.003〜0.018）では seed は A/B 値に分裂（optimizer の basin trapping）し、**全 seed が B 値へ揃うのは τ≈0.02 以降**です。物理的クロスオーバーは objective レベルの ΔΦ 交差（τ_c = 0.018）で定義すべきで、G7-2 の定性結論（τ→0 で同一、有限 τ でシフト）は変わりません。詳細は D3 セクション参照。
 - **G7-3（順位維持）PASS**: mixed > thermal > ground > haar の順位が全 τ で保存
 - **G7-4（病理非再発）PASS**: 全 (state, τ) で min C_F²(0) ≥ 0.09, p_max ≤ 0.58, std ≤ 0.009；Haar 30 seeds @ τ=0.1: best 1.9135 / std 0.0011
 
