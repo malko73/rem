@@ -64,6 +64,7 @@ SEEDS = {3: 6, 4: 4, 5: 4}
 # large N. The DeltaPhi crossing is objective-level and unaffected.
 SUBSPACE_DIM = {5: 200}
 SUBSPACE_SEED = 777
+FORCE_FULL = {"5": False}  # set True via --subspace-dim 0 at runtime
 # cuts: (n_a, d_A, d_B) per N; N=4 offers balanced 2|2 and asymmetric 1|3
 CUTS = {
     3: {"21": (2, 4, 2)},
@@ -182,11 +183,17 @@ def dominant_eigenvector(rho):
     return evecs[:, np.argmax(evals)]
 
 
-def horizontal_basis_for(N, d_A, d_B):
-    """Full horizontal basis, or a random subspace for large N."""
+def horizontal_basis_for(N, d_A, d_B, subspace_dim=None):
+    """Full horizontal basis, or a random subspace for large N.
+
+    subspace_dim: explicit override (0 forces the full quotient).
+    """
     H_basis = horizontal_basis(d_A, d_B)
     n_h = H_basis.shape[2]
-    sub = SUBSPACE_DIM.get(N)
+    if subspace_dim is None:
+        sub = SUBSPACE_DIM.get(N)
+    else:
+        sub = None if subspace_dim == 0 else subspace_dim
     if sub is None or sub >= n_h:
         return H_basis, n_h, False
     rng = np.random.default_rng(SUBSPACE_SEED)
@@ -197,13 +204,13 @@ def horizontal_basis_for(N, d_A, d_B):
     return H_sub, sub, True
 
 
-def run_d4a(N, state_name, cut_key):
+def run_d4a(N, state_name, cut_key, subspace_dim=None):
     n_a, d_A, d_B = CUTS[N][cut_key]
     H, gvec, L = build_system(N)
     states = build_states(H, N)
     rho0 = states[state_name]
     Y0 = (L @ rho0.reshape(-1, order="F")).reshape(rho0.shape, order="F")
-    H_basis, n_h, is_sub = horizontal_basis_for(N, d_A, d_B)
+    H_basis, n_h, is_sub = horizontal_basis_for(N, d_A, d_B, subspace_dim)
     steps, seeds_n = STEPS[N], SEEDS[N]
 
     print(f"=== D4-A N={N} cut={cut_key} state={state_name} "
@@ -240,7 +247,7 @@ def run_d4a(N, state_name, cut_key):
         max_p_max=float(max(d["p_max"] for d in seeds)),
         elapsed=time.time() - t0,
     )
-    out = OUTDIR / f"d4_a_n{N}_cut{cut_key}_{state_name}.json"
+    out = OUTDIR / f"d4_a_n{N}_cut{cut_key}_{state_name}{'_full' if not is_sub and N == 5 else ''}.json"
     out.write_text(json.dumps(result, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"  best Phi={result['best_Phi']:.4f} std={result['std_Phi']:.4f} "
           f"success={success:.2f} minC0={result['min_C_F_sq']:.4f} "
@@ -248,12 +255,12 @@ def run_d4a(N, state_name, cut_key):
     print(f"Saved to {out}")
 
 
-def run_d4b(N, cut_key, tau_b=0.1, tau_a=1e-3, reps_only="AB"):
+def run_d4b(N, cut_key, tau_b=0.1, tau_a=1e-3, reps_only="AB", subspace_dim=None):
     n_a, d_A, d_B = CUTS[N][cut_key]
     H, gvec, L = build_system(N)
     states = build_states(H, N)
     rho0 = states["haar"]
-    H_basis, n_h, is_sub = horizontal_basis_for(N, d_A, d_B)
+    H_basis, n_h, is_sub = horizontal_basis_for(N, d_A, d_B, subspace_dim)
     steps, seeds_n = STEPS[N], SEEDS[N]
 
     print(f"=== D4-B N={N} cut={cut_key} Haar "
@@ -293,15 +300,17 @@ def run_d4b(N, cut_key, tau_b=0.1, tau_a=1e-3, reps_only="AB"):
         print(f"  F_{label} (tau={tau}): best {reps[label]['best_Phi']:.4f} "
               f"std {reps[label]['std_Phi']:.4f} ({time.time()-t0:.0f}s)")
 
+    out = OUTDIR / f"d4_b_n{N}_cut{cut_key}_haar{'_full' if not is_sub and N == 5 else ''}.json"
     if "A" not in reps or "B" not in reps:
-        # partial run: save what we have and exit (caller runs the other rep)
-        out = OUTDIR / f"d4_b_n{N}_cut{cut_key}_haar.json"
-        if out.exists():
-            prev = json.loads(out.read_text(encoding="utf-8"))
-            prev.update({k: v for k, v in reps.items()})
-            out.write_text(json.dumps(prev, indent=2, ensure_ascii=False), encoding="utf-8")
-            print(f"Updated {out}")
-        return
+        # partial run: create or merge into the file; if both reps are now
+        # present, continue to the DeltaPhi computation below.
+        prev = json.loads(out.read_text(encoding="utf-8")) if out.exists() else {}
+        prev.update({k: v for k, v in reps.items()})
+        reps = {k: v for k, v in prev.items() if k in ("A", "B")}
+        out.write_text(json.dumps(prev, indent=2, ensure_ascii=False), encoding="utf-8")
+        print(f"Saved/updated {out}")
+        if "A" not in reps or "B" not in reps:
+            return
 
     F_A = np.array(reps["A"]["best_U_real"]) + 1j * np.array(reps["A"]["best_U_imag"])
     F_B = np.array(reps["B"]["best_U_real"]) + 1j * np.array(reps["B"]["best_U_imag"])
@@ -341,7 +350,7 @@ def run_d4b(N, cut_key, tau_b=0.1, tau_a=1e-3, reps_only="AB"):
         F_A=reps["A"], F_B=reps["B"], d_F_FA_FB=dAB,
         DeltaPhi=dphi, tau_c=tau_c,
     )
-    out = OUTDIR / f"d4_b_n{N}_cut{cut_key}_haar.json"
+    out = OUTDIR / f"d4_b_n{N}_cut{cut_key}_haar{'_full' if not is_sub and N == 5 else ''}.json"
     out.write_text(json.dumps(result, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"Saved to {out}")
 
@@ -354,6 +363,9 @@ def main():
     pa.add_argument("--n", type=int, required=True)
     pa.add_argument("--state", choices=["ground", "haar"], required=True)
     pa.add_argument("--cut", default="21")
+    pa.add_argument("--subspace-dim", type=int, default=None,
+                    help="override subspace dim (0 = full quotient)")
+    pa.add_argument("--seeds", type=int, default=None, help="override seed count")
 
     pb = sub.add_parser("d4b")
     pb.add_argument("--n", type=int, required=True)
@@ -361,13 +373,19 @@ def main():
     pb.add_argument("--tau-a", type=float, default=1e-3)
     pb.add_argument("--tau-b", type=float, default=0.1)
     pb.add_argument("--reps", default="AB", help="which reps to run: A, B, or AB")
+    pb.add_argument("--subspace-dim", type=int, default=None,
+                    help="override subspace dim (0 = full quotient)")
+    pb.add_argument("--seeds", type=int, default=None, help="override seed count")
 
     args = ap.parse_args()
     OUTDIR.mkdir(exist_ok=True)
+    if args.seeds is not None:
+        SEEDS.update({k: args.seeds for k in SEEDS})
     if args.mode == "d4a":
-        run_d4a(args.n, args.state, args.cut)
+        run_d4a(args.n, args.state, args.cut, args.subspace_dim)
     else:
-        run_d4b(args.n, args.cut, args.tau_b, args.tau_a, args.reps)
+        run_d4b(args.n, args.cut, args.tau_b, args.tau_a, args.reps,
+                args.subspace_dim)
 
 
 if __name__ == "__main__":
