@@ -30,8 +30,10 @@ jobs:
       run: |
         python -m pytest tests/ -v --tb=short
 
-    - name: Smoke test (reproduce.sh, reduced grid)
+    - name: Legacy REM4 smoke test (reduced grid)
       run: |
+        # This preserves the earlier REM4 numerical scaffold. It is not a
+        # full rerun of the current Spec v2.2 Phase D / Phase E analyses.
         python src/rem4_numerical.py \
           --outdir outputs \
           --mode all \
