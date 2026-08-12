@@ -470,7 +470,18 @@ Spec v2.0 の C_dyn^(0) と C_dyn^(τ) を「同じものの近似」と考え�
 - tools/gen_paper.py（再現可能 .tex 生成、--check でドリフト検出）+ latex.yml に論文ビルドステップとドリフトゲート追加
 - 10セクション順序・公式値の機械検証済み。suite 74 passed + 1 xfailed
 
-**工程**: ~~v0.1本文~~ → ~~図表固定~~ → **数式・数値QC** → 独立査読 → v1.0 → Zenodo。新しい実験は追加しない。
+**工程**: ~~v0.1本文~~ → ~~図表固定~~ → ~~数式・数値QC~~ → **独立査読（r1–r4 実施、対応中）** → v1.0 → Zenodo。新しい実験は追加しない。
+
+### 独立査読（✅ 2026-08-12 r1–r4 実施・commit 2ddf246..74d9ceb）
+
+**異種モデル2系統**（Review A = Gemini 3.6 flash 数学・量子情報寄り / Review B = OpenAI gpt-5.4-mini 数値・査読者寄り、`tools/run_review.py` で API 実行、成果物 `papers/reviews/`）:
+
+- **r1**: A=Minor revision（Major 1）/ B=Major revision（Critical 1: "derived, not fitted" の根拠不足）
+- **r2 修正**: 感度・不確かさ補足（ΔΦ₂・fit 誤差・代表感度・グリッド分解能、`analysis/e1_sensitivity.py`）→ B の Critical 解消
+- **r3 修正**: "derived to first order" 再構成（τ_c^(1)=derived / τ_c^(2)=fit 分離）、F_B conditional scope、二次導関数の明示導出、単調性整合、D1-R 完全行列（Table S3）
+- **r4 修正**: J₁ 規約明文化・Q_F の operator-space 二重性・"well-posed in the tested protocol"・"no statement about N→∞"
+- **r4 時点**: **A = Minor revision**（収束）/ **B = Major revision**（Major 5件は全て scope/wording 判断項目、Critical なし）
+- **対応方針の判断待ち**: (A) 現状を v1.0 候補として凍結し、point-by-point response（`papers/reviews/response_to_reviewers.md`）を持って reb とする / (B) r5 以降を継続。マスター用語（"finite-size persistence"・"well-posed"）が B の再指摘対象であり、技術的指摘は全て対応済み。
 
 ### 図表固定（✅ 2026-08-12 実施・commit 62c8d8a）
 
